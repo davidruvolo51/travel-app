@@ -1,0 +1,40 @@
+button {
+    display: block;
+    cursor: pointer;
+}
+
+.b {
+    margin-top: 12px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 12pt;
+	background-color: transparent;
+	padding: 6px 0;
+	border-radius: 4px;
+    border: 2px solid transparent;
+    
+    &.b-primary {
+        background-color: $brand;
+        border-color: $brand;
+        color: $light;
+
+        &:hover {
+            background-color: transparent;
+            color: $brand;
+        }
+    }
+
+    &.b-secondary {
+        background-color: $light;
+        border-color: none;
+        color: $brand;
+
+        &:hover {
+            border-color: $brand;
+        }
+    }
+}

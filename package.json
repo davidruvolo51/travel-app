@@ -1,0 +1,17 @@
+{
+  "name": "travel-app",
+  "version": "1.0.0",
+  "description": "a shiny application for finding speciality coffee and craft breweries",
+  "main": "index.js",
+  "repository": "https://github.com/davidruvolo51/travel-app.git",
+  "author": "davidruvolo51",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^5.1.0"
+  },
+  "scripts": {
+    "shiny": "Rscript -e \"shiny::runApp(launch.browser = FALSE, port = 8000)\"",
+    "sass": "sass --watch www/css/index.scss:www/css/styles.min.css --style compressed",
+    "dev": "concurrently --kill-others-on-fail \"yarn shiny\" \"yarn sass\""
+  }
+}
