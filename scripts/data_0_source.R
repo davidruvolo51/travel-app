@@ -22,16 +22,16 @@
 #' build new cmd for breweries dataset
 cmd_a <- paste0(
     "curl -O ",
-    "https://github.com/davidruvolo51/",
-    "travel-app-data/blob/master/data/",
+    "https://raw.githubusercontent.com/davidruvolo51/",
+    "travel-app-data/master/data/",
     "breweries_all_cities.RDS"
 )
 
 #' build new cmd for coffee dataset
 cmd_b <- paste0(
     "curl -O ",
-    "https://github.com/davidruvolo51/",
-    "travel-app-data/blob/master/data/",
+    "https://raw.githubusercontent.com/davidruvolo51/",
+    "travel-app-data/master/data/",
     "coffee_all_cafes.RDS"
 )
 
@@ -41,4 +41,4 @@ system(cmd_b)
 
 
 #' mv files to data/
-system("mv *.RDS data/")
+system("mv *.RDS data/downloads")
