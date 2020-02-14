@@ -1,5 +1,49 @@
 .main {
-    margin-top: 72px;
-    padding: 24px 0;
+    margin: 0;
+    padding: 0;
     min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+
+    .section {
+        width: 90%;
+        margin: 0 auto;
+        padding: 48px 0;
+
+        h2 {
+            margin-bottom: 6px;
+        }
+
+        p {
+            margin-bottom: 13px;
+
+            span {
+
+                &.app-title {
+                    font-weight: 700;
+                    color: $brand;
+                }
+    
+                &.page-title {
+                    color: $brand;
+                    font-style: italic;
+                    box-shadow: inset 0 -1px 0 0 $brand;
+                }
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 32px;
+        }
+    }
+}
+
+@media (min-width: $screen-break) {
+    .main {
+        min-height: 100vh;
+
+        .section {
+            max-width: $screen-break;
+        }
+    }
 }

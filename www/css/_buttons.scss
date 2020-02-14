@@ -24,6 +24,7 @@ button {
 
         &:hover {
             background-color: transparent;
+            text-decoration: underline;
             color: $brand;
         }
     }
@@ -34,7 +35,42 @@ button {
         color: $brand;
 
         &:hover {
-            border-color: $brand;
+            text-decoration: underline;
         }
     }
 }
+
+.b-list {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    margin-top: 21px;
+    list-style: none;
+
+    .b {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media (min-width: 532px) {
+    .b-list {
+        display: inline-flex;
+        justify-content: center;
+
+        .b {
+            width: 200px;
+            margin: 0;
+
+            &:nth-of-type(1) {
+                margin-right: 16px;
+            }
+        }
+    }
+}
+
+// @media (min-width: $screen-break) {
+//     .b-list {
+//         justify-content: flex-end;
+//     }
+// }

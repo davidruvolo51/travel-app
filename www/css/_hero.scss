@@ -1,0 +1,37 @@
+.hero {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+
+    .hero-content {
+        position: relative;
+        width: 90%;
+        margin: 0 auto;
+        padding: 1em;
+        background-color: $light;
+        border-radius: 4px;
+        z-index: 1;
+
+        h1 {
+            font-size: 21pt;
+        }
+
+        h2 {
+            font-size: 32pt;
+            font-weight: 400;
+        }   
+    }
+}
+
+@media (min-width: $screen-break) {
+    .hero {
+        max-height: 80vh;
+        
+        .hero-content {
+            max-width: $screen-break;
+        }
+    }
+}

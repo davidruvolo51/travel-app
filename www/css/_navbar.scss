@@ -5,11 +5,11 @@
 	display: -ms-grid;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 65% 35%;
+	padding: 8px 0;
+	grid-template-columns: calc(100% - 55px) 50px;
 	grid-template-areas: "brandlink menuBtn";
 	column-gap: 0;
 	row-gap: 0;
-	font-family: "Open Sans";
 	z-index: 10;
 	background-color: white;
 	box-shadow: 0 0 6px 3px $shadow;
@@ -27,7 +27,7 @@
 
 		&.menu {
 			display: block;
-			positon: absolute;
+			position: absolute;
 			top: 48px;
 			width: 1px;
 			height: 1px;
@@ -70,67 +70,72 @@
 			}
 		}
 
-		&#toggle {
+		&.menu-btn {
+			justify-content: flex-end;
 			grid-area: menuBtn;
 			margin-right: 16px;
-			display: -webkit-box;
-			display: -ms-flexbox;
-			display: flex;
-			-webkit-box-pack: center;
-			-ms-flex-pack: center;
-			justify-content: center;
-			-webkit-box-align: center;
-			-ms-flex-align: center;
-			align-items: center;
-            background-color: transparent;
-            border: none;
+			
+			#toggle {
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				-webkit-box-pack: center;
+				-ms-flex-pack: center;
+				justify-content: center;
+				-webkit-box-align: center;
+				-ms-flex-align: center;
+				align-items: flex-end;
+				background-color: transparent;
+				border: none;
+				transform: scale(0.8);
 
-			.menu-icon {
-				display: block;
-				margin: 0 auto;
-                position: relative;
-
-				.menu-bar {
+				.menu-icon {
 					display: block;
-					height: 3px;
-					width: 30px;
-					border-radius: 6px;
-					margin-bottom: 6px;
-					background-color: $dark;
-					-webkit-transition: all 0.2s ease-in-out;
-					-o-transition: all 0.2s ease-in-out;
-					transition: all 0.2s ease-in-out;
+					margin: 0 auto;
+					position: relative;
 
-					&:nth-child(1) {
-						margin-top: 2px;
+					.menu-bar {
+						display: block;
+						height: 3px;
+						width: 30px;
+						border-radius: 6px;
+						margin-bottom: 6px;
+						background-color: $dark;
+						-webkit-transition: all 0.2s ease-in-out;
+						-o-transition: all 0.2s ease-in-out;
+						transition: all 0.2s ease-in-out;
+
+						&:nth-child(1) {
+							margin-top: 2px;
+						}
 					}
 				}
-            }
-            &.open {
-                .menu-bar:nth-child(1) {
-                    opacity: 0;
-                }
-        
-                .menu-bar:nth-child(2) {
-                    -webkit-transform: rotate(-45deg);
-                    -ms-transform: rotate(-45deg);
-                    transform: rotate(-45deg);
-                    -webkit-transform-origin: center 0.5px;
-                    -ms-transform-origin: center 0.5px;
-                    transform-origin: center 0.5px;
-                    background-color: $dark;
-                }
-        
-                .menu-bar:nth-child(3) {
-                    -webkit-transform: rotate(45deg);
-                    -ms-transform: rotate(45deg);
-                    transform: rotate(45deg);
-                    -webkit-transform-origin: 24.85px -2.5px;
-                    -ms-transform-origin: 24.85px -2.5px;
-                    transform-origin: 24.85px -2.5px;
-                    background-color: $dark;
-                }
-            }
+				&.open {
+					.menu-bar:nth-child(1) {
+						opacity: 0;
+					}
+
+					.menu-bar:nth-child(2) {
+						-webkit-transform: rotate(-45deg);
+						-ms-transform: rotate(-45deg);
+						transform: rotate(-45deg);
+						-webkit-transform-origin: center 0.5px;
+						-ms-transform-origin: center 0.5px;
+						transform-origin: center 0.5px;
+						background-color: $dark;
+					}
+
+					.menu-bar:nth-child(3) {
+						-webkit-transform: rotate(45deg);
+						-ms-transform: rotate(45deg);
+						transform: rotate(45deg);
+						-webkit-transform-origin: 24.85px -2.5px;
+						-ms-transform-origin: 24.85px -2.5px;
+						transform-origin: 24.85px -2.5px;
+						background-color: $dark;
+					}
+				}
+			}
 		}
 	}
 }
@@ -140,43 +145,41 @@
 		display: -ms-grid;
 		display: grid;
 		grid-template-areas: "brandLink navLinks";
-        grid-template-columns: 200px 80%;
-        
-        .nav-item {
+		grid-template-columns: 200px 80%;
 
-            &.brand-link {
-                padding-bottom: 0;
-                grid-area: brandLink;
-            }
+		.nav-item {
+			&.brand-link {
+				padding-bottom: 0;
+				grid-area: brandLink;
+			}
 
-            &.menu {
-                position: static;
-                display: flex;
-                width: 100%;
-                height: auto;
-                clip: auto;
-                overflow: visible;
-                grid-area: navLinks;
+			&.menu {
+				position: static;
+				display: flex;
+				width: 100%;
+				height: auto;
+				clip: auto;
+				overflow: visible;
+				grid-area: navLinks;
 
-                .menu-item {
-                    display: inline-blocK;
-                    width: auto;
-                    margin: 0;
-                    margin-right: 16px;
+				.menu-item {
+					display: inline-blocK;
+					width: auto;
+					margin: 0;
+					margin-right: 16px;
 
-                    .menu-link {
-                        font-size: 12pt;
-                    }
+					.menu-link {
+						font-size: 11pt;
+					}
 
-                    &:last-child {
-                        margin-right: 0;
-                    }
-                }
-            }
-
-            &#toggle {
-                display: none;
-            }
-        }
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
+			&.menu-btn {
+				display: none;
+			}
+		}
 	}
 }

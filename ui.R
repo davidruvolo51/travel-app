@@ -2,7 +2,7 @@
 #' FILE: ui.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-13
+#' MODIFIED: 2020-02-14
 #' PURPOSE: client side for application
 #' STATUS: working; on.going
 #' PACKAGES: NA
@@ -24,14 +24,31 @@ ui <- tagList(
             type = "text/css",
             href = "css/styles.min.css"
         ),
-        tags$title("Shiny Travel")
+        tags$title("shinyTravel")
     ),
     src$app(
         src$navbar(
             title = "shinyTravel",
-            labels = c("home", "learn", "explore"),
-            links = c("Home", "Learn", "Explore")
+            labels = routes$labels,
+            links = routes$links
         ),
-        uiOutput("page")
-    )
+        uiOutput("page"),
+        src$footer(
+            tags$h2("shinyTravel"),
+            src$nav$navlinks(
+                id = "footer-nav",
+                labels = c(
+                    "Source",
+                    "Data",
+                    "Wiki"
+                ),
+                links = c(
+                    "https://github.com/davidruvolo51/travel-app",
+                    "https://github.com/davidruvolo51/travel-app-data",
+                    "https://github.com/davidruvolo51/travel-app/wiki"
+                    )
+            )
+        )
+    ),
+    tags$script(src = "js/index.js")
 )

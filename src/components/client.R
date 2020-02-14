@@ -110,7 +110,9 @@ src$navbar <- function(title, links, labels) {
             links = links,
             labels = labels
         ),
-        src$nav$toggle(class = "nav-item")
+        tags$div(class = "nav-item menu-btn",
+            src$nav$toggle(class = "nav-item")
+        )
     )
     return(n)
 }
@@ -174,10 +176,30 @@ src$app <- function(...) {
 #' ~ iv ~
 #' <Hero />
 src$hero <- function(..., id = NULL, class = NULL) {
-    h <- tags$header(class = "section-hero", ...)
+    h <- tags$header(
+        class = "hero",
+        tags$div(..., class = "hero-content"),
+        tags$div(class="hero-filter", `aria-hidden` = "true")
+    )
     if (length(id) > 0) h$attribs$id <- id
     if (length(class) > 0) {
         h$attribs$class <- paste0(h$attribs$class, " ", class)
     }
     return(h)
+}
+
+#' ~ v ~
+#' <Footer />
+src$footer <- function(..., id = NULL, class = NULL) {
+    f <- tags$footer(
+        class = "footer",
+        tags$div(class = "footer-content",
+            ...
+        )
+    )
+    if (length(id) > 0) f$attribs$id <- id;
+    if (length(class) > 0) {
+        f$attribs$class <- paste0(f$attribs$class, " ", class)
+    }
+    return(f)
 }

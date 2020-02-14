@@ -1,0 +1,60 @@
+.flex {
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+
+	.flex-child {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	&.flex-30x70-layout {
+		width: 100%;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+	
+	&.flex-50x2-layout {
+		width: 100%;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+
+	&.flex-33x3-layout {
+		width: 100%;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+}
+
+@media (min-width: 812px) {
+	.flex {
+		&.flex-30x70-layout .flex-child {
+			display: inline-block;
+
+			&:nth-child(odd) {
+				width: 30%;
+			}
+			&:nth-child(even) {
+				width: 70%;
+			}
+		}
+
+		&.flex-33x3-layout .flex-child {
+			display: inline-block;
+			width: 33%;
+		}
+		
+		&.flex-50x2-layout .flex-child {
+			display: inline-block;
+
+			&:nth-child(odd) {
+				width: 50%;
+			}
+			&:nth-child(even) {
+				width: 50%;
+			}
+		}
+	}
+}
