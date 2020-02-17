@@ -21,6 +21,7 @@ suppressPackageStartupMessages(library(tidyverse))
 #' In this section, identify duplicate entries and remove them. Load datasets
 breweries <- readRDS("data/downloads/breweries_all_cities.RDS")
 coffee <- readRDS("data/downloads/coffee_all_cafes.RDS")
+museum <- readRDS("data/downloads/museums_all_cities.RDS")
 
 #'//////////////////////////////////////
 
@@ -180,8 +181,35 @@ cafes <- coffee %>%
         type = "cafe"
     )
 
+#' reduce museums data and add columns to match the structure of the other data
+museums <- museum %>%
+    mutate(
+        user_ratings_total = NA,
+        rating = NA,
+        price_level = NA,
+        type = "museum",
+        name = trimws(
+            stringr::str_replace(name, ",", " "),
+            "both"
+        )
+    ) %>%
+    select(
+        city,
+        country,
+        id,
+        name,
+        lat,
+        lon,
+        user_ratings_total,
+        rating,
+        price_level,
+        type
+    )
+
 #' Merge datasets - bind rows
-places <- rbind(brew, cafes) %>% arrange(city, country, name, type)
+places <- rbind(brew, cafes, museums) %>%
+    arrange(city, country, name, type) %>%
+    distinct(id, .keep_all = TRUE)
 
 #'//////////////////////////////////////////////////////////////////////////////
 
@@ -235,36 +263,82 @@ travel$highlights$breweries <- places %>%
     count() %>%
     pull()
 
+#' ~ f ~
+#' Find the total number of museums
+travel$highlights$museums <- places %>%
+    filter(type == "museum") %>%
+    distinct(id) %>%
+    count() %>%
+    pull()
 
 #' Check to see if the breweries and cafes count equal the NCOL
 travel$highlights$places == NROW(places)
-sum(travel$highlights$breweries, travel$highlights$cafes) == NROW(places)
+sum(
+    travel$highlights$breweries,
+    travel$highlights$cafes,
+    travel$highlights$museums
+) == NROW(places)
 
-#' ~ f ~
+#' ~ g ~
 #' Descriptives: Places by City
 #' (I don't know if this will be helpful)
 travel$descriptives$places_by_city <- places %>%
     group_by(city, type) %>%
-    count() %>%
-    group_by(type) %>%
     summarize(
-        avg = mean(n),
-        sd = sd(n)
+        n = n()
+    ) %>%
+    left_join(
+        places %>%
+            group_by(city) %>%
+            summarize(
+                places_city = length(unique(id))
+            ),
+        by = "city"
+    ) %>%
+    left_join(
+        places %>%
+            group_by(type) %>%
+            summarize(
+                places_type = length(unique(id))
+            ),
+        by = "type"
+    ) %>%
+    mutate(
+        rate_city = n / places_city,
+        rate_type = n / places_type
     )
 
-#' ~ g ~
+
+#' ~ h ~
 #' Descriptives: Places by Country
 #' (I don't know if this will be helpful)
 travel$descriptives$places_by_country <- places %>%
     group_by(country, type) %>%
-    count() %>%
-    group_by(type) %>%
     summarize(
-        mean = mean(n),
-        sd = sd(n)
+        n = n(),
+    ) %>%
+    left_join(
+        places %>%
+            group_by(country) %>%
+            summarize(
+                places_country = length(unique(id))
+            ),
+        by = "country"
+    ) %>%
+    left_join(
+        places %>%
+            group_by(type) %>%
+            summarize(
+                places_type = length(unique(id))
+            ),
+        by = "type"
+    ) %>%
+    mutate(
+        rate_country = n / places_country,
+        rate_type = n / places_type
     )
 
-#' ~ h ~
+#' ~ i ~
 #' Summaries: coffee and breweries by country
 travel$summary$places_by_country <- places %>%
     group_by(country, type) %>%
@@ -279,7 +353,7 @@ travel$summary$places_by_country <- places %>%
     ) %>%
     arrange(country, type)
 
-#' ~ i ~
+#' ~ j ~
 #' Summary: coffe and breweries by city
 travel$summary$places_by_city <- places %>%
     group_by(city, country, type) %>%
