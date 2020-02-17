@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-02-12
+#' MODIFIED: 2020-02-17
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: in.progress
 #' PACKAGES: tidyverse
@@ -122,6 +122,20 @@ coffee$rating[coffee$cafeId == "cafe_585"] <- 4.8
 # View entry
 coffee[coffee$cafeId == "cafe_585", ]
 
+#'//////////////////////////////////////
+
+#' Reduce the Museums Dataset
+#' It's impossible to submit the dataset with names missing. I cannot add cases
+#' if the name does not exist as it is impossible to verify it's existence.
+#' Despite the significant loss of data, I'd rather have cases with a valid
+#' name than pure numbers. This is a real life example of the issues that are
+#' mentioned in the OSM blog post.
+#' https://blog.emacsen.net/blog/2018/02/16/osm-is-in-trouble/
+
+museum <- museum %>% filter(!is.na(name))
+
+
+dim(museum) #' Ouch, this hurts!
 
 #'//////////////////////////////////////
 
@@ -283,29 +297,51 @@ sum(
 #' Descriptives: Places by City
 #' (I don't know if this will be helpful)
 travel$descriptives$places_by_city <- places %>%
-    group_by(city, type) %>%
+    group_by(city, country, type) %>%
     summarize(
         n = n()
     ) %>%
+
+    #' Calcuate the total number of places in each city
+    #' This says, In Vienna there are n places. Where n is
+    #' the total cafes, breweries, and museums.
     left_join(
         places %>%
             group_by(city) %>%
             summarize(
-                places_city = length(unique(id))
+                tot_city_places = length(unique(id))
             ),
         by = "city"
     ) %>%
+
+    #' Calcuate the total number of places in each country.
+    #' This says: In Austria, there n cafes, n breweries, and
+    #' n musuems. This allows me to calcuate the rate of place type
+    #' of a city in comparison to the country level.
+    left_join(
+        places %>%
+            group_by(country) %>%
+            summarize(
+                tot_country_places = length(unique(id))
+            ),
+        by = "country"
+    ) %>%
+
+    #' Calcuate the total number of place type (entire dataset)
+    #' This says: in the entire dataset, how returns the total number
+    #' of cafes, museums, and breweries
     left_join(
         places %>%
             group_by(type) %>%
             summarize(
-                places_type = length(unique(id))
+                global_type_places = length(unique(id))
             ),
         by = "type"
     ) %>%
     mutate(
-        rate_city = n / places_city,
-        rate_type = n / places_type
+        city_rate = n / tot_city_places,
+        country_rate = n / tot_country_places,
+        type_rate_global = n / global_type_places
     )
 
 
@@ -376,4 +412,5 @@ travel$summary$places_by_city <- places %>%
 
 saveRDS(brew, "data/all_european_breweries.RDS")
 saveRDS(cafes, "data/all_european_coffee.RDS")
+saveRDS(museums, "data/all_european_museums.RDS")
 saveRDS(travel, "data/travel_summary.RDS")
