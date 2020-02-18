@@ -44,10 +44,19 @@ cmd_c <- paste0(
     "museums_all_cities.RDS"
 )
 
+#' build new cmd for geocoded cities
+cmd_d <- paste0(
+    "curl -O ",
+    "https://raw.githubusercontent.com/davidruvolo51/",
+    "travel-app-data/master/data/",
+    "cafe_cities_geocoded.RDS"
+)
+
 #' run both cmds
 system(cmd_a)
 system(cmd_b)
 system(cmd_c)
+system(cmd_d)
 
 
 #' mv files to data/
