@@ -8,15 +8,15 @@
 #' PACKAGES: NA
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
-page <- function() {
+home_tab <- function() {
     shiny_btn_css <- "action-button shiny-bound-input"
     src$main(
-        src$hero(id = "home",
+        src$hero(id = "hero-home",
             tags$h1("shinyTravel"),
             tags$h2("Plan your next European city break using data")
         ),
         src$section(
-            id = "about", class = "flex flex-50x2-layout",
+            id = "section-about", class = "flex flex-50x2-layout",
             tags$div(
                 class = "flex-child",
                 tags$p("Some image will go here")
@@ -38,46 +38,46 @@ page <- function() {
             )
         ),
         src$section(
-            id = "start", class = "start",
-            tags$h2(
-                "How do I use",
-                tags$span(class = "app-title", "shinyTravel"),
-                "?"
-            ),
-            tags$p("Are you reading to start planning your holiday?"),
-            tags$p(
-                "Use the", tags$span(class = "page-title", "Finder"),
-                "to get recommendations or use the",
-                tags$span(class = "page-title", "Explorer"),
-                "to view all locations."
-            ),
-            tags$ul(
-                class = "b-list", `aria-describedby` = "b-list-title",
-                tags$span(
-                    id = "b-list-title",
-                    class = "visually-hidden",
-                    "Choose a data visualization module"
+            id = "section-howto", class = "flex flex-50x2-layout",
+            tags$div(
+                class = "flex-child",
+                tags$h2(
+                    "How do I use the",
+                    tags$span(class = "app-title", "shinyTravel"),
+                    "app?"
                 ),
-                tags$li(
-                    class = "b-list-item",
-                    tags$button(
-                        class = paste0(
-                            shiny_btn_css,
-                            " b b-secondary"
-                        ),
-                        "Explorer"
-                    )
-                ),
-                tags$li(
-                    class = "b-list-item",
-                    tags$button(
-                        class = paste0(
-                            shiny_btn_css,
-                            " b b-primary"
-                        ),
-                        "Finder"
-                    )
+                tags$p(
+                    "You can use the",
+                    tags$span(class = "app-title", "shinyTravel"),
+                    "app in a number of ways. Use the",
+                    tags$strong("Finder"), "to get city recommendations",
+                    "based on your preferences for coffee, breweries,",
+                    "and museums. You can also search for places using",
+                    "the interactive map. This is available in the",
+                    tags$strong("Explorer"), "page. If you would like to view",
+                    "all places, you can search through the data in the",
+                    tags$strong("Data"), "page."
                 )
+            ),
+            tags$div(
+                class = "flex-child",
+                tags$p("Some image will go here")
+            )
+        ),
+        src$section(
+            id = "section-start", class = "start",
+            tags$h2("Are you reading to start planning your holiday?"),
+            tags$p(
+                "If you are ready to begin, navigate to any of the",
+                "available pages or click the start button below."
+            ),
+            tags$button(
+                id = "appStart",
+                class = paste0(
+                    shiny_btn_css,
+                    " b b-primary"
+                ),
+                "Start"
             )
         )
     )
