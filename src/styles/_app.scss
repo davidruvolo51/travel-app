@@ -1,0 +1,94 @@
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+.fade-in {
+	animation: fadeIn 1s forwards;
+}
+
+.fade-out {
+	animation: fadeOut 1s forwards;
+}
+
+#root {
+	animation: fadeIn 1s forwards;
+}
+
+.main {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	justify-content: center;
+	align-items: center;
+	animation: fadeIn 1s 1 forwards;
+
+	.section {
+		width: 90%;
+		margin: 0 auto;
+		padding: 36px 0;
+
+		h2 {
+			margin-bottom: 6px;
+		}
+
+		p {
+			margin-bottom: 13px;
+
+			span {
+				&.app-title {
+					font-weight: 700;
+					color: $brand;
+				}
+
+				&.page-title {
+					color: $brand;
+					font-style: italic;
+					box-shadow: inset 0 -1px 0 0 $brand;
+				}
+			}
+
+			strong {
+				color: $brand;
+				font-weight: 700;
+			}
+		}
+
+		&:last-child {
+			margin-bottom: 44px;
+		}
+
+		a {
+			color: $brand;
+			-webkit-box-shadow: inset 0 -2px 0 0 $brand;
+			box-shadow: inset 0 -2px 0 0 $brand;
+		}
+	}
+
+	&.main-extra-top-spacing {
+		padding-top: 52px;
+	}
+}
+
+@media (min-width: $screen-break) {
+	.main {
+		min-height: 100vh;
+
+		.section {
+			max-width: $screen-break;
+		}
+	}
+}

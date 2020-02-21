@@ -1,0 +1,42 @@
+.hero {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	min-height: 100vh;
+
+	&.hero-small {
+		min-height: 20vh;
+	}
+
+	&.hero-normal {
+		min-height: 100vh;
+	}
+
+	.hero-content {
+		position: relative;
+		width: 90%;
+		margin: 0 auto;
+		z-index: 1;
+
+		h1 {
+			font-size: 24pt;
+		}
+
+		h2 {
+			font-size: 32pt;
+			font-weight: 400;
+		}
+	}
+}
+
+@media (min-width: $screen-break) {
+	.hero {
+		max-height: 80vh;
+
+		.hero-content {
+			max-width: $screen-break;
+		}
+	}
+}

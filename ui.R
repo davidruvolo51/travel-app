@@ -12,7 +12,8 @@
 #'      element "page". This is loaded dynamically in the server.
 #' ////////////////////////////////////////////////////////////////////////////
 ui <- tagList(
-    tags$head(`lang` = "en",
+    tags$head(
+        `lang` = "en",
         tags$meta(charset = "utf-8"),
         tags$meta(`http-equiv` = "X-UA-Compatible", content = "IE=edge"),
         tags$meta(
@@ -22,31 +23,45 @@ ui <- tagList(
         tags$link(
             rel = "stylesheet",
             type = "text/css",
-            href = "css/styles.min.css"
+            href = "css/styles.css"
         ),
         tags$title("shinyTravel")
     ),
-    src$app(
-        src$navbar(
-            title = "shinyTravel",
-            labels = routes$labels,
-            links = routes$links
-        ),
-        uiOutput("page"),
-        src$footer(
-            tags$h2("shinyTravel"),
-            src$nav$navlinks(
-                id = "footer-nav",
-                labels = c(
-                    "Source",
-                    "Data",
-                    "Wiki"
-                ),
-                links = c(
-                    "https://github.com/davidruvolo51/travel-app",
-                    "https://github.com/davidruvolo51/travel-app-data",
-                    "https://github.com/davidruvolo51/travel-app/wiki"
+    tags$div(id = "loading",
+        tags$p(class = "visually-hidden", "Loading"),
+        HTML("
+            <svg aria-hidden='true' width='90' height='25' viewBox='0 0 90 25'>
+                <circle class='dot' cx='10' cy='12.5' r='10' />
+                <circle class='dot' cx='40' cy='12.5' r='10' />
+                <circle class='dot' cx='70' cy='12.5' r='10' />
+            </svg>"
+        )
+    ),
+    tags$div(
+        id = "root",
+        src$app(
+            src$navbar(
+                title = "shinyTravel",
+                labels = routes$labels,
+                links = routes$links
+            ),
+            uiOutput("page"),
+            tags$div(class = "footer-banner", `aria-hidden` = "true"),
+            src$footer(
+                tags$h2("shinyTravel"),
+                src$nav$navlinks(
+                    id = "footer-nav",
+                    labels = c(
+                        "Code",
+                        "Data",
+                        "Wiki"
+                    ),
+                    links = c(
+                        "https://github.com/davidruvolo51/travel-app",
+                        "https://github.com/davidruvolo51/travel-app-data",
+                        "https://github.com/davidruvolo51/travel-app/wiki"
                     )
+                )
             )
         )
     ),

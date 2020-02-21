@@ -1,17 +1,57 @@
 {
-  "name": "travel-app",
-  "version": "1.0.0",
-  "description": "a shiny application for finding speciality coffee and craft breweries",
-  "main": "index.js",
-  "repository": "https://github.com/davidruvolo51/travel-app.git",
-  "author": "davidruvolo51",
-  "license": "MIT",
-  "dependencies": {
-    "concurrently": "^5.1.0"
-  },
-  "scripts": {
-    "shiny": "Rscript -e \"shiny::runApp(launch.browser = FALSE, port = 8000)\"",
-    "sass": "sass --watch www/css/index.scss:www/css/styles.min.css --style compressed",
-    "dev": "concurrently --kill-others-on-fail \"yarn shiny\" \"yarn sass\""
-  }
+	"name": "travel-app",
+	"version": "1.0.0",
+	"description": "a shiny application for finding speciality coffee and craft breweries",
+	"main": "index.js",
+	"author": "davidruvolo51",
+	"license": "MIT",
+	"dependencies": {
+		"autoprefixer": "^9.7.4",
+		"concurrently": "^5.1.0",
+		"cssnano": "^4.1.10",
+		"d3": "^5.15.0",
+		"sass": "^1.25.0"
+	},
+	"devDependencies": {
+		"postcss-modules": "^1.5.0"
+	},
+	"scripts": {
+		"shiny": "Rscript -e \"shiny::runApp(launch.browser = FALSE, port = 8000)\"",
+		"sass": "parcel src/styles/styles.scss -d www/css --no-cache --no-source-maps",
+		"sass_build": "parcel build src/styles/styles.scss -d www/css --no-cache --no-source-maps",
+		"clean": "rm -rf www/css"
+	},
+	"postcss": {
+		"modules": false,
+		"plugins": {
+		  "autoprefixer": {
+			"overrideBrowserslist": [
+			  ">1%",
+			  "last 4 versions",
+			  "Firefox ESR",
+			  "not ie < 9"
+			],
+			"flexbox": "no-2009"
+		  },
+		  "cssnano": {
+			"calc": true,
+			"discardComments": {
+			  "removeAll": true
+			}
+		  }
+		}
+	  },
+	  "repository": {
+		"type": "git",
+		"url": "https://github.com/davidruvolo51/travel-app.git"
+	  },
+	  "bugs": {
+		"url" : "https://github.com/davidruvolo51/travel-app/issues"  
+	  },
+	  "keywords": [
+		  "r",
+		  "shiny",
+		  "d3",
+		  "sass"
+	  ]
 }

@@ -2,7 +2,7 @@
 #' FILE: client.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-13
+#' MODIFIED: 2020-02-20
 #' PURPOSE: list of ui components
 #' STATUS: in.progress
 #' PACKAGES: shiny (htmltools)
@@ -10,9 +10,9 @@
 #' ////////////////////////////////////////////////////////////////////////////
 
 #' pkgs
-if (!require("shiny")) {
-    suppressPackageStartupMessages(library(shiny))
-}
+#' if (!require("shiny")) {
+#'     suppressPackageStartupMessages(library(shiny))
+#' }
 
 #' Define components object
 #' The object `src` will receive all components that will be used in the
@@ -40,8 +40,10 @@ src$nav$navlinks <- function(id = NULL, class = NULL, links, labels) {
         # define href and text
         if (length(labels[link]) > 0) {
             item$children <- tags$a(
-                class = "menu-link",
+                class = "shiny-bound-input menu-link",
                 href = links[link],
+                id = tolower(links[link]),
+                `data-tab` = tolower(links[link]),
                 labels[link]
             )
         }
@@ -126,10 +128,16 @@ src$navbar <- function(title, links, labels) {
 #' Alternative to <main>
 #' - class: a string containing one or more class class names
 #' - ...: child elements to render inside the <main> element
-src$main <- function(..., class = NULL) {
+src$main <- function(..., class = NULL, extra_spacing = TRUE) {
     m <- tags$main(id = "main", class = "main", ...)
     if (length(class) > 0) {
         m$attribs$class <- paste0(m$attribs$class, " ", class)
+    }
+    if (isTRUE(extra_spacing)) {
+        m$attribs$class <- paste0(
+            m$attribs$class, " ",
+            "main-extra-top-spacing"
+        )
     }
     return(m)
 }
@@ -175,15 +183,24 @@ src$app <- function(...) {
 
 #' ~ iv ~
 #' <Hero />
-src$hero <- function(..., id = NULL, class = NULL) {
+src$hero <- function(..., id = NULL, class = NULL, is_small = FALSE) {
     h <- tags$header(
-        class = "hero",
+        class = "hero ",
         tags$div(..., class = "hero-content"),
-        tags$div(class="hero-filter", `aria-hidden` = "true")
+        tags$div(class = "hero-filter", `aria-hidden` = "true")
     )
+    # add id
     if (length(id) > 0) h$attribs$id <- id
+
+    # add css based on props
     if (length(class) > 0) {
-        h$attribs$class <- paste0(h$attribs$class, " ", class)
+        h$attribs$class <- paste0(css, " ", class)
+    }
+    # update css based on props
+    if (isTRUE(is_small)) {
+        h$attribs$class <- paste0(h$attribs$class, "hero-small")
+    } else {
+        h$attribs$class <- paste0(h$attribs$class, "hero-normal")
     }
     return(h)
 }
