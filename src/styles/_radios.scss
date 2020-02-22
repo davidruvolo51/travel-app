@@ -1,0 +1,111 @@
+.radios {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    flex-direction: column;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+	font-family: inherit;
+	margin-bottom: 24px;
+
+	.radios-title {
+        margin: 0;
+        margin-bottom: 16px;
+        position: relative;
+
+		.radio-title-emph {
+			font-style: italic;
+		}
+		&::after {
+            position: relative;
+			content: "?";
+			margin-left: -4px;
+		}
+	}
+
+	// input wrapper
+	.radio-btn {
+        display: block;
+        width: 100%;
+		margin: 0 auto;
+
+		input[type="radio"] {
+			position: absolute;
+			clip: rect(1px 1px 1px 1px);
+			clip: rect(1px, 1px, 1px, 1px);
+			height: 1px;
+			width: 1px;
+			overflow: hidden;
+			white-space: nowrap;
+
+			&:checked + label {
+				cursor: pointer;
+				border-color: $brand;
+				background-color: $brand;
+				color: $light;
+				border-bottom-width: 3px;
+			}
+
+			&:hover,
+			&:focus {
+				+ label {
+					border-color: $brand;
+					background-color: $brand;
+					border-bottom-width: 3px;
+					color: $light;
+				}
+			}
+		}
+
+		label {
+			display: block;
+			text-align: center;
+			margin: 12px 4px;
+			padding: 7px 12px;
+			border: 1px solid $semi-light;
+			border-bottom-width: 3px;
+			cursor: pointer;
+
+			&:hover,
+			&:focus {
+				border-color: $brand;
+				background-color: $brand;
+				border-bottom-width: 3px;
+				color: $light;
+			}
+		}
+    }
+    
+    &:first-child {
+        margin-top: 12px;
+    }
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+@media (min-width: $screen-break-sm) {
+	.radios {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+        // .radios-title {
+        //     margin: 6px auto;
+        // }
+
+		.radio-btn {
+			display: inline-block;
+			width: 100%;
+			margin: 0;
+			margin-right: 16px;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+}

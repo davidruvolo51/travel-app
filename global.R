@@ -2,7 +2,7 @@
 #' FILE: global.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-18
+#' MODIFIED: 2020-02-21
 #' PURPOSE: global script for app
 #' STATUS: in.progress
 #' PACKAGES: shiny
@@ -16,8 +16,6 @@ suppressPackageStartupMessages(library(shiny))
 #' load components
 source("src/components/client.R")
 
-#' Define application routes
-routes <- list(
-    links = c("home","finder", "explorer"),
-    labels = c("Home","Finder", "Explorer")
-)
+#' data
+recs <- readRDS("data/travel_recommendations.RDS")
+travel <- readRDS("data/travel_summary.RDS")

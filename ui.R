@@ -42,8 +42,8 @@ ui <- tagList(
         src$app(
             src$navbar(
                 title = "shinyTravel",
-                labels = routes$labels,
-                links = routes$links
+                links = c("home", "finder", "explorer"),
+                labels = c("Home", "Finder", "Explorer")
             ),
             uiOutput("page"),
             tags$div(class = "footer-banner", `aria-hidden` = "true"),

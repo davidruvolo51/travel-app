@@ -2,18 +2,18 @@
 #' FILE: handlers.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-18
+#' MODIFIED: 2020-02-21
 #' PURPOSE: A collection of js handlers for use in shiny apps
 #' STATUS: working
 #' PACKAGES: NA
-#' COMMENTS: NA
+#' COMMENTS: see src/js/* for corresponding js code
 #'////////////////////////////////////////////////////////////////////////////
 
 #' Define object
 js <- list()
 
 #' Retrieve the session
-js$get_shiny_session <- function(...) {
+js$get_shiny_session <- function() {
     return(shiny::getDefaultReactiveDomain())
 }
 
@@ -57,6 +57,15 @@ js$remove_css <- function(elem, css) {
 js$remove_elem <- function(elem) {
     session <- js$get_shiny_session()
     session$sendCustomMessage("remove_elem", list(elem))
+}
+
+#' Remove an html attribute from an element
+js$remove_element_attribute <- function(elem, attr) {
+    session <- js$get_shiny_session()
+    session$sendCustomMessage(
+        "remove_element_attribute",
+        list(elem, attr)
+    )
 }
 
 #' Scroll to the Top of a page

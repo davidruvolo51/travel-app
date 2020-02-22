@@ -23,15 +23,13 @@ button {
         color: $light;
 
         &:hover {
-            background-color: transparent;
             text-decoration: underline;
-            color: $brand;
         }
     }
 
     &.b-secondary {
         background-color: $light;
-        border-color: none;
+        // border-color: $brand-light;
         color: $brand;
 
         &:hover {
@@ -41,10 +39,14 @@ button {
 }
 
 .b-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column-reverse;
     width: 100%;
     padding: 0;
     margin: 0;
-    margin-top: 21px;
+    // margin-top: 21px;
     list-style: none;
 
     .b {
@@ -53,10 +55,12 @@ button {
     }
 }
 
-@media (min-width: 532px) {
+@media (min-width: $screen-break-sm) {
     .b-list {
         display: inline-flex;
-        justify-content: center;
+        justify-content: flex-end;
+        align-items: center;
+        flex-direction: row;
 
         .b {
             width: 200px;

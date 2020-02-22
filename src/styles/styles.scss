@@ -1,5 +1,14 @@
-@import "_variables", "_fonts", "_flex";
-@import "_base", "_buttons", "_navbar", "_app", "_hero", "_footer", "_loading";
+@import "_variables", "_fonts";
+@import 
+	"_base",
+	"_flex",
+	"_buttons",
+	"_radios",
+	"_navbar",
+	"_app",
+	"_hero",
+	"_footer", 
+	"_loading";
 
 .visually-hidden {
 	position: absolute;
@@ -62,6 +71,10 @@
 
 #hero-finder {
 	text-align: center;
+}
+
+#travel-form {
+	padding: 1.5em;
 }
 
 .footer-banner {

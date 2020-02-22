@@ -10,48 +10,55 @@
 		"concurrently": "^5.1.0",
 		"cssnano": "^4.1.10",
 		"d3": "^5.15.0",
+		"modules": "^0.4.0",
 		"sass": "^1.25.0"
 	},
 	"devDependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.8.4",
+		"@babel/preset-env": "^7.8.4",
 		"postcss-modules": "^1.5.0"
 	},
 	"scripts": {
 		"shiny": "Rscript -e \"shiny::runApp(launch.browser = FALSE, port = 8000)\"",
-		"sass": "parcel src/styles/styles.scss -d www/css --no-cache --no-source-maps",
+		"sass": "parcel src/styles/styles.scss -d www/css --no-cache --no-source-maps --port 1111",
 		"sass_build": "parcel build src/styles/styles.scss -d www/css --no-cache --no-source-maps",
-		"clean": "rm -rf www/css"
+		"sass_clean": "rm -rf www/css .sass-cache/",
+		"js": "parcel src/js/index.js -d www/js --no-hmr --no-cache --no-source-maps --port 2222",
+		"js_build": "parcel build src/js/index.js -d www/js --no-cache --no-source-maps",
+		"js_clean": "rm -rf www/js/index.js"
 	},
 	"postcss": {
 		"modules": false,
 		"plugins": {
-		  "autoprefixer": {
-			"overrideBrowserslist": [
-			  ">1%",
-			  "last 4 versions",
-			  "Firefox ESR",
-			  "not ie < 9"
-			],
-			"flexbox": "no-2009"
-		  },
-		  "cssnano": {
-			"calc": true,
-			"discardComments": {
-			  "removeAll": true
+			"autoprefixer": {
+				"overrideBrowserslist": [
+					">1%",
+					"last 4 versions",
+					"Firefox ESR",
+					"not ie < 9"
+				],
+				"flexbox": "no-2009"
+			},
+			"cssnano": {
+				"calc": true,
+				"discardComments": {
+					"removeAll": true
+				}
 			}
-		  }
 		}
-	  },
-	  "repository": {
+	},
+	"repository": {
 		"type": "git",
 		"url": "https://github.com/davidruvolo51/travel-app.git"
-	  },
-	  "bugs": {
-		"url" : "https://github.com/davidruvolo51/travel-app/issues"  
-	  },
-	  "keywords": [
-		  "r",
-		  "shiny",
-		  "d3",
-		  "sass"
-	  ]
+	},
+	"bugs": {
+		"url": "https://github.com/davidruvolo51/travel-app/issues"
+	},
+	"keywords": [
+		"r",
+		"shiny",
+		"d3",
+		"sass"
+	]
 }

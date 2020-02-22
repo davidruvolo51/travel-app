@@ -17,6 +17,7 @@ server <- function(input, output, session) {
 
     #' load utils and modules
     source("server/utils/handlers.R")
+    source("server/utils/viz.R")
 
     #' define server variables
     # current_page <- reactiveVal("home")
@@ -30,30 +31,35 @@ server <- function(input, output, session) {
             output$page <- renderUI(home_tab())
             js$scroll_to_top()
         }
-    }, ignoreInit = TRUE)
+    })
     observeEvent(input$finder, {
         if (current_page() != "finder") {
             current_page("finder")
             output$page <- renderUI(finder_tab())
-            js$scroll_to_top()
         }
-    }, ignoreInit = TRUE)
+    })
     observeEvent(input$appStart, {
         if (current_page() != "finder") {
             current_page("finder")
             output$page <- renderUI(finder_tab())
             js$scroll_to_top()
         }
-    }, ignoreInit = TRUE)
+    })
     observeEvent(input$explorer, {
         if (current_page() != "explorer") {
             current_page("explorer")
             output$page <- renderUI(explorer_tab())
             js$scroll_to_top()
         }
-    }, ignoreInit = TRUE)
+    })
 
     #' Switch Loading Screen with App
-    # Sys.sleep(2)
     js$remove_elem(elem = "#loading");
+
+    #' Run Code for Data
+    observe({
+        if (current_page() == "finder") {
+            js$console_log("hello world")
+        }
+    })
 }

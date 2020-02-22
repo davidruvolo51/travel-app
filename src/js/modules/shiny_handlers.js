@@ -48,7 +48,7 @@ export function add_css(elem, css) {
 // SET INNERHTML
 export function inner_html(elem, string, delay) {
     if (delay) {
-        setTimeout(export function () {
+        setTimeout(function () {
             document.querySelector(elem).innerHTML = string;
         }, delay)
     } else {

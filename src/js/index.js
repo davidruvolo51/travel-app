@@ -11,10 +11,10 @@
 // BEGIN
 
 // imports
-import * as utils from "./modules/shiny_handler"
+import * as utils from "./modules/shiny_handlers"
 
 ////////////////////////////////////////
-// register modals
+// register shiny modules
 Shiny.addCustomMessageHandler("add_css", function (value) {
     utils.add_css(value[0], value[1]);
 });
