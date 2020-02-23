@@ -57,9 +57,10 @@ server <- function(input, output, session) {
     js$remove_elem(elem = "#loading");
 
     #' Run Code for Data
-    observe({
-        if (current_page() == "finder") {
-            js$console_log("hello world")
-        }
+    observeEvent(input$submitForm, {
+        js$console_log("form submitted!")
+        js$console_log(input$coffeePrefs)
+        js$console_log(input$breweryPrefs)
+        js$console_log(input$museumPrefs)
     })
 }

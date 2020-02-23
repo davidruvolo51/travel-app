@@ -45,8 +45,9 @@ finder_tab <- function() {
 
                 #' //////////////////////////////////////
                 # coffee
-                tags$fieldset(
-                    class = "input-group radios coffee-radio",
+                src$radioInputGroup(
+                    id = "coffeePrefs",
+                    class = "radios coffee-radio",
                     tags$legend(
                         class = "radios-title",
                         "How important is",
@@ -55,102 +56,48 @@ finder_tab <- function() {
                             "coffee"
                         )
                     ),
-
-                    # button: none
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "coffee-none",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "coffee",
-                            value = 0
-                        ),
-                        tags$label(
-                            `for` = "coffee-none",
-                            class = "radio-label",
-                            "Not at all"
-                        )
+                    # button:
+                    src$radioInput(
+                        name = "coffeePrefs",
+                        label = "Not at all",
+                        value = 0
                     ),
 
-                    # button: a little
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "coffee-little",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "coffee",
-                            value = 1
-                        ),
-                        tags$label(
-                            `for` = "coffee-little",
-                            class = "radio-label",
-                            "A little"
-                        )
+                    # button:
+                    src$radioInput(
+                        name = "coffeePrefs",
+                        label = "Somewhat",
+                        value = 1
                     ),
+
 
                     # button: important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "coffee-somewhat",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "coffee",
-                            value = 2
-                        ),
-                        tags$label(
-                            `for` = "coffee-somewhat",
-                            class = "radio-label",
-                            "Somewhat"
-                        )
+                    src$radioInput(
+                        name = "coffeePrefs",
+                        label = "Important",
+                        value = 2
                     ),
 
                     # button: very important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "coffee-very",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "coffee",
-                            value = 3
-                        ),
-                        tags$label(
-                            `for` = "coffee-very",
-                            class = "radio-label",
-                            "Very"
-                        )
+                    src$radioInput(
+                        name = "coffeePrefs",
+                        label = "Very",
+                        value = 3
                     ),
 
                     # button: essential
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "coffee-essential",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "coffee",
-                            value = 4
-                        ),
-                        tags$label(
-                            `for` = "coffee-essential",
-                            class = "radio-label",
-                            "Essential"
-                        )
-                    )
+                    src$radioInput(
+                        name = "coffeePrefs",
+                        label = "Essential",
+                        value = 4
+                    ),
                 ),
 
                 #' //////////////////////////////////////
                 # breweries
-                tags$fieldset(
-                    class = "input-group radios brewery-radio",
+                src$radioInputGroup(
+                    id = "breweryPrefs",
+                    class = "radios brewery-radio",
                     tags$legend(
                         class = "radios-title",
                         "How important are",
@@ -160,100 +107,46 @@ finder_tab <- function() {
                         )
                     ),
                     # button: none
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "breweries-none",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "breweries",
-                            value = 0
-                        ),
-                        tags$label(
-                            `for` = "breweries-none",
-                            class = "radio-label",
-                            "Not at all"
-                        )
+                    src$radioInput(
+                        name = "breweryPrefs",
+                        label = "Not at all",
+                        value = 0
                     ),
 
                     # button: a little
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "breweries-little",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "breweries",
-                            value = 1
-                        ),
-                        tags$label(
-                            `for` = "breweries-little",
-                            class = "radio-label",
-                            "A little"
-                        )
+                    src$radioInput(
+                        name = "breweryPrefs",
+                        label = "A little",
+                        value = 1
                     ),
 
                     # button: important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "breweries-somewhat",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "breweries",
-                            value = 2
-                        ),
-                        tags$label(
-                            `for` = "breweries-somewhat",
-                            class = "radio-label",
-                            "Somewhat"
-                        )
+                    src$radioInput(
+                        name = "breweryPrefs",
+                        label = "Important",
+                        value = 2
                     ),
 
                     # button: very important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "breweries-very",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "breweries",
-                            value = 3
-                        ),
-                        tags$label(
-                            `for` = "breweries-very",
-                            class = "radio-label",
-                            "Very"
-                        )
+                    src$radioInput(
+                        name = "breweryPrefs",
+                        label = "Very",
+                        value = 3
                     ),
 
                     # button: essential
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "breweries-essential",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "breweries",
-                            value = 4
-                        ),
-                        tags$label(
-                            `for` = "breweries-essential",
-                            class = "radio-label",
-                            "Essential"
-                        )
+                    src$radioInput(
+                        name = "breweryPrefs",
+                        label = "Essential",
+                        value = 4
                     )
                 ),
 
                 #' //////////////////////////////////////
                 # musuems
-                tags$fieldset(
-                    class = "input-group radios musem-radio",
+                src$radioInputGroup(
+                    id = "museumPrefs",
+                    class = "radios musem-radio",
                     tags$legend(
                         class = "radios-title",
                         "How important are",
@@ -264,93 +157,38 @@ finder_tab <- function() {
                     ),
 
                     # button: none
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "museums-none",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "museums",
-                            value = 0
-                        ),
-                        tags$label(
-                            `for` = "museums-none",
-                            class = "radio-label",
-                            "Not at all"
-                        )
+                    src$radioInput(
+                        name = "museumPrefs",
+                        label = "Not at all",
+                        value = 0
                     ),
 
                     # button: a little
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "museums-little",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "museums",
-                            value = 1
-                        ),
-                        tags$label(
-                            `for` = "museums-little",
-                            class = "radio-label",
-                            "A little"
-                        )
+                    src$radioInput(
+                        name = "museumPrefs",
+                        label = "A little",
+                        value = 1
                     ),
 
                     # button: important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "museums-somewhat",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "museums",
-                            value = 2
-                        ),
-                        tags$label(
-                            `for` = "museums-somewhat",
-                            class = "radio-label",
-                            "Somewhat"
-                        )
+                    src$radioInput(
+                        name = "museumPrefs",
+                        label = "Important",
+                        value = 2
                     ),
 
                     # button: very important
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "museums-very",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "museums",
-                            value = 3
-                        ),
-                        tags$label(
-                            `for` = "museums-very",
-                            class = "radio-label",
-                            "Very"
-                        )
+                    src$radioInput(
+                        name = "museumPrefs",
+                        label = "Very",
+                        value = 3
                     ),
 
                     # button: essential
-                    tags$div(
-                        class = "radio-btn",
-                        tags$input(
-                            id = "museums-essential",
-                            class = "radio-input",
-                            type = "radio",
-                            role = "radio",
-                            name = "museums",
-                            value = 4
-                        ),
-                        tags$label(
-                            `for` = "museums-essential",
-                            class = "radio-label",
-                            "Essential"
-                        )
+                    src$radioInput(
+                        name = "museumPrefs",
+                        label = "Essential",
+                        value = 4
                     )
                 ),
 

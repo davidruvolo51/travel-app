@@ -220,3 +220,46 @@ src$footer <- function(..., id = NULL, class = NULL) {
     }
     return(f)
 }
+
+#'////////////////////////////////////////////////////////////////////////////
+
+#' ~ 2 ~
+#' Define list of functions for inputs
+
+#' ~ a ~
+#' radio input group
+src$radioInputGroup <- function(..., id, class = NULL) {
+    f <- tags$fieldset(
+        class = "shiny-input-radiogroup",
+        role = "radiogroup",
+        ...
+    )
+    if (length(id) > 0) f$attribs$id <- id;
+    if (length(class) > 0) {
+        f$attribs$class <- paste0(f$attribs$class, " ", class)
+    }
+    return(f)
+}
+
+
+#' ~ b ~
+#' radio input
+src$radioInput <- function(name, label, value) {
+    id <- paste0(name, "-", gsub("[[:space:]]", "-", tolower(label)))
+    r <- tags$div(
+        class = "radio-btn",
+        tags$input(
+            id = id,
+            type = "radio",
+            role = "radio",
+            name = name,
+            value = value
+        ),
+        tags$label(
+            `for` = id,
+            class =  "radio-label",
+            label
+        )
+    )
+    return(r)
+}

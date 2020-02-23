@@ -138,7 +138,7 @@ travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
 #' travel_preferences(weights = c(1, 1, 0), ratings = c(3, 3, 0))
 #' travel_preferences(weights = c(0, 1, 0), ratings = c(0, 3, 0))
 #' travel_preferences(
-#'     weights = c(1, 1, 1),
-#'     ratings = c(3, 5, 1),
-#'     limits = 35
+#'     weights = c(0, 1, 1),
+#'     ratings = c(0, 4, 3),
+#'     limits = 10
 #' )
