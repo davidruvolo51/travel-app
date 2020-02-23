@@ -30,8 +30,11 @@ finder_tab <- function() {
             tags$p(
                 "Let's figure out where you may want to visit. Rate how",
                 "important it is to visit cafes with speciality coffee,",
-                "craft breweries, and museums when on holiday. Select only",
-                "one option for each place type."
+                "craft breweries, and museums when on holiday.",
+                "By default, all options are set to", tags$em("No Preference"),
+                ", which can be used if you find a place",
+                "neither important or unimportant. Press submit when you",
+                "have made all of your decisions.",
             ),
             tags$form(
                 id = "travel-form",
@@ -48,6 +51,8 @@ finder_tab <- function() {
                 src$radioInputGroup(
                     id = "coffeePrefs",
                     class = "radios coffee-radio",
+
+                    # title
                     tags$legend(
                         class = "radios-title",
                         "How important is",
@@ -56,41 +61,17 @@ finder_tab <- function() {
                             "coffee"
                         )
                     ),
-                    # button:
+                    # buttons
                     src$radioInput(
                         name = "coffeePrefs",
-                        label = "Not at all",
-                        value = 0
+                        label = "No Preference",
+                        checked = TRUE
                     ),
-
-                    # button:
-                    src$radioInput(
-                        name = "coffeePrefs",
-                        label = "Somewhat",
-                        value = 1
-                    ),
-
-
-                    # button: important
-                    src$radioInput(
-                        name = "coffeePrefs",
-                        label = "Important",
-                        value = 2
-                    ),
-
-                    # button: very important
-                    src$radioInput(
-                        name = "coffeePrefs",
-                        label = "Very",
-                        value = 3
-                    ),
-
-                    # button: essential
-                    src$radioInput(
-                        name = "coffeePrefs",
-                        label = "Essential",
-                        value = 4
-                    ),
+                    src$radioInput(name = "coffeePrefs", label = "Not at all"),
+                    src$radioInput(name = "coffeePrefs", label = "Somewhat"),
+                    src$radioInput(name = "coffeePrefs", label = "Important"),
+                    src$radioInput(name = "coffeePrefs", label = "Very"),
+                    src$radioInput(name = "coffeePrefs", label = "Essential")
                 ),
 
                 #' //////////////////////////////////////
@@ -98,6 +79,8 @@ finder_tab <- function() {
                 src$radioInputGroup(
                     id = "breweryPrefs",
                     class = "radios brewery-radio",
+
+                    # title
                     tags$legend(
                         class = "radios-title",
                         "How important are",
@@ -106,40 +89,18 @@ finder_tab <- function() {
                             "breweries"
                         )
                     ),
-                    # button: none
-                    src$radioInput(
-                        name = "breweryPrefs",
-                        label = "Not at all",
-                        value = 0
-                    ),
 
-                    # button: a little
+                    # buttons
                     src$radioInput(
                         name = "breweryPrefs",
-                        label = "A little",
-                        value = 1
+                        label = "No Preference",
+                        checked = TRUE
                     ),
-
-                    # button: important
-                    src$radioInput(
-                        name = "breweryPrefs",
-                        label = "Important",
-                        value = 2
-                    ),
-
-                    # button: very important
-                    src$radioInput(
-                        name = "breweryPrefs",
-                        label = "Very",
-                        value = 3
-                    ),
-
-                    # button: essential
-                    src$radioInput(
-                        name = "breweryPrefs",
-                        label = "Essential",
-                        value = 4
-                    )
+                    src$radioInput(name = "breweryPrefs", label = "Not at all"),
+                    src$radioInput(name = "breweryPrefs", label = "A little"),
+                    src$radioInput(name = "breweryPrefs", label = "Important"),
+                    src$radioInput(name = "breweryPrefs", label = "Very"),
+                    src$radioInput(name = "breweryPrefs", label = "Essential")
                 ),
 
                 #' //////////////////////////////////////
@@ -147,6 +108,8 @@ finder_tab <- function() {
                 src$radioInputGroup(
                     id = "museumPrefs",
                     class = "radios musem-radio",
+
+                    # title
                     tags$legend(
                         class = "radios-title",
                         "How important are",
@@ -156,50 +119,22 @@ finder_tab <- function() {
                         )
                     ),
 
-                    # button: none
+                    # inputs
                     src$radioInput(
                         name = "museumPrefs",
-                        label = "Not at all",
-                        value = 0
+                        label = "No Preference",
+                        checked = TRUE
                     ),
-
-                    # button: a little
-                    src$radioInput(
-                        name = "museumPrefs",
-                        label = "A little",
-                        value = 1
-                    ),
-
-                    # button: important
-                    src$radioInput(
-                        name = "museumPrefs",
-                        label = "Important",
-                        value = 2
-                    ),
-
-                    # button: very important
-                    src$radioInput(
-                        name = "museumPrefs",
-                        label = "Very",
-                        value = 3
-                    ),
-
-                    # button: essential
-                    src$radioInput(
-                        name = "museumPrefs",
-                        label = "Essential",
-                        value = 4
-                    )
+                    src$radioInput(name = "museumPrefs", label = "Not at all"),
+                    src$radioInput(name = "museumPrefs", label = "A little"),
+                    src$radioInput(name = "museumPrefs", label = "Important"),
+                    src$radioInput(name = "museumPrefs", label = "Very"),
+                    src$radioInput(name = "museumPrefs", label = "Essential")
                 ),
 
                 # Form buttons
                 tags$div(
                     class = "b-list",
-                    tags$button(
-                        id = "resetForm",
-                        class = "action-button shiny-bound-input b b-secondary",
-                        "Reset"
-                    ),
                     tags$button(
                         id = "submitForm",
                         class = "action-button shiny-bound-input b b-primary",

@@ -18,6 +18,7 @@ server <- function(input, output, session) {
     #' load utils and modules
     source("server/utils/handlers.R")
     source("server/utils/viz.R")
+    source("scripts/utils/travel_finder.R")
 
     #' define server variables
     # current_page <- reactiveVal("home")
@@ -62,5 +63,30 @@ server <- function(input, output, session) {
         js$console_log(input$coffeePrefs)
         js$console_log(input$breweryPrefs)
         js$console_log(input$museumPrefs)
+
+        setUserPreferences <- function(input) {
+            case_when(
+                input == "No Preference" ~ c(0, 0),
+                input == "Not at all" ~ c(1, -1),
+                input == "Somewhat" ~ c(1, 1),
+                input == "Important" ~ c(1, 2),
+                input == "Very" ~ c(1, 3),
+                input == "Essential" ~ c(1, 4),
+                TRUE ~ NA_real_
+            )
+        }
+
+        #' Calculate Weights and Ratings Based on Selection
+        coffee_pref <- setUserPreferences(input$coffeePrefs)
+        brewery_pref <- setUserPreferences(input$breweryPrefs)
+        museum_pref <- setUserPreferences(input$museumPrefs)
+
+        #' Collate Preferences into weights and ratings objects
+        weights <- c(coffee_pref[1], brewery_pref[1], museum_pref[1])
+        ratings <- c(coffee_pref[2], brewery_pref[2], museum_pref[2])
+
+        #' Run
+        results <- travel_preferences(weights, ratings)
+        js$console_log(results[1:3, ])
     })
 }

@@ -12,6 +12,7 @@ options(stringsAsFactors = FALSE)
 
 #' pkgs
 suppressPackageStartupMessages(library(shiny))
+suppressPackageStartupMessages(library(tidyverse))
 
 #' load components
 source("src/components/client.R")

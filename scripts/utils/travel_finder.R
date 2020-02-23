@@ -131,7 +131,7 @@ travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
     }
 
     #' Return
-    return(prefs[order(prefs$score), ])
+    return(prefs[order(prefs$score, decreasing = TRUE), ])
 }
 
 #' Run a few tests

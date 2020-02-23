@@ -2,10 +2,10 @@
 #' FILE: client.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-20
+#' MODIFIED: 2020-02-23
 #' PURPOSE: list of ui components
 #' STATUS: in.progress
-#' PACKAGES: shiny (htmltools)
+#' PACKAGES: shiny; htmltools
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 
@@ -244,22 +244,16 @@ src$radioInputGroup <- function(..., id, class = NULL) {
 
 #' ~ b ~
 #' radio input
-src$radioInput <- function(name, label, value) {
+src$radioInput <- function(name, label, checked = FALSE) {
     id <- paste0(name, "-", gsub("[[:space:]]", "-", tolower(label)))
-    r <- tags$div(
-        class = "radio-btn",
-        tags$input(
+    lab <- tags$label(`for` = id, class =  "radio-label", label)
+    btn <- tags$input(
             id = id,
             type = "radio",
             role = "radio",
             name = name,
-            value = value
-        ),
-        tags$label(
-            `for` = id,
-            class =  "radio-label",
-            label
-        )
+            value = label,
     )
-    return(r)
+    if (isTRUE(checked)) btn$attribs$checked <- "true";
+    return(tags$div(class = "radio-btn", btn, lab))
 }
