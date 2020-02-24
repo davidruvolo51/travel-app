@@ -1,5 +1,7 @@
 button {
     display: block;
+    background-color: none;
+    border: none;
     cursor: pointer;
 }
 
@@ -68,6 +70,10 @@ button {
 
             &:nth-of-type(1) {
                 margin-right: 16px;
+            }
+
+            &:last-child {
+                margin-right: 0;
             }
         }
     }

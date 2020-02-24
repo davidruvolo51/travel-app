@@ -8,7 +8,10 @@ $medium: #3f454b;
 $dark: #252525;
 $dark-alt: #2a2c32;
 $brown: #edb183;
-
+$warning: hsla(53, 100%, 61%, 1);
+$warning-accent: hsla(53, 100%, 61%, 0.2);
+$error: hsla(9, 100%, 45%, 1);
+$error-accent: hsla(9, 100%, 45%, 0.08);
 
 // shadows
 $shadow: hsla(0, 0%, 0%, 0.18);

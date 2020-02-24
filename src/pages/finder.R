@@ -40,10 +40,19 @@ finder_tab <- function() {
                 id = "travel-form",
                 class = "form",
                 `aria-describedby` = "travel-form-title",
+
+                #' Form Error
+                tags$span(
+                    id = "travel-form-error",
+                    class = "error visually-hidden"
+                ),
+
+                #' Form  title
                 tags$h3(
                     id = "travel-form-title",
-                    class = "form-title visually-hidden",
-                    "Rate each place type by how important it is to you"
+                    class = "form-title",
+                    "When on holiday, how important is it that you visit",
+                    "..."
                 ),
 
                 #' //////////////////////////////////////
@@ -55,11 +64,7 @@ finder_tab <- function() {
                     # title
                     tags$legend(
                         class = "radios-title",
-                        "How important is",
-                        tags$strong(
-                            class = "radio-title-emph",
-                            "coffee"
-                        )
+                        "Cafes with Specialty Coffee?",
                     ),
                     # buttons
                     src$radioInput(
@@ -83,11 +88,7 @@ finder_tab <- function() {
                     # title
                     tags$legend(
                         class = "radios-title",
-                        "How important are",
-                        tags$strong(
-                            class = "radio-title-emph",
-                            "breweries"
-                        )
+                        "Breweries?"
                     ),
 
                     # buttons
@@ -112,11 +113,7 @@ finder_tab <- function() {
                     # title
                     tags$legend(
                         class = "radios-title",
-                        "How important are",
-                        tags$strong(
-                            class = "radio-title-emph",
-                            "museums"
-                        )
+                        "Museums?"
                     ),
 
                     # inputs
@@ -130,6 +127,41 @@ finder_tab <- function() {
                     src$radioInput(name = "museumPrefs", label = "Important"),
                     src$radioInput(name = "museumPrefs", label = "Very"),
                     src$radioInput(name = "museumPrefs", label = "Essential")
+                ),
+
+                #'//////////////////////////////////////
+                # input to limit results
+                tags$fieldset(
+                    class = "number-input-group",
+                    src$accordion(
+                        id = "limitResultsDefs",
+                        heading = "Would you like to limit the results?",
+                        text = paste(
+                        "You can exclude any number of the cities with",
+                        "them most places from the results. See the data tab",
+                        "for a complete list of cities. Enter a number between",
+                        "0 and 50. A value of 50 will remove the top 50",
+                        "cities whereas 0 will not exclude any cities.",
+                        sep = " ")
+                    ),
+                    tags$label(
+                        `for` = "limitResults",
+                        class = "number-input-label",
+                        "Enter the number of top cities you would like to",
+                        "remove."
+                    ),
+                    tags$input(
+                        id = "limitResults",
+                        type = "number",
+                        class = "number-input",
+                        value = 0,
+                        max = 50,
+                        min = 0
+                    ),
+                    tags$span(
+                        id = "limit-results-error",
+                        class = "error visually-hidden"
+                    )
                 ),
 
                 # Form buttons

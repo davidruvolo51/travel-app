@@ -3,12 +3,13 @@
 	"_base",
 	"_flex",
 	"_buttons",
-	"_radios",
+	"_inputs",
 	"_navbar",
 	"_app",
 	"_hero",
 	"_footer", 
-	"_loading";
+	"_loading",
+	"_accordions";
 
 .visually-hidden {
 	position: absolute;
@@ -73,6 +74,21 @@
 	text-align: center;
 }
 
+.error {
+	color: $error;
+	font-weight: bold;
+}
+
+#travel-form {
+	background-color: hsla(0, 0, 99);
+	padding: 1.1em;
+	border-radius: 4px;
+
+	.form-title {
+		margin-bottom: 21px;
+		font-size: 16pt;
+	}
+}
 
 .footer-banner {
 	height: 100px;
