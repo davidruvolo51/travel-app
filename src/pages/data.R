@@ -15,8 +15,8 @@ data_tab <- function() {
             id = "hero-data",
             is_small = TRUE,
             tags$im(
-                class = "illustration size-small ticket",
-                src = "images/ticket-illustration.svg"
+                class = "illustration size-small camera",
+                src = "images/camera-illustration.svg"
             ),
             tags$h1("Data"),
             tags$h2("View the Data")
@@ -51,7 +51,21 @@ data_tab <- function() {
         ),
         src$section(
             id = "summary-of-data",
-            tags$h2("Summary of Data")
+            tags$h2("Summary of Data"),
+            tags$p(
+                "The following table provides a overview of the number of",
+                "places by type. In total, there are",
+                tags$output(id = "summary-total-cities"), "cities across",
+                tags$output(id = "summary-total-countries"), "countries."
+            )
+        ),
+        src$section(
+            id = "summary-of-countries",
+            tags$h2("Summary of Countries"),
+            tags$p(
+                "The following table lists the number of places at the",
+                "country level."
+            )
         )
     )
 }
