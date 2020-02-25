@@ -2,7 +2,7 @@
 #' FILE: client.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-24
+#' MODIFIED: 2020-02-25
 #' PURPOSE: list of ui components
 #' STATUS: in.progress
 #' PACKAGES: shiny; htmltools
@@ -282,9 +282,9 @@ src$accordion <- function(id, class = NULL, heading, text) {
         sID <- paste0(id, "_section")
         tog <- paste0(bID, "_icon")
         paste0(
-            "const ", bID, " = document.getElementById('", id, "');",
-            "const ", sID, " = document.getElementById('", sID, "');",
-            "const ", tog, " = ", bID, ".getElementsByTagName('svg')[0];",
+            "let ", bID, " = document.getElementById('", id, "');",
+            "let ", sID, " = document.getElementById('", sID, "');",
+            "let ", tog, " = ", bID, ".getElementsByTagName('svg')[0];",
             bID, ".addEventListener('click', function() {",
             sID, ".classList.toggle('visually-hidden');",
             tog, ".classList.toggle('rotated');",
