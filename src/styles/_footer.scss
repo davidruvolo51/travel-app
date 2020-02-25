@@ -1,0 +1,48 @@
+.footer {
+	width: 100%;
+	padding: 32px 0;
+    background-color: $dark;
+    color: $light;
+
+	.footer-content {
+		width: 90%;
+		margin: 0 auto;
+        padding: 0;
+        
+        h2 {
+            font-size: 16pt;
+        }
+
+        p {
+            font-size: 13pt;
+        }
+
+		.menu {
+			list-style: none;
+			padding: 0;
+            margin: 0;
+
+			.menu-item {
+                display: inline-block;
+                margin-right: 12px;
+
+				.menu-link {
+                    color: $light;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    font-size: 11pt;
+                    padding-bottom: 4px;
+
+                    &:hover {
+                        box-shadow: inset 0 -2px 0 0 $light;
+                    }
+                }
+                
+                &:last-child {
+                    margin-right: 0;
+                }
+			}
+		}
+	}
+}

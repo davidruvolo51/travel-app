@@ -4,5 +4,11 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"linters": {
+			"lintr": {
+			  "linters": "with_defaults(undesirable_function_linter = FALSE)"
+			}
+		  }
+	},
 }

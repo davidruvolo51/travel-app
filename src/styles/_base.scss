@@ -1,0 +1,34 @@
+html, body {
+    font-family: "Open Sans", "Merriweather", Arial, Helvetica, sans-serif;
+    font-size: 16pt;
+    padding: 0;
+    margin: 0;
+    // background-color: $light;
+}
+
+h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+    line-height: $heading-line-height;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+    line-height: $text-line-height;
+}
+
+a {
+    text-decoration: none;
+    line-height: inherit;
+}
+
+form {
+    margin: 12px 0;
+
+    fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+}

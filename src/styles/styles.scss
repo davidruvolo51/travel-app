@@ -1,0 +1,120 @@
+@import "_variables", "_fonts";
+@import 
+	"_base",
+	"_flex",
+	"_buttons",
+	"_inputs",
+	"_navbar",
+	"_app",
+	"_hero",
+	"_footer", 
+	"_loading",
+	"_accordions",
+	"_viz";
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	clip: rect(0, 0, 0, 0);
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.illustration {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+
+	&.size-lg {
+		max-width: 315px;
+	}
+	&.size-med {
+		max-width: 175px;
+		max-height: 175px;
+		padding: 5% 0;
+	}
+	&.size-small {
+		max-width: 135px;
+		max-height: 135px;
+		padding: 5% 0;
+	}
+}
+
+.uppercased-text {
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 600;
+}
+
+.shiny-html-output {
+	padding: 0;
+	margin: 0;
+	&.shiny-bound-output {
+		padding: 0;
+		margin: 0;
+	}
+}
+
+#appStart {
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 12px;
+}
+
+#section-start {
+	text-align: left;
+
+	p {
+		display: inline;
+		margin: 0;
+	}
+}
+
+#hero-finder {
+	text-align: center;
+}
+
+.error {
+	color: $error;
+	font-weight: bold;
+}
+
+#travel-form {
+	background-color: hsla(0, 0, 99);
+	padding: 1.1em;
+	border-radius: 4px;
+
+	.form-title {
+		margin-bottom: 21px;
+		font-size: 16pt;
+	}
+}
+
+.footer-banner {
+	height: 100px;
+	background-size: contain;
+	background-position: center 100%;
+	background-repeat: repeat-x;
+	opacity: 0.75;
+}
+
+@media (min-width: $screen-break) {
+	#appStart {
+		width: 250px;
+	}
+
+	#section-start {
+		text-align: center;
+		p {
+			display: block;
+		}
+	}
+
+	.illustration {
+		height: auto;
+		&.size-lg {
+			max-width: 500px;
+		}
+	}
+}
