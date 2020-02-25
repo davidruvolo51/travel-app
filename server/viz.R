@@ -37,3 +37,10 @@ viz$render_top_city_maps <- function(data) {
     out <- viz$as_json_object(data)
     session$sendCustomMessage("render_top_city_maps", out)
 }
+
+#' Render Datatable
+viz$render_datatable <- function(id, data, columns, caption = NULL) {
+    session <- viz$get_shiny_session()
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage("render_datatable", list(id, out, columns, caption))
+}

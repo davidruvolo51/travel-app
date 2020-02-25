@@ -176,12 +176,13 @@
     const home = document.getElementById("home");
     const finder = document.getElementById("finder");
     const explorer = document.getElementById("explorer");
+    const data = document.getElementById("data");
 
     /// add event listeners
     home.addEventListener("click", function (event) {
         event.preventDefault();
         Shiny.setInputValue("home", "home", { priority: "event" });
-        document.title = "shinyTravel | home"
+        document.title = "shinyTravel | Home"
     });
     finder.addEventListener("click", function (event) {
         event.preventDefault();
@@ -192,6 +193,11 @@
         event.preventDefault();
         Shiny.setInputValue("explorer", "explorer", { priority: "event" });
         document.title = "shinyTravel | Explorer"
+    });
+    data.addEventListener("click", function(event) {
+        event.preventDefault();
+        Shiny.setInputValue("data", "data", { priority: "event"});
+        document.title = "shinyTravel | Data"
     })
 })();
 
@@ -393,6 +399,107 @@
         const city_b = value[1];
         const city_c = value[2];
         render_top_city_maps(city_a, city_b, city_c);
+    })
+
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// ~ 5 ~
+// D3 Visualizations Tables
+
+// function and handler to generate data tables
+(function(){
+
+    // function for evaluating classnames for td elements
+    function set_classname(value, col) {
+        let css;
+        const datatype = typeof value; 
+        if(datatype === "number") {
+          if(value > 0) {
+              css = "datatype-number value-positive";
+          } else if(value < 0){
+            css = "datatype-number value-negative";
+          } else if(value === 0){
+            css = "datatype-number value-zero"
+          }
+        } else {
+            css = `datatype-${typeof value}`;
+        }
+        css = css + " column-" + (col + 1);
+        return(css)
+    }
+
+    // build datatable
+    function datatable(id, data, columns, caption) {
+        
+        // define table
+        const table = d3.select(id)
+            .append("table")
+            .attr("class", "d3-viz d3-table datatable");
+
+        // render caption
+        if (caption) {
+            table.append("caption").text(caption)
+        }
+
+        // <thead>
+        const thead = table.append("thead")
+            .attr("class", "datatable-head")
+            .append("tr")
+            .attr("role", "row")
+            .selectAll("th")
+            .data(columns)
+            .enter()
+            .append("th")
+            .attr("scope", "col")
+            .text( c => c);
+
+        // // <tbody>
+        const tbody = table.append("tbody")
+            .attr("class", "datatable-body");
+
+        // // create rows
+        const rows = tbody.selectAll("tr")
+            .data(data)
+            .enter()
+            .append("tr")
+            .attr("role", "row");
+        
+        // create cells
+        const cells = rows.selectAll("td")
+            .data(function (row) {
+                return columns.map(function (column) {
+                    return {
+                        column: column,
+                        value: row[column]
+                    };
+                });
+            })
+            .enter()
+            .append("td")
+            .attr("role", "cell")
+            .attr("class", (d, i) => { return set_classname(d.value, i); });
+
+        // create responsive cells
+        cells.text(d => d.value)
+        cells.append("span")
+        .attr("class", "hidden-colname")
+        .attr("aria-hidden", "true")
+        .text(d => d.column)
+        .lower()
+    }
+
+    // shiny handler
+    Shiny.addCustomMessageHandler("render_datatable", function(value) {
+        setTimeout(function(){
+            datatable(
+                id = value[0],
+                data = value[1],
+                columns = value[2],
+                caption = value[3]
+            )
+        }, 350)
     })
 
 })();

@@ -2,7 +2,7 @@
 #' FILE: server.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-24
+#' MODIFIED: 2020-02-25
 #' PURPOSE: server for application
 #' STATUS: in.progress
 #' PACKAGES: shiny
@@ -14,8 +14,9 @@ server <- function(input, output, session) {
     source("src/pages/home.R")
     source("src/pages/finder.R")
     source("src/pages/explorer.R")
-    source("server/utils/handlers.R")
-    source("server/utils/viz.R")
+    source("src/pages/data.R")
+    source("server/handlers.R")
+    source("server/viz.R")
     source("scripts/utils/travel_finder.R")
 
     #' Function that converts input values to
@@ -37,16 +38,17 @@ server <- function(input, output, session) {
     #' define routing
     #' current_page <- reactiveVal("home")
     #' output$page <- renderUI(home_tab())
-    current_page <- reactiveVal("finder")
-    output$page <- renderUI(finder_tab())
+    # current_page <- reactiveVal("finder")
+    # output$page <- renderUI(finder_tab())
+    current_page <- reactiveVal("data")
+    output$page <- renderUI(data_tab())
     
     #' Switch to Home Page
     observeEvent(input$home, {
         if (current_page() != "home") {
-            js$set_element_attribute(
+            js$remove_element_attribute(
                 paste0("#", current_page()),
-                "aria-current",
-                "page"
+                "aria-current"
             )
             js$set_element_attribute("#home", "aria-current", "page")
             current_page("home")
@@ -58,10 +60,9 @@ server <- function(input, output, session) {
     #' Switch to Finder Page
     observeEvent(input$finder, {
         if (current_page() != "finder") {
-            js$set_element_attribute(
+            js$remove_element_attribute(
                 paste0("#", current_page()),
-                "aria-current",
-                "page"
+                "aria-current"
             )
             js$set_element_attribute("#finder", "aria-current", "page")
             current_page("finder")
@@ -73,10 +74,9 @@ server <- function(input, output, session) {
     #' Switch to Finder Page
     observeEvent(input$appStart, {
         if (current_page() != "finder") {
-            js$set_element_attribute(
+            js$remove_element_attribute(
                 paste0("#", current_page()),
-                "aria-current",
-                "page"
+                "aria-current"
             )
             js$set_element_attribute("#finder", "aria-current", "page")
             current_page("finder")
@@ -88,10 +88,9 @@ server <- function(input, output, session) {
     #' Switch to Explorer Page
     observeEvent(input$explorer, {
         if (current_page() != "explorer") {
-            js$set_element_attribute(
+            js$remove_element_attribute(
                 paste0("#", current_page()),
-                "aria-current",
-                "page"
+                "aria-current"
             )
             js$set_element_attribute("#explorer", "aria-current", "page")
             current_page("explorer")
@@ -99,6 +98,36 @@ server <- function(input, output, session) {
             js$scroll_to_top()
         }
     })
+
+    #' Swicth to Data Page
+    observeEvent(input$data, {
+        if (current_page() != "data") {
+
+            # Update Routing
+            js$remove_element_attribute(
+                paste0("#", current_page()),
+                "aria-current"
+            )
+            js$set_element_attribute("#data", "aria-current", "page")
+            current_page("data")
+            output$page <- renderUI(data_tab())
+            js$scroll_to_top()
+        }
+    })
+
+    # Render Datatables
+            h <- travel$highlights %>%
+                as.data.frame() %>%
+                pivot_longer(everything(), "name") %>%
+                .[1:3, ] %>%
+                as.data.frame()
+                
+            viz$render_datatable(
+                id = "#summary-of-data",
+                data = h,
+                columns = names(h),
+                caption = "Total Counts"
+            )
 
     #' Switch Loading Screen with App
     js$remove_elem(elem = "#loading");

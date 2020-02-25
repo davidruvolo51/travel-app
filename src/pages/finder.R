@@ -2,7 +2,7 @@
 #' FILE: finder.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-24
+#' MODIFIED: 2020-02-25
 #' PURPOSE: ui page component for finder tab
 #' STATUS: in.progress
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
