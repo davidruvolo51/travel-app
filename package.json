@@ -17,6 +17,7 @@
 		"@babel/cli": "^7.8.4",
 		"@babel/core": "^7.8.4",
 		"@babel/preset-env": "^7.8.4",
+		"babel-preset-minify": "^0.5.1",
 		"postcss-modules": "^1.5.0"
 	},
 	"scripts": {
@@ -24,8 +25,7 @@
 		"sass": "parcel src/styles/styles.scss -d www/css --no-cache --no-source-maps --port 1111",
 		"sass_build": "parcel build src/styles/styles.scss -d www/css --no-cache --no-source-maps",
 		"sass_clean": "rm -rf www/css .sass-cache/",
-		"js": "parcel src/js/index.js -d www/js --no-hmr --no-cache --no-source-maps --port 2222",
-		"js_build": "parcel build src/js/index.js -d www/js --no-cache --no-source-maps",
+		"js_build": "babel www/js/index.js -d www/js/app.js --presets minify --no-comments",
 		"js_clean": "rm -rf www/js/index.js"
 	},
 	"postcss": {

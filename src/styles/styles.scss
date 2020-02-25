@@ -9,7 +9,8 @@
 	"_hero",
 	"_footer", 
 	"_loading",
-	"_accordions";
+	"_accordions",
+	"_viz";
 
 .visually-hidden {
 	position: absolute;
@@ -92,10 +93,10 @@
 
 .footer-banner {
 	height: 100px;
-	background-image: url("../images/page-footer-grayscale.svg");
 	background-size: contain;
 	background-position: center 100%;
 	background-repeat: repeat-x;
+	opacity: 0.75;
 }
 
 @media (min-width: $screen-break) {

@@ -2,10 +2,10 @@
 #' FILE: finder.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-18
+#' MODIFIED: 2020-02-24
 #' PURPOSE: ui page component for finder tab
 #' STATUS: in.progress
-#' PACKAGES: NA
+#' PACKAGES: shiny; custom handlers; sass; babel; D3
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 finder_tab <- function() {
@@ -23,7 +23,7 @@ finder_tab <- function() {
         ),
 
         #' //////////////////////////////////////
-        # selection section
+        # Introduction and Form
         src$section(
             class = "section-finder-intro",
             tags$h2("Plan a Holiday"),
@@ -73,7 +73,7 @@ finder_tab <- function() {
                         checked = TRUE
                     ),
                     src$radioInput(name = "coffeePrefs", label = "Not at all"),
-                    src$radioInput(name = "coffeePrefs", label = "Somewhat"),
+                    src$radioInput(name = "coffeePrefs", label = "A little"),
                     src$radioInput(name = "coffeePrefs", label = "Important"),
                     src$radioInput(name = "coffeePrefs", label = "Very"),
                     src$radioInput(name = "coffeePrefs", label = "Essential")
@@ -172,6 +172,30 @@ finder_tab <- function() {
                         class = "action-button shiny-bound-input b b-primary",
                         "Submit"
                     )
+                )
+            )
+        ),
+        #'//////////////////////////////////////
+        #' ~ 2 ~
+        #' Build Report
+        tags$article(
+            id = "travel-summary",
+            # class = "article visually-hidden",
+            class = "article",
+            # `aria-hidden` = "true",
+
+            # section maps
+            src$section(
+                tags$h2("Recommended Cities"),
+                tags$p(
+                    "Based on your selections, here are the top three",
+                    "recommended cities. Scroll down to view why these",
+                    "cities were recommended and more about them."
+                ),
+                tags$figcaption("Top 3 Cities"),
+                tags$figure(
+                    id = "recommended-cities",
+                    class = "d3-viz-output top-n-maps",
                 )
             )
         )

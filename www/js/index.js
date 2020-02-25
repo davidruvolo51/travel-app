@@ -1,403 +1,398 @@
-// modules are defined as an array
-// [ module function, map of requires ]
-//
-// map of requires is short require name -> numeric require
-//
-// anything defined in a previous bundle is accessed via the
-// orig method which is the require for previous bundles
-parcelRequire = (function (modules, cache, entry, globalName) {
-  // Save the require from previous bundle to this closure if any
-  var previousRequire = typeof parcelRequire === 'function' && parcelRequire;
-  var nodeRequire = typeof require === 'function' && require;
-
-  function newRequire(name, jumped) {
-    if (!cache[name]) {
-      if (!modules[name]) {
-        // if we cannot find the module within our internal map or
-        // cache jump to the current global require ie. the last bundle
-        // that was added to the page.
-        var currentRequire = typeof parcelRequire === 'function' && parcelRequire;
-        if (!jumped && currentRequire) {
-          return currentRequire(name, true);
-        }
-
-        // If there are other bundles on this page the require from the
-        // previous one is saved to 'previousRequire'. Repeat this as
-        // many times as there are bundles until the module is found or
-        // we exhaust the require chain.
-        if (previousRequire) {
-          return previousRequire(name, true);
-        }
-
-        // Try the node require function if it exists.
-        if (nodeRequire && typeof name === 'string') {
-          return nodeRequire(name);
-        }
-
-        var err = new Error('Cannot find module \'' + name + '\'');
-        err.code = 'MODULE_NOT_FOUND';
-        throw err;
-      }
-
-      localRequire.resolve = resolve;
-      localRequire.cache = {};
-
-      var module = cache[name] = new newRequire.Module(name);
-
-      modules[name][0].call(module.exports, localRequire, module, module.exports, this);
-    }
-
-    return cache[name].exports;
-
-    function localRequire(x){
-      return newRequire(localRequire.resolve(x));
-    }
-
-    function resolve(x){
-      return modules[name][1][x] || x;
-    }
-  }
-
-  function Module(moduleName) {
-    this.id = moduleName;
-    this.bundle = newRequire;
-    this.exports = {};
-  }
-
-  newRequire.isParcelRequire = true;
-  newRequire.Module = Module;
-  newRequire.modules = modules;
-  newRequire.cache = cache;
-  newRequire.parent = previousRequire;
-  newRequire.register = function (id, exports) {
-    modules[id] = [function (require, module) {
-      module.exports = exports;
-    }, {}];
-  };
-
-  var error;
-  for (var i = 0; i < entry.length; i++) {
-    try {
-      newRequire(entry[i]);
-    } catch (e) {
-      // Save first error but execute all entries
-      if (!error) {
-        error = e;
-      }
-    }
-  }
-
-  if (entry.length) {
-    // Expose entry point to Node, AMD or browser globals
-    // Based on https://github.com/ForbesLindesay/umd/blob/master/template.js
-    var mainExports = newRequire(entry[entry.length - 1]);
-
-    // CommonJS
-    if (typeof exports === "object" && typeof module !== "undefined") {
-      module.exports = mainExports;
-
-    // RequireJS
-    } else if (typeof define === "function" && define.amd) {
-     define(function () {
-       return mainExports;
-     });
-
-    // <script>
-    } else if (globalName) {
-      this[globalName] = mainExports;
-    }
-  }
-
-  // Override the current require with this new one
-  parcelRequire = newRequire;
-
-  if (error) {
-    // throw error from earlier, _after updating parcelRequire_
-    throw error;
-  }
-
-  return newRequire;
-})({"modules/shiny_handlers.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.console_log = console_log;
-exports.remove_css = remove_css;
-exports.toggle_css = toggle_css;
-exports.add_css = add_css;
-exports.inner_html = inner_html;
-exports.set_element_attribute = set_element_attribute;
-exports.remove_element_attribute = remove_element_attribute;
-exports.show_elem = show_elem;
-exports.hide_elem = hide_elem;
-exports.remove_elem = remove_elem;
-exports.clear_input = clear_input;
-exports.refresh_page = refresh_page;
-exports.scroll_to_top = scroll_to_top;
-
-////////////////////////////////////////////////////////////////////////////////
-// FILE: shiny_handlers.js
-// AUTHOR: David Ruvolo
-// CREATED: 2020-02-21
-// MODIFIED: 2020-02-21
-// PURPOSE: custom handlers for shiny
-// DEPENDENCIES: parceljs, babeljs
-// STATUS: working;
-// COMMENTS: NA
-////////////////////////////////////////////////////////////////////////////////
-// BEGIN
-// LOG SOMETHING TO THE CONSOLE
-function console_log(value, asDir) {
-  if (asDir) {
-    console.dir(value);
-  } else {
-    console.log(value);
-  }
-} ////////////////////////////////////////
-// CSS export functions
-// REMOVE CSS CLASS
-
-
-function remove_css(elem, css) {
-  var elems = document.querySelectorAll(elem);
-  elems.forEach(function (e) {
-    return e.classList.remove(css);
-  });
-} // TOGGLE CSS CLASS
-
-
-function toggle_css(elem, css) {
-  var elems = document.querySelectorAll(elem);
-  elems.forEach(function (e) {
-    return e.classList.toggle(css);
-  });
-}
-
-function add_css(elem, css) {
-  var elems = document.querySelectorAll(elem);
-  elems.forEach(function (e) {
-    return e.classList.add(css);
-  });
-} ////////////////////////////////////////
-// Modifying the Document Body
-// SET INNERHTML
-
-
-function inner_html(elem, string, delay) {
-  if (delay) {
-    setTimeout(function () {
-      document.querySelector(elem).innerHTML = string;
-    }, delay);
-  } else {
-    document.querySelector(elem).innerHTML = string;
-  }
-} ////////////////////////////////////////
-// Modifying ELement Attributes
-// Set element attribs
-
-
-function set_element_attribute(elem, attr, value) {
-  document.querySelector(elem).setAttribute(attr, value);
-} // remove element attribs
-
-
-function remove_element_attribute(elem, attr) {
-  document.querySelector(elem).removeAttribute(attr);
-} ////////////////////////////////////////
-// SHOW ELEM (SHOW / HIDE)
-
-
-function show_elem(elem, css) {
-  var el = document.querySelector(elem);
-
-  if (css.length > 0) {
-    el.classList.remove(css);
-  } else {
-    el.classList.remove("hidden");
-  }
-
-  el.removeAttribute("hidden");
-} // HIDE ELEM
-
-
-function hide_elem(elem, css) {
-  var el = document.querySelector(elem);
-
-  if (css.length > 0) {
-    el.classList.add(css);
-  } else {
-    el.classList.add("hidden");
-  }
-
-  el.setAttribute("hidden", true);
-} // Remove Element from document
-
-
-function remove_elem(elem) {
-  var el = document.querySelector(elem);
-  el.parentNode.removeChild(el);
-} ////////////////////////////////////////
-// Inputs
-
-
-function clear_input(elem, value) {
-  var inputs = document.querySelectorAll(elem);
-  inputs.forEach(function (input) {
-    if (value.length > 0) {
-      input.value = value;
-    } else {
-      input.value = "";
-    }
-  });
-} ////////////////////////////////////////
-// Window Behaviors
-// REFRESH PAGE
-
-
-function refresh_page(value) {
-  history.go(0);
-} // SCROLL TO TOP OF PAGE
-
-
-function scroll_to_top(value) {
-  window.scrollTo(0, 0);
-}
-},{}],"index.js":[function(require,module,exports) {
-"use strict";
-
-var utils = _interopRequireWildcard(require("./modules/shiny_handlers"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 ////////////////////////////////////////////////////////////////////////////////
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-02-21
+// MODIFIED: 2020-02-24
 // PURPOSE: primary functions for application
 // DEPENDENCIES: NA
-// STATUS: in.progress
+// STATUS: d3; topojson; countries geojson;
 // COMMENTS: NA
 ////////////////////////////////////////////////////////////////////////////////
 // BEGIN
-// imports
-////////////////////////////////////////
-// register shiny modules
-Shiny.addCustomMessageHandler("add_css", function (value) {
-  utils.add_css(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("clear_input", function (value) {
-  utils.clear_input(value);
-});
-Shiny.addCustomMessageHandler("console_log", function (value) {
-  utils.console_log(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("hide_elem", function (value) {
-  utils.hide_elem(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("inner_html", function (value) {
-  utils.inner_html(value[0], value[1], value[2]);
-});
-Shiny.addCustomMessageHandler("refresh_page", function (value) {
-  utils.refresh_page(value);
-});
-Shiny.addCustomMessageHandler("remove_css", function (value) {
-  utils.remove_css(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("remove_elem", function (value) {
-  utils.remove_elem(value);
-});
-Shiny.addCustomMessageHandler("remove_element_attribute", function (value) {
-  utils.remove_element_attribute(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("set_element_attribute", function (value) {
-  utils.set_element_attribute(value[0], value[1], value[2]);
-});
-Shiny.addCustomMessageHandler("scroll_to_top", function (value) {
-  utils.scroll_to_top(value);
-});
-Shiny.addCustomMessageHandler("show_elem", function (value) {
-  utils.show_elem(value[0], value[1]);
-});
-Shiny.addCustomMessageHandler("toggle_css", function (value) {
-  utils.toggle_css(value[0], value[1]);
-}); // Function for handling clicks of all navigation links 
 
+// ~ 1 ~
+// define and register custom shiny handlers
 (function () {
-  // select all navigation links
-  var home = document.getElementById("home");
-  var finder = document.getElementById("finder");
-  var explorer = document.getElementById("explorer"); /// add event listeners
 
-  home.addEventListener("click", function (event) {
-    event.preventDefault();
-    Shiny.setInputValue("home", "home", {
-      priority: "event"
+    // ADD CSS CLASS
+    function add_css(elem, css) {
+        const elems = document.querySelectorAll(elem);
+        elems.forEach(e => e.classList.add(css))
+    }
+
+    // CLEAR INPUT VALUE
+    function clear_input(elem, value) {
+        const inputs = document.querySelectorAll(elem);
+        inputs.forEach(input => {
+            if (value.length > 0) {
+                input.value = value
+            } else {
+                input.value = ""
+            }
+        });
+    }
+
+    // LOG SOMETHING TO THE CONSOLE
+    function console_log(value, asDir) {
+        if (asDir) {
+            console.dir(value);
+        } else {
+            console.log(value);
+        }
+    }
+
+    // HIDE ELEM
+    function hide_elem(elem, css) {
+        const el = document.querySelector(elem);
+        if (css.length > 0) {
+            el.classList.add(css)
+        } else {
+            el.classList.add("hidden");
+        }
+        el.setAttribute("hidden", true);
+    }
+
+    // SET INNERHTML
+    function inner_html(elem, string, delay) {
+        if (delay) {
+            setTimeout(function () {
+                document.querySelector(elem).innerHTML = string;
+            }, delay)
+        } else {
+            document.querySelector(elem).innerHTML = string;
+        }
+    }
+
+    // REFRESH PAGE
+    function refresh_page(value) {
+        history.go(0);
+    }
+
+    // REMOVE CSS CLASS
+    function remove_css(elem, css) {
+        const elems = document.querySelectorAll(elem);
+        elems.forEach(e => e.classList.remove(css))
+    }
+
+    // REMOVE ELEMENT (from document)
+    function remove_elem(elem) {
+        const el = document.querySelector(elem);
+        el.parentNode.removeChild(el);
+    }
+
+    // REMOVE ELEMENT ATTRIBUTE
+    function remove_element_attribute(elem, attr) {
+        document.querySelector(elem).removeAttribute(attr);
+    }
+
+    // SCROLL TO TOP OF PAGE
+    function scroll_to_top(value) {
+        window.scrollTo(0, 0);
+    }
+
+    // SET ELEMENT ATTRIBUTE
+    function set_element_attribute(elem, attr, value) {
+        document.querySelector(elem).setAttribute(attr, value);
+    }
+
+    // SHOW ELEM (SHOW / HIDE)
+    function show_elem(elem, css) {
+        const el = document.querySelector(elem);
+        if (css.length > 0) {
+            el.classList.remove(css);
+        } else {
+            el.classList.remove("hidden");
+        }
+        el.removeAttribute("hidden");
+    }
+
+    // TOGGLE CSS CLASS
+    function toggle_css(elem, css) {
+        const elems = document.querySelectorAll(elem);
+        elems.forEach(e => e.classList.toggle(css))
+    }
+
+    ////////////////////////////////////////
+    // Register Functions
+    Shiny.addCustomMessageHandler("add_css", function (value) {
+        add_css(value[0], value[1]);
     });
-    document.title = "shinyTravel | home";
-  });
-  finder.addEventListener("click", function (event) {
-    event.preventDefault();
-    Shiny.setInputValue("finder", "finder", {
-      priority: "event"
+
+    Shiny.addCustomMessageHandler("clear_input", function (value) {
+        clear_input(value)
+    })
+
+    Shiny.addCustomMessageHandler("console_log", function (value) {
+        console_log(value[0], value[1]);
     });
-    document.title = "shinyTravel | Finder";
-  });
-  explorer.addEventListener("click", function (event) {
-    event.preventDefault();
-    Shiny.setInputValue("explorer", "explorer", {
-      priority: "event"
+
+    Shiny.addCustomMessageHandler("hide_elem", function (value) {
+        hide_elem(value[0], value[1]);
     });
-    document.title = "shinyTravel | Explorer";
-  });
-})(); // Anonymous function for handling menu toggle
+    Shiny.addCustomMessageHandler("inner_html", function (value) {
+        inner_html(value[0], value[1], value[2])
+    });
 
+    Shiny.addCustomMessageHandler("refresh_page", function (value) {
+        refresh_page(value);
+    });
 
-(function () {
-  // pull all elements
-  var menuToggle = document.getElementById("toggle");
-  var menu = document.getElementById("navlinks");
-  var body = document.querySelector("body");
-  var width = body.getBoundingClientRect().width; // init menu state
+    Shiny.addCustomMessageHandler("remove_css", function (value) {
+        remove_css(value[0], value[1]);
+    });
 
-  menu.addEventListener("DOMContentLoaded", function () {
-    if (width > 912) {
-      menu.setAttribute("hidden", "false");
-    }
+    Shiny.addCustomMessageHandler("remove_elem", function (value) {
+        remove_elem(value)
+    })
 
-    if (width <= 912) {
-      menu.setAttribute("hidden", "true");
-    }
-  }); // bind to menu togle <button id="toggle">
+    Shiny.addCustomMessageHandler("remove_element_attribute", function (value) {
+        remove_element_attribute(value[0], value[1]);
+    });
 
-  menuToggle.addEventListener("click", function () {
-    menu.classList.toggle("expanded");
-    menuToggle.classList.toggle("open");
+    Shiny.addCustomMessageHandler("set_element_attribute", function (value) {
+        set_element_attribute(value[0], value[1], value[2]);
+    });
 
-    if (menuToggle.getAttribute("aria-expanded") === false) {
-      menuToggle.setAttribute("aria-expaned", "true");
-      menu.removeAttribute("hidden");
-    }
+    Shiny.addCustomMessageHandler("scroll_to_top", function (value) {
+        scroll_to_top(value);
+    })
 
-    if (menuToggle.getAttribute("aria-expanded") === true) {
-      menuToggle.setAttribute("aria-expanded", "false");
-      menu.setAttribute("hidden", "true");
-    }
-  }); // handle menu action when window is resized
+    Shiny.addCustomMessageHandler("show_elem", function (value) {
+        show_elem(value[0], value[1]);
+    });
 
-  menu.addEventListener("resize", function () {
-    var w = body.getBoundingClientRect().width;
+    Shiny.addCustomMessageHandler("toggle_css", function (value) {
+        toggle_css(value[0], value[1]);
+    });
 
-    if (w > 912) {
-      menu.classList.remove("expanded");
-      menu.removeAttribute("hidden");
-      menuToggle.classList.remove("open");
-      menuToggle.setAttribute("aria-expanded", "false");
-    }
-  });
 })();
-},{"./modules/shiny_handlers":"modules/shiny_handlers.js"}]},{},["index.js"], null)
+
+////////////////////////////////////////////////////////////////////////////////
+
+// ~ 2 ~
+// Function for handling clicks of all navigation links 
+(function () {
+    // select all navigation links
+    const home = document.getElementById("home");
+    const finder = document.getElementById("finder");
+    const explorer = document.getElementById("explorer");
+
+    /// add event listeners
+    home.addEventListener("click", function (event) {
+        event.preventDefault();
+        Shiny.setInputValue("home", "home", { priority: "event" });
+        document.title = "shinyTravel | home"
+    });
+    finder.addEventListener("click", function (event) {
+        event.preventDefault();
+        Shiny.setInputValue("finder", "finder", { priority: "event" });
+        document.title = "shinyTravel | Finder"
+    });
+    explorer.addEventListener("click", function (event) {
+        event.preventDefault();
+        Shiny.setInputValue("explorer", "explorer", { priority: "event" });
+        document.title = "shinyTravel | Explorer"
+    })
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// ~ 3 ~
+// Function for handling menu opening and closing
+(function () {
+
+    // pull all elements
+    const menuToggle = document.getElementById("toggle");
+    const menu = document.getElementById("navlinks");
+    const body = document.querySelector("body");
+    const width = body.getBoundingClientRect().width;
+
+    // init menu state
+    menu.addEventListener("DOMContentLoaded", function () {
+        if (width > 912) {
+            menu.setAttribute("hidden", "false");
+        }
+        if (width <= 912) {
+            menu.setAttribute("hidden", "true");
+        }
+    })
+
+    // bind to menu togle <button id="toggle">
+    menuToggle.addEventListener("click", function () {
+        menu.classList.toggle("expanded");
+        menuToggle.classList.toggle("open");
+        if (menuToggle.getAttribute("aria-expanded") === false) {
+            menuToggle.setAttribute("aria-expaned", "true");
+            menu.removeAttribute("hidden");
+        }
+        if (menuToggle.getAttribute("aria-expanded") === true) {
+            menuToggle.setAttribute("aria-expanded", "false");
+            menu.setAttribute("hidden", "true");
+        }
+    });
+
+    // handle menu action when window is resized
+    menu.addEventListener("resize", function () {
+        let w = body.getBoundingClientRect().width;
+        if (w > 912) {
+            menu.classList.remove("expanded");
+            menu.removeAttribute("hidden");
+            menuToggle.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// ~ 4 ~
+// D3 Visualisations
+
+
+// Render Top 3 Locations Map
+(function () {
+    // ~ 1 ~
+    // Draw Maps: Base function that renders a map and point
+    // this function takes a few arguments:
+    // id: the id of the html element to draw (ie., "#my-figure")
+    // coords: a pair of coordinates to center the map (lon, lat)
+    // name: a text string containing the name of the location
+    // data: a geojson features object
+    function drawMap(id, coords, name, data) {
+
+        // set map defaults
+        const width = 250;
+        const height = 250;
+
+        // define svg output element
+        const svg = d3.select(id)
+            .append("svg")
+            .attr("class", "d3-viz d3-map top-three-cities-maps")
+            .attr("width", width)
+            .attr("height", height);
+
+        // define projection
+        let projection = d3.geoMercator()
+                .scale(1)
+                .translate([0, 0]);
+        
+        // define path
+        let path = d3.geoPath().projection(projection);
+
+        // create bounds in order to compute scale and translate
+        let b = path.bounds(data[0]);
+        let s = 0.8 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+        let t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+        projection = projection.scale(s).translate(t);
+
+        // add map layer
+        const map = svg.append("g")
+            .attr("data-city", name);
+
+        // draw boundaries
+        map.selectAll("path")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr("fill", "#bdbdbd")
+            .attr("stroke", "#c4c4c4")
+            .attr("d", path);
+
+        // add marker
+        map.selectAll("circle")
+            .data([coords])
+            .enter()
+            .append("circle")
+            .attr("cx", d => projection(d)[0])
+            .attr("cy", d => projection(d)[1])
+            .attr("r", "9px")
+            .attr("fill", "rgb(174, 117, 159)");
+
+        // add text box for location name
+        map.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("x", 0)
+            .attr("y", 220)
+            .attr("width", width)
+            .attr("height", 30)
+            .attr("fill", "hsla(215, 45%, 53%, 0.35)");
+
+        // add location name
+        map.selectAll("text")
+            .data([name])
+            .enter()
+            .append("text")
+            .attr("x", width / 2)
+            .attr("y", 240)
+            .attr("text-anchor", "middle")
+            .text(d => d);
+    }
+
+    // ~ 2 ~
+    // Map Function
+    // define a function that receives three locations from the 
+    // shiny server, loads geojson file and parses map boundaries
+    // of the three locations, and renders a map with the city
+    // and name. The output id is predefined in the file finder.R
+    // should the id change, make sure it is updated here.
+    // This function has one input argument which contains all three
+    // cities,
+    function render_top_city_maps(city_a, city_b, city_c) {
+
+        // Remove Existing Maps
+        // console.log(city_a, city_b, city_c)
+        d3.selectAll(".top-three-cities-maps").remove();
+
+        // define output id
+        const out_elem = "#recommended-cities";
+        // run fetch
+        d3.json("../data/eu.topojson", response => {
+            if (repsonse.ok) {
+                return response;
+            } else {
+                throw response;
+            }
+        }).then(result => {
+
+            // Pull Data
+            const countries = [city_a.country, city_b.country, city_c.country];
+            let geojson = topojson.feature(result, result.objects.europe);
+            geojson.features = geojson.features.filter(d => {
+                // console.log(d.properties.name);
+                return countries.indexOf(d.properties.name) > -1;
+            });
+
+            // isolate each country
+            let countryA = geojson.features.filter(d => d.properties.name === countries[0]);
+            let countryB = geojson.features.filter(d => d.properties.name === countries[1]);
+            let countryC = geojson.features.filter(d => d.properties.name === countries[2]);
+
+            // Build Map For City A
+            let coordsA = [city_a.lng, city_a.lat];
+            drawMap(out_elem, coordsA, city_a.city, countryA)
+
+            // Build Map For City B
+            let coordsB = [city_b.lng, city_b.lat];
+            drawMap(out_elem, coordsB, city_b.city, countryB)
+
+            // Build Map For City C
+            const coordsC = [city_c.lng, city_c.lat];
+            drawMap(out_elem, coordsC, city_c.city, countryC)
+
+        }).catch(error => {
+            d3.select(out_elem).text(`ERROR: ${error}`).style("color", "red");
+            console.log(error);
+        })
+    }
+
+    // Register with Shiny
+    Shiny.addCustomMessageHandler("render_top_city_maps", function (value) {
+        const city_a = value[0];
+        const city_b = value[1];
+        const city_c = value[2];
+        render_top_city_maps(city_a, city_b, city_c);
+    })
+
+})();

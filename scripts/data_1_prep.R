@@ -2,9 +2,9 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-02-17
+#' MODIFIED: 2020-02-24
 #' PURPOSE: prepare data into viz ready objects
-#' STATUS: in.progress
+#' STATUS: complete; working;
 #' PACKAGES: tidyverse
 #' COMMENTS: NA
 #'//////////////////////////////////////////////////////////////////////////////
@@ -408,9 +408,26 @@ travel$summary$places_by_city <- places %>%
 #'//////////////////////////////////////////////////////////////////////////////
 
 #' ~ 2 ~
+#' Create Master List of All Cities Geocoded
+
+#' Load data
+geo <- readRDS("data/downloads/cafe_cities_geocoded.RDS")
+
+#' Add IDs
+geo <- geo %>%
+    rowid_to_column("id") %>%
+    mutate(
+        id = as.character(id)
+    )
+
+
+#'//////////////////////////////////////////////////////////////////////////////
+
+#' ~ 3 ~
 # save all objects
 
 saveRDS(brew, "data/all_european_breweries.RDS")
 saveRDS(cafes, "data/all_european_coffee.RDS")
 saveRDS(museums, "data/all_european_museums.RDS")
 saveRDS(travel, "data/travel_summary.RDS")
+saveRDS(geo, "data/travel_all_cities_geocoded.RDS")

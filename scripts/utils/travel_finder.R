@@ -2,7 +2,7 @@
 #' FILE: travel_finder.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-17
-#' MODIFIED: 2020-02-18
+#' MODIFIED: 2020-02-24
 #' PURPOSE: primary function for finding cities
 #' STATUS: working; complete
 #' PACKAGES: tidyverse (only for data prep)
@@ -46,12 +46,11 @@ options(stringsAsFactors = FALSE)
 #'         values_fill = list(n = 0)
 #'     ) %>%
 #'     left_join(
-#'         readRDS("data/downloads/cafe_cities_geocoded.RDS") %>%
-#'             rowid_to_column("id") %>%
-#'             select(id, city),
+#'         readRDS("data/travel_all_cities_geocoded.RDS") %>%
+#'             select(id, city, lat, lng),
 #'         by = "city"
 #'     ) %>%
-#'     select(id, everything()) %>%
+#'     select(id, city, country, lat, lng, everything()) %>%
 #'     as.data.frame()
 #'
 #' Save Transformed Data for Use in Application.
@@ -97,6 +96,8 @@ travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
             id = data$id,
             city = data$city,
             country = data$country,
+            lat = data$lat,
+            lng = data$lng,
             data[, c("brewery", "cafe", "museum")] * 0,
             score = 0,
             stringsAsFactors = FALSE

@@ -10,12 +10,10 @@
 #'////////////////////////////////////////////////////////////////////////////
 server <- function(input, output, session) {
 
-    # load ui pages
-    source("src/pages/home.R", local = TRUE)
-    source("src/pages/finder.R", local = TRUE)
-    source("src/pages/explorer.R", local = TRUE)
-
-    #' load utils and modules
+    #' load utils and ui
+    source("src/pages/home.R")
+    source("src/pages/finder.R")
+    source("src/pages/explorer.R")
     source("server/utils/handlers.R")
     source("server/utils/viz.R")
     source("scripts/utils/travel_finder.R")
@@ -41,29 +39,61 @@ server <- function(input, output, session) {
     #' output$page <- renderUI(home_tab())
     current_page <- reactiveVal("finder")
     output$page <- renderUI(finder_tab())
-
+    
+    #' Switch to Home Page
     observeEvent(input$home, {
         if (current_page() != "home") {
+            js$set_element_attribute(
+                paste0("#", current_page()),
+                "aria-current",
+                "page"
+            )
+            js$set_element_attribute("#home", "aria-current", "page")
             current_page("home")
             output$page <- renderUI(home_tab())
             js$scroll_to_top()
         }
     })
+
+    #' Switch to Finder Page
     observeEvent(input$finder, {
         if (current_page() != "finder") {
-            current_page("finder")
-            output$page <- renderUI(finder_tab())
-        }
-    })
-    observeEvent(input$appStart, {
-        if (current_page() != "finder") {
+            js$set_element_attribute(
+                paste0("#", current_page()),
+                "aria-current",
+                "page"
+            )
+            js$set_element_attribute("#finder", "aria-current", "page")
             current_page("finder")
             output$page <- renderUI(finder_tab())
             js$scroll_to_top()
         }
     })
+    
+    #' Switch to Finder Page
+    observeEvent(input$appStart, {
+        if (current_page() != "finder") {
+            js$set_element_attribute(
+                paste0("#", current_page()),
+                "aria-current",
+                "page"
+            )
+            js$set_element_attribute("#finder", "aria-current", "page")
+            current_page("finder")
+            output$page <- renderUI(finder_tab())
+            js$scroll_to_top()
+        }
+    })
+
+    #' Switch to Explorer Page
     observeEvent(input$explorer, {
         if (current_page() != "explorer") {
+            js$set_element_attribute(
+                paste0("#", current_page()),
+                "aria-current",
+                "page"
+            )
+            js$set_element_attribute("#explorer", "aria-current", "page")
             current_page("explorer")
             output$page <- renderUI(explorer_tab())
             js$scroll_to_top()
@@ -72,6 +102,10 @@ server <- function(input, output, session) {
 
     #' Switch Loading Screen with App
     js$remove_elem(elem = "#loading");
+
+    #'/////////////////////////////////////////////////////////////////////////
+
+    #' Server Code for Finder Tab
     validated <- reactiveVal(FALSE)
     hasError <- reactiveVal(FALSE)
 
@@ -116,11 +150,7 @@ server <- function(input, output, session) {
             )
         } else {
             #' Update Reactive Values
-            validated(TRUE)
             hasError(FALSE)
-        }
-        
-        if (isTRUE(validated())) {
 
             #' Calculate Weights and Ratings Based on Selection
             coffee_pref <- setUserPreferences(input$coffeePrefs)
@@ -132,9 +162,9 @@ server <- function(input, output, session) {
             ratings <- c(coffee_pref[2], brewery_pref[2], museum_pref[2])
 
             #' Run
-            results <- travel_preferences(weights, ratings)
-            js$console_log(results[1:3, ])
-
+            results <- travel_preferences(weights, ratings, limits)
+            map_data <- results[c(1, 2, 3), ]
+            viz$render_top_city_maps(map_data)
         }
-    })
+    }, ignoreInit = TRUE)
 }

@@ -30,3 +30,10 @@ viz$as_json_object <- function(data) {
     })
     return(parent)
 }
+
+#' Render Top Cities Maps
+viz$render_top_city_maps <- function(data) {
+    session <- viz$get_shiny_session()
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage("render_top_city_maps", out)
+}

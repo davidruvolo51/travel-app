@@ -46,7 +46,13 @@ ui <- tagList(
                 labels = c("Home", "Finder", "Explorer")
             ),
             uiOutput("page"),
-            tags$div(class = "footer-banner", `aria-hidden` = "true"),
+            tags$div(
+                class = "footer-banner",
+                `aria-hidden` = "true",
+                style = "
+                    background-image: url('images/page-footer-grayscale.svg')
+                "
+            ),
             src$footer(
                 tags$h2("shinyTravel"),
                 src$nav$navlinks(
@@ -65,5 +71,8 @@ ui <- tagList(
             )
         )
     ),
+    #' Load Assets
+    tags$script(src = "assets/d3.v5.min.js"),
+    tags$script(src = "assets/topojson.min.js"),
     tags$script(src = "js/index.js")
 )
