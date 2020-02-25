@@ -431,12 +431,17 @@
     }
 
     // build datatable
-    function datatable(id, data, columns, caption) {
+    function datatable(id, data, columns, caption, css) {
         
         // define table
         const table = d3.select(id)
             .append("table")
-            .attr("class", "d3-viz d3-table datatable");
+            .attr("class", "datatable");
+
+        // update css if present
+        if (css) {
+            table.attr("class", `datatable ${css}`)
+        }
 
         // render caption
         if (caption) {
@@ -453,6 +458,7 @@
             .enter()
             .append("th")
             .attr("scope", "col")
+            .attr("class", (d, i) => `column-${i + 1}`)
             .text( c => c);
 
         // // <tbody>
@@ -497,7 +503,8 @@
                 id = value[0],
                 data = value[1],
                 columns = value[2],
-                caption = value[3]
+                caption = value[3],
+                css = value[4]
             )
         }, 350)
     })

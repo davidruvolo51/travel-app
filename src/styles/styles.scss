@@ -1,17 +1,6 @@
 @import "_variables", "_fonts";
-@import 
-	"_base",
-	"_flex",
-	"_buttons",
-	"_inputs",
-	"_navbar",
-	"_app",
-	"_hero",
-	"_footer", 
-	"_loading",
-	"_accordions",
-	"_datatable",
-	"_viz";
+@import "_base", "_flex", "_buttons", "_inputs", "_navbar", "_app", "_hero", "_footer", "_loading", "_accordions",
+	"_datatable", "_viz";
 
 .visually-hidden {
 	position: absolute;
@@ -116,6 +105,12 @@
 		height: auto;
 		&.size-lg {
 			max-width: 500px;
+		}
+	}
+
+	#summary-of-data {
+		.column-2 {
+			text-align: right;
 		}
 	}
 }

@@ -49,9 +49,13 @@
 			}
 		}
 	}
+
+	&.datatable-small {
+		max-width: 50%;
+	}
 }
 
-@media (max-width: 892px) {
+@media (max-width: $screen-break) {
 	.datatable {
 		thead {
 			position: absolute;
@@ -66,7 +70,7 @@
 				th,
 				td {
 					display: block;
-					padding: 5px 0 5px 12px;
+					padding: 6px 0 6px 12px;
 
 					.hidden-colname {
 						display: inline-block;
@@ -77,6 +81,10 @@
 					}
 				}
 			}
+		}
+
+		&.datatable-small {
+			max-width: 100%;
 		}
 	}
 }
