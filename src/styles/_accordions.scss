@@ -2,7 +2,6 @@
     display: block;
     margin: 0;
     padding: 0;
-    font-weight: normal;
     
     .accordion-button {
         display: flex;
@@ -16,7 +15,6 @@
         padding: 0;
         font-size: inherit;
         font-weight: normal;
-        box-sizing: content-box;
         text-align: left;
 
         svg {
@@ -26,7 +24,7 @@
         .accordion-icon {
             margin: 0;
             padding: 0;
-            margin-top: -8px;
+            margin-top: -12px;
             transition: all 0.3s;
             
             circle {
@@ -55,9 +53,9 @@
 
 .accordion-content {
     margin: 0;
-    margin-bottom: 24px;
-    padding: 12px 24px;
+    margin-bottom: 16px;
+    padding: 1em;
+    border-radius: 4px;
     border: 1px solid $brand-light;
-    box-shadow: inset 12px 0 0 0 $brand-light;
     background-color: white;
 }
