@@ -17,30 +17,16 @@ server <- function(input, output, session) {
     source("src/pages/data.R")
     source("server/handlers.R")
     source("server/viz.R")
-    source("scripts/utils/travel_finder.R")
-
-    #' Function that converts input values to
-    #' user preferences arrays
-    setUserPreferences <- function(input) {
-        case_when(
-            input == "No Preference" ~ c(0, 0),
-            input == "Not at all" ~ c(1, -2),
-            input == "Tend to avoid" ~ c(1, -1),
-            input == "Important" ~ c(1, 1),
-            input == "Very" ~ c(1, 2),
-            input == "Essential" ~ c(1, 3),
-            TRUE ~ NA_real_
-        )
-    }
+    source("server/travel_finder.R")
 
     #' //////////////////////////////////////
-    #' ~ i ~
+
     #' define routing
-    current_page <- reactiveVal("home")
-    output$page <- renderUI(home_tab())
-    #' current_page <- reactiveVal("finder")
-    #' output$page <- renderUI(finder_tab())
-    #' current_page <- reactiveVal("data")
+    # current_page <- reactiveVal("home")
+    # output$page <- renderUI(home_tab())
+    current_page <- reactiveVal("finder")
+    output$page <- renderUI(finder_tab())
+    # ' current_page <- reactiveVal("data")
     #' output$page <- renderUI(data_tab())
 
     #' Switch to Home Page
@@ -175,59 +161,65 @@ server <- function(input, output, session) {
     #' Run Code for Data
     observeEvent(input$submitForm, {
 
-            #' Reset Form only if there is an error
-            if (isTRUE(hasError())) {
-                js$add_css("#travel-form-error", "visually-hidden")
-                js$add_css("#limit-results-error", "visually-hidden")
-                js$set_element_attribute(
-                    "#travel-form-error",
-                    "aria-hidden",
-                    "true"
-                )
-                js$set_element_attribute(
-                    "#limit-results-error",
-                    "aria-hidden",
-                    "true"
-                )
-            }
+        #' Reset Form only if there is an error
+        if (isTRUE(hasError())) {
+            js$add_css("#travel-form-error", "visually-hidden")
+            js$add_css("#limit-results-error", "visually-hidden")
+            js$set_element_attribute(
+                "#travel-form-error",
+                "aria-hidden",
+                "true"
+            )
+            js$set_element_attribute(
+                "#limit-results-error",
+                "aria-hidden",
+                "true"
+            )
+        }
 
-            #' Get Limits Input
-            limits <- input$limitResults
-            if (class(limits) != "integer" | limits > 50 | limits < 0) {
+        #' Get Limits Input
+        l <- input$limitResults
+        if (class(l) != "integer" | l > 50 | l < 0) {
 
-                #' Update Reactive Values and Client
-                hasError(TRUE)
-                js$remove_css("#travel-form-error", "visually-hidden")
-                js$remove_css("#limit-results-error", "visually-hidden")
-                js$remove_element_attribute("#travel-form-error", "aria-hidden")
-                js$remove_element_attribute("#limit-results-error", "aria-hidden")
+            #' Update Reactive Values and Client
+            hasError(TRUE)
+            js$remove_css("#travel-form-error", "visually-hidden")
+            js$remove_css("#limit-results-error", "visually-hidden")
+            js$remove_element_attribute("#travel-form-error", "aria-hidden")
+            js$remove_element_attribute("#limit-results-error", "aria-hidden")
 
-                #' Send Error Messages
-                js$inner_html(
-                    "#travel-form-error",
-                    "ERROR: There was a problem with the 'limit results' field"
-                )
-                js$inner_html(
-                    "#limit-results-error",
-                    "ERROR: Enter a number from 0 to 50"
-                )
-            } else {
-                #' Update Reactive Values
-                hasError(FALSE)
+            #' Send Error Messages
+            js$inner_html(
+                "#travel-form-error",
+                "ERROR: There was a problem with the 'limit results' field"
+            )
+            js$inner_html(
+                "#limit-results-error",
+                "ERROR: Enter a number from 0 to 50"
+            )
+        } else {
+            #' Update Reactive Values
+            hasError(FALSE)
 
-                #' Calculate Weights and Ratings Based on Selection
-                coffee_pref <- setUserPreferences(input$coffeePrefs)
-                brewery_pref <- setUserPreferences(input$breweryPrefs)
-                museum_pref <- setUserPreferences(input$museumPrefs)
+            #' Prep objects
+            w <- c(
+                as.numeric(input$breweryPrefs),
+                as.numeric(input$coffeePrefs),
+                as.numeric(input$museumPrefs)
+            )
 
-                #' Collate Preferences into weights and ratings objects
-                weights <- c(coffee_pref[1], brewery_pref[1], museum_pref[1])
-                ratings <- c(coffee_pref[2], brewery_pref[2], museum_pref[2])
+            js$console_log(
+                w,
+                asDir = TRUE
+            )
 
-                #' Run
-                results <- travel_preferences(weights, ratings, limits)
-                map_data <- results[c(1, 2, 3), ]
-                viz$render_top_city_maps(map_data)
-            }
-        })
+            #' Run
+            results <- travel_preferences(weights = w, limits = l)
+            js$console_log(
+                results[1:3, ]
+            )
+            # map_data <- results[c(1, 2, 3), ]
+            # viz$render_top_city_maps(map_data)
+        }
+    })
 }

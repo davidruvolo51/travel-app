@@ -2,13 +2,70 @@
 #' FILE: finder.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-25
+#' MODIFIED: 2020-02-26
 #' PURPOSE: ui page component for finder tab
 #' STATUS: in.progress
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 finder_tab <- function() {
+
+    # define country filter
+    country_filter <- function() {
+        countries <- sort(unique(recs$country))
+        boxes <- lapply(seq_len(length(countries)), function(d) {
+            src$checkBoxInput(
+                name  = "countryFilter",
+                label = countries[d],
+                value = countries[d]
+            )
+        })
+        rm(countries)
+        return(boxes)
+    }
+
+    # set user preferences buttons function
+    user_prefs_ui <- function(id) {
+        tagList(
+            #' Strongest Negative Weighting
+            src$radioInput(
+                name = id,
+                label = "Not at all",
+                value = -2
+            ),
+
+            #' Slightly Negative Weighting
+            src$radioInput(
+                name = id,
+                label = "Tend to avoid",
+                value = -1
+            ),
+
+            #' Neutral (default checked)
+            src$radioInput(
+                    name = id,
+                    label = "No Preference",
+                    value = 0,
+                    checked = TRUE
+            ),
+
+            #' Slightly Positive Weighting
+            src$radioInput(
+                name = id,
+                label = "Tend to visit",
+                value = 1
+            ),
+
+            #' Strongest Positive Weighting
+            src$radioInput(
+                name = id,
+                label = "Essential",
+                value = 2
+            )
+        )
+    }
+
+    # return ui
     src$main(
         # hero
         src$hero(
@@ -60,110 +117,86 @@ finder_tab <- function() {
                 src$radioInputGroup(
                     id = "coffeePrefs",
                     class = "radios coffee-radio",
-
-                    # title
                     tags$legend(
                         class = "radios-title",
-                        "Cafes with Specialty Coffee?",
+                        "Cafes with Specialty Coffee?"
                     ),
-                    # buttons
-                    src$radioInput(
-                        name = "coffeePrefs",
-                        label = "No Preference",
-                        checked = TRUE
-                    ),
-                    src$radioInput(name = "coffeePrefs", label = "Not at all"),
-                    src$radioInput(name = "coffeePrefs", label = "A little"),
-                    src$radioInput(name = "coffeePrefs", label = "Important"),
-                    src$radioInput(name = "coffeePrefs", label = "Very"),
-                    src$radioInput(name = "coffeePrefs", label = "Essential")
+                    user_prefs_ui(id = "coffeePrefs")
                 ),
-
-                #' //////////////////////////////////////
                 # breweries
                 src$radioInputGroup(
                     id = "breweryPrefs",
                     class = "radios brewery-radio",
-
-                    # title
-                    tags$legend(
-                        class = "radios-title",
-                        "Breweries?"
-                    ),
-
-                    # buttons
-                    src$radioInput(
-                        name = "breweryPrefs",
-                        label = "No Preference",
-                        checked = TRUE
-                    ),
-                    src$radioInput(name = "breweryPrefs", label = "Not at all"),
-                    src$radioInput(name = "breweryPrefs", label = "A little"),
-                    src$radioInput(name = "breweryPrefs", label = "Important"),
-                    src$radioInput(name = "breweryPrefs", label = "Very"),
-                    src$radioInput(name = "breweryPrefs", label = "Essential")
+                    tags$legend(class = "radios-title", "Breweries?"),
+                    user_prefs_ui(id = "breweryPrefs")
                 ),
-
-                #' //////////////////////////////////////
                 # musuems
                 src$radioInputGroup(
                     id = "museumPrefs",
                     class = "radios musem-radio",
-
-                    # title
-                    tags$legend(
-                        class = "radios-title",
-                        "Museums?"
-                    ),
-
-                    # inputs
-                    src$radioInput(
-                        name = "museumPrefs",
-                        label = "No Preference",
-                        checked = TRUE
-                    ),
-                    src$radioInput(name = "museumPrefs", label = "Not at all"),
-                    src$radioInput(name = "museumPrefs", label = "A little"),
-                    src$radioInput(name = "museumPrefs", label = "Important"),
-                    src$radioInput(name = "museumPrefs", label = "Very"),
-                    src$radioInput(name = "museumPrefs", label = "Essential")
+                    tags$legend(class = "radios-title", "Museums?"),
+                    user_prefs_ui(id = "museumPrefs")
                 ),
 
                 #'//////////////////////////////////////
-                # input to limit results
-                tags$fieldset(
-                    class = "number-input-group",
-                    src$accordion(
-                        id = "limitResultsDefs",
-                        heading = "Would you like to limit the results?",
-                        text = paste(
-                        "You can exclude any number of the cities with",
-                        "them most places from the results. See the data tab",
-                        "for a complete list of cities. Enter a number between",
-                        "0 and 50. A value of 50 will remove the top 50",
-                        "cities whereas 0 will not exclude any cities.",
-                        sep = " ")
+
+                #' Additional Options
+                tags$h3("Additional Options"),
+
+                #' Limit Results to Specific Countries
+                src$accordion(
+                    id = "filter_countries_option",
+                    heading = "Limit Results to Specific Countries",
+                    tags$p(
+                        "Do you have a few countries that you would like to",
+                        "visit in mind? Select the countries you would like",
+                        "to search for destinations. Leave everything blank",
+                        "if you would like to search everything."
                     ),
-                    tags$label(
-                        `for` = "limitResults",
-                        class = "number-input-label",
-                        "Enter the number of top cities you would like to",
-                        "remove."
-                    ),
-                    tags$input(
-                        id = "limitResults",
-                        type = "number",
-                        class = "number-input",
-                        value = 0,
-                        max = 50,
-                        min = 0
-                    ),
-                    tags$span(
-                        id = "limit-results-error",
-                        class = "error visually-hidden"
+                    src$radioInputGroup(
+                        id = "filter-countries",
+                        class = "checkboxes countries-checkboxes",
+                        country_filter()
                     )
                 ),
 
+                # input to limit results
+                src$accordion(
+                    id = "limitResultsDefs",
+                    heading = "Exclude Top Cities",
+                    tags$p(
+                    "You can exclude any number of the cities with",
+                    "them most places from the results. Larger cities",
+                    "are likely to be recommended more as there are",
+                    "more places to visit. You can remove any number of",
+                    "the largest cities from the results. For example,",
+                    "entering '3' will remove the top three cities. '4' will",
+                    "remove the top four cities and so on. Entering '0' will",
+                    "keep all cities. See the data tab for a complete list of",
+                    "cities."
+                    ),
+                    tags$fieldset(
+                        class = "number-input-group",
+                        tags$label(
+                            `for` = "limitResults",
+                            class = "number-input-label",
+                            "Enter the number of top cities you would like to",
+                            "remove."
+                        ),
+                        tags$input(
+                            id = "limitResults",
+                            type = "number",
+                            class = "number-input",
+                            value = 0,
+                            max = 50,
+                            min = 0
+                        ),
+                        tags$span(
+                            id = "limit-results-error",
+                            class = "error visually-hidden"
+                        )
+                    )
+                ),
                 # Form buttons
                 tags$div(
                     class = "b-list",

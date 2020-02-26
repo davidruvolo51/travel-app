@@ -61,7 +61,7 @@ options(stringsAsFactors = FALSE)
 #' that is weighted by a user's selection and rating of place type (i.e.,
 #' cafes, breweries, museums).
 #' recs <- readRDS("data/travel_recommendations.RDS")
-travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
+travel_preferences <- function(weights, limits = FALSE, data = recs) {
 
     #' Define a function that returns the limits
     new_limits <- function(limits) {
@@ -104,30 +104,25 @@ travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
         )
     }
 
-    #' Make sure input arguments are number
-    #' the weights are whether or not the user has selected a place type
-    #' the ratings are how strongly the user felt about each type
+    #' Create Required Objects
     user_weights <- as.numeric(weights)
-    user_ratings <- as.numeric(ratings)
-
-    #' Create Required Data Structures
     internal_df <- internal_ref_df(data = data, limits = limits)
     cities_mat <- new_refs(data = internal_df)
     prefs <- new_prefs(data = internal_df)
 
-    #' Build a new score per city that is a the number of places by type
-    #' weighted by selection status and ratings per place type dividing by
-    #' weights
+    #' Build a new score per city (weighted mean)
     for (d in seq_len(NROW(cities_mat))) {
 
-        #' Caclulate Scores for City based on weights and rating
-        scores <- (cities_mat[d, ] * user_weights + user_ratings) /
-            (user_weights + 1)
+        #' Caclulate Scores for City and Place Type based on weights
+        #' you can also use the weighted.mean function, but I wanted
+        #' to return the scores for each place type for use in the
+        #' visualisations.
+        scores <- (cities_mat[d, ] * user_weights)
 
         #' Append to Preferences Object
         prefs[d, c("brewery", "cafe", "museum", "score")] <- cbind(
             rbind(scores),
-            score = sum(scores)
+            score = sum(scores) / sum(user_weights)
         )
     }
 
@@ -135,11 +130,5 @@ travel_preferences <- function(weights, ratings, limits = FALSE, data = recs) {
     return(prefs[order(prefs$score, decreasing = TRUE), ])
 }
 
-#' Run a few tests
-#' travel_preferences(weights = c(1, 1, 0), ratings = c(3, 3, 0))
-#' travel_preferences(weights = c(0, 1, 0), ratings = c(0, 3, 0))
-#' travel_preferences(
-#'     weights = c(0, 1, 1),
-#'     ratings = c(0, 4, 3),
-#'     limits = 10
-#' )
+#' Test
+travel_preferences(weights = c(-2, 1, 2))
