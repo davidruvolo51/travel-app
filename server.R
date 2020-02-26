@@ -178,7 +178,7 @@ server <- function(input, output, session) {
         }
 
         #' Get Limits Input
-        l <- input$limitResults
+        l <- input$option_city_limits
         if (class(l) != "integer" | l > 50 | l < 0) {
 
             #' Update Reactive Values and Client
@@ -201,25 +201,28 @@ server <- function(input, output, session) {
             #' Update Reactive Values
             hasError(FALSE)
 
-            #' Prep objects
-            w <- c(
-                as.numeric(input$breweryPrefs),
-                as.numeric(input$coffeePrefs),
-                as.numeric(input$museumPrefs)
-            )
-
             js$console_log(
-                w,
+                list(
+                    "breweries" = input$breweryPrefs,
+                    "coffee" = input$coffeePrefs,
+                    "museums" = input$museumPrefs,
+                    "countries" = input$countryFilter,
+                    "limits" = input$option_city_limits
+                ),
                 asDir = TRUE
             )
 
+            #' Prep objects
+            # w <- c(
+            #     as.numeric(input$breweryPrefs),
+            #     as.numeric(input$coffeePrefs),
+            #     as.numeric(input$museumPrefs)
+            # )
+
             #' Run
-            results <- travel_preferences(weights = w, limits = l)
-            js$console_log(
-                results[1:3, ]
-            )
-            # map_data <- results[c(1, 2, 3), ]
-            # viz$render_top_city_maps(map_data)
+            #' results <- travel_preferences(weights = w, limits = l)
+            #' map_data <- results[c(1, 2, 3), ]
+            #' viz$render_top_city_maps(map_data)
         }
     })
 }

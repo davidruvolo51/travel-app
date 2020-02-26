@@ -145,7 +145,7 @@ finder_tab <- function() {
 
                 #' Limit Results to Specific Countries
                 src$accordion(
-                    id = "filter_countries_option",
+                    id = "countries_fieldset",
                     heading = "Limit Results to Specific Countries",
                     tags$p(
                         "Do you have a few countries that you would like to",
@@ -153,16 +153,16 @@ finder_tab <- function() {
                         "to search for destinations. Leave everything blank",
                         "if you would like to search everything."
                     ),
-                    src$radioInputGroup(
-                        id = "filter-countries",
-                        class = "checkboxes countries-checkboxes",
+                    src$checkBoxGroup(
+                        id = "countryFilter",
+                        class = "checkboxes",
                         country_filter()
                     )
                 ),
 
                 # input to limit results
                 src$accordion(
-                    id = "limitResultsDefs",
+                    id = "limits_fieldset",
                     heading = "Exclude Top Cities",
                     tags$p(
                     "You can exclude any number of the cities with",
@@ -184,7 +184,7 @@ finder_tab <- function() {
                             "remove."
                         ),
                         tags$input(
-                            id = "limitResults",
+                            id = "option_city_limits",
                             type = "number",
                             class = "number-input",
                             value = 0,

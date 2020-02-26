@@ -261,12 +261,16 @@ src$radioInput <- function(name, label, value, checked = FALSE) {
 
 #' ~ c ~
 #' checkbox group
-src$checkBoxGroup <- function(..., id, class = NULL) {
+src$checkBoxGroup <- function(..., id = NULL, class = NULL) {
     f <- tags$fieldset(
         class = "shiny-input-checkboxgroup",
         role = "checkboxgroup",
         ...
     )
+    if (length(id) > 0) f$attribs$id <- id
+    if (length(class) > 0) {
+        f$attribs$class <- paste0(f$attribs$class, " ", class)
+    }
     return(f)
 }
 
@@ -280,7 +284,7 @@ src$checkBoxInput <- function(name, label, value, checked = FALSE) {
             type = "checkbox",
             role = "checkbox",
             name = name,
-            value = value,
+            value = value
     )
     if (isTRUE(checked)) btn$attribs$checked <- "true";
     return(tags$div(class = "checkbox-btn", btn, lab))
