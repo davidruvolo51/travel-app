@@ -2,7 +2,7 @@
 #' FILE: viz.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-21
-#' MODIFIED: 2020-02-21
+#' MODIFIED: 2020-02-25
 #' PURPOSE: shiny handlers for d3 modules
 #' STATUS: in.progress
 #' PACKAGES: NA
@@ -36,4 +36,14 @@ viz$render_top_city_maps <- function(data) {
     session <- viz$get_shiny_session()
     out <- viz$as_json_object(data)
     session$sendCustomMessage("render_top_city_maps", out)
+}
+
+#' Render Datatable
+viz$render_datatable <- function(id, data, columns, caption = NULL, class = NULL) {
+    session <- viz$get_shiny_session()
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage(
+        "render_datatable",
+        list(id, out, columns, caption, class)
+    )
 }

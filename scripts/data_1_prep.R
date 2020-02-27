@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-02-24
+#' MODIFIED: 2020-02-25
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: complete; working;
 #' PACKAGES: tidyverse
@@ -293,6 +293,33 @@ sum(
     travel$highlights$museums
 ) == NROW(places)
 
+
+#' Create an Object with all highlights collapsed into a data.frame
+travel$highlights$all <- travel$highlights %>%
+        as.data.frame() %>%
+        rename(
+            Breweries = breweries,
+            Cafes = cafes,
+            Cities = cities,
+            Countries = countries,
+            Museums = museums,
+            Total = places
+        ) %>%
+        pivot_longer(everything(), "name") %>%
+        mutate(
+            name = factor(
+                name,
+                c(
+                    "Countries", "Cities",
+                    "Cafes", "Breweries", "Museums",
+                    "Total"
+                )
+            )
+        ) %>%
+        arrange(name) %>%
+        as.data.frame()
+
+
 #' ~ g ~
 #' Descriptives: Places by City
 #' (I don't know if this will be helpful)
@@ -376,34 +403,34 @@ travel$descriptives$places_by_country <- places %>%
 
 #' ~ i ~
 #' Summaries: coffee and breweries by country
-travel$summary$places_by_country <- places %>%
-    group_by(country, type) %>%
-    summarize(
-        cities = length(unique(city)),
-        places = length(unique(id)),
-        user_ratings_mean = mean(user_ratings_total, na.rm = TRUE),
-        user_ratings_total = sum(user_ratings_total, na.rm = TRUE),
-        rating_avg = mean(rating, na.rm = TRUE),
-        rading_sd = sd(rating, na.rm = TRUE),
-        price_level = median(price_level, na.rm = TRUE)
-    ) %>%
-    arrange(country, type)
+#' travel$summary$places_by_country <- places %>%
+#'     group_by(country, type) %>%
+#'     summarize(
+#'         cities = length(unique(city)),
+#'         places = length(unique(id)),
+#'         user_ratings_mean = mean(user_ratings_total, na.rm = TRUE),
+#'         user_ratings_total = sum(user_ratings_total, na.rm = TRUE),
+#'         rating_avg = mean(rating, na.rm = TRUE),
+#'         rading_sd = sd(rating, na.rm = TRUE),
+#'         price_level = median(price_level, na.rm = TRUE)
+#'     ) %>%
+#'     arrange(country, type)
 
 #' ~ j ~
 #' Summary: coffe and breweries by city
-travel$summary$places_by_city <- places %>%
-    group_by(city, country, type) %>%
-    summarize(
-        cities = length(unique(city)),
-        places = length(unique(id)),
-        user_ratings_mean = mean(user_ratings_total, na.rm = TRUE),
-        user_ratings_total = sum(user_ratings_total, na.rm = TRUE),
-        rating_avg = mean(rating, na.rm = TRUE),
-        rading_sd = sd(rating, na.rm = TRUE),
-        price_level = median(price_level, na.rm = TRUE)
-    ) %>%
-    ungroup() %>%
-    arrange(country, city, type)
+#' travel$summary$places_by_city <- places %>%
+#'     group_by(city, country, type) %>%
+#'     summarize(
+#'         cities = length(unique(city)),
+#'         places = length(unique(id)),
+#'         user_ratings_mean = mean(user_ratings_total, na.rm = TRUE),
+#'         user_ratings_total = sum(user_ratings_total, na.rm = TRUE),
+#'         rating_avg = mean(rating, na.rm = TRUE),
+#'         rading_sd = sd(rating, na.rm = TRUE),
+#'         price_level = median(price_level, na.rm = TRUE)
+#'     ) %>%
+#'     ungroup() %>%
+#'     arrange(country, city, type)
 
 #'//////////////////////////////////////////////////////////////////////////////
 

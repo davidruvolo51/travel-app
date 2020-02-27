@@ -2,13 +2,13 @@
 #' FILE: home.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-20
+#' MODIFIED: 2020-02-27
 #' PURPOSE: ui component for home page
 #' STATUS: in.progress
 #' PACKAGES: NA
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
-home_tab <- function() {
+home_page <- function() {
     shiny_btn_css <- "action-button shiny-bound-input"
     src$main(
         extra_spacing = FALSE,

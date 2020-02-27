@@ -1,16 +1,6 @@
 @import "_variables", "_fonts";
-@import 
-	"_base",
-	"_flex",
-	"_buttons",
-	"_inputs",
-	"_navbar",
-	"_app",
-	"_hero",
-	"_footer", 
-	"_loading",
-	"_accordions",
-	"_viz";
+@import "_base", "_flex","_forms", "_buttons", "_inputs", "_navbar", "_app", "_hero", "_footer", "_loading", "_accordions",
+	"_datatable", "_viz";
 
 .visually-hidden {
 	position: absolute;
@@ -80,16 +70,16 @@
 	font-weight: bold;
 }
 
-#travel-form {
-	background-color: hsla(0, 0, 99);
-	padding: 1.1em;
-	border-radius: 4px;
+// #travel-form {
+// 	background-color: hsla(0, 0, 99);
+// 	padding: 1.1em;
+// 	border-radius: 4px;
 
-	.form-title {
-		margin-bottom: 21px;
-		font-size: 16pt;
-	}
-}
+// 	.form-title {
+// 		margin-bottom: 21px;
+// 		font-size: 16pt;
+// 	}
+// }
 
 .footer-banner {
 	height: 100px;
@@ -115,6 +105,12 @@
 		height: auto;
 		&.size-lg {
 			max-width: 500px;
+		}
+	}
+
+	#summary-of-data {
+		.column-2 {
+			text-align: right;
 		}
 	}
 }

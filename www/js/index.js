@@ -170,28 +170,68 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // ~ 2 ~
-// Function for handling clicks of all navigation links 
-(function () {
-    // select all navigation links
-    const home = document.getElementById("home");
-    const finder = document.getElementById("finder");
-    const explorer = document.getElementById("explorer");
+// Navigation, Toggles, and Buttons
 
-    /// add event listeners
-    home.addEventListener("click", function (event) {
-        event.preventDefault();
-        Shiny.setInputValue("home", "home", { priority: "event" });
-        document.title = "shinyTravel | home"
-    });
-    finder.addEventListener("click", function (event) {
-        event.preventDefault();
-        Shiny.setInputValue("finder", "finder", { priority: "event" });
-        document.title = "shinyTravel | Finder"
-    });
-    explorer.addEventListener("click", function (event) {
-        event.preventDefault();
-        Shiny.setInputValue("explorer", "explorer", { priority: "event" });
-        document.title = "shinyTravel | Explorer"
+// ~ a ~
+// Function for handling clicks of all navigation links
+(function () {
+    function toTitleCase(string) {
+        return string.charAt(0).toUpperCase() + string.substr(1).toLowerCase();
+    }
+    const links = document.querySelectorAll(".nav .menu-link");
+    links.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            Shiny.setInputValue(event.target.id, event.target.id, { priority: "event" });
+            document.title = `shinyTravel | ${toTitleCase(event.target.innerText)}`;
+        })
+    })
+})();
+
+
+// ~ b ~ 
+// Function for opening and closing accordions to get this function to work
+// you must call it on the desired page.
+const accordions = (function () {
+    function addToggles() {
+        const buttons = document.querySelectorAll(".accordion-button");
+        buttons.forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+                let id = btn.getAttribute("data-name", "value");
+                let svg = document.querySelector(`svg[data-name="${id}"]`);
+                let sec = document.querySelector(`section[data-name="${id}"]`);
+                sec.classList.toggle("visually-hidden");
+                svg.classList.toggle("rotated");
+                if (btn.getAttribute("aria-expanded", "value") === "false") {
+                    btn.setAttribute("aria-expanded", true);
+                    sec.removeAttribute("hidden");
+                } else {
+                    btn.setAttribute("aria-expanded", "false");
+                    sec.setAttribute("hidden", "");
+                }
+            });
+        });
+    }
+    return {
+        addToggles: addToggles
+    }
+})();
+
+
+// ~ c ~ 
+// Function to reset all radio input groups and checkbox input groups
+(function(){
+    function resetInputGroups() {
+        const elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
+        elems.forEach(function(el) {
+            el.checked = false;
+            if (el.getAttribute("data-default", "value") === "true") {
+                el.checked = true;
+            }
+        });
+    }
+    Shiny.addCustomMessageHandler("reset_input_groups", function(value) {
+        resetInputGroups()
     })
 })();
 
@@ -273,9 +313,9 @@
 
         // define projection
         let projection = d3.geoMercator()
-                .scale(1)
-                .translate([0, 0]);
-        
+            .scale(1)
+            .translate([0, 0]);
+
         // define path
         let path = d3.geoPath().projection(projection);
 
@@ -342,8 +382,7 @@
     function render_top_city_maps(city_a, city_b, city_c) {
 
         // Remove Existing Maps
-        // console.log(city_a, city_b, city_c)
-        d3.selectAll(".top-three-cities-maps").remove();
+        d3.selectAll("#recommended-cities .top-three-cities-maps, #recommended-cities .error").remove();
 
         // define output id
         const out_elem = "#recommended-cities";
@@ -363,36 +402,182 @@
                 // console.log(d.properties.name);
                 return countries.indexOf(d.properties.name) > -1;
             });
-
-            // isolate each country
-            let countryA = geojson.features.filter(d => d.properties.name === countries[0]);
-            let countryB = geojson.features.filter(d => d.properties.name === countries[1]);
-            let countryC = geojson.features.filter(d => d.properties.name === countries[2]);
-
+            
             // Build Map For City A
-            let coordsA = [city_a.lng, city_a.lat];
-            drawMap(out_elem, coordsA, city_a.city, countryA)
-
+            if (city_a !== false) {
+                let coordsA = [city_a.lng, city_a.lat];
+                let countryA = geojson.features.filter(d => d.properties.name === countries[0]);
+                drawMap(out_elem, coordsA, city_a.city, countryA)
+            }
+            
             // Build Map For City B
-            let coordsB = [city_b.lng, city_b.lat];
-            drawMap(out_elem, coordsB, city_b.city, countryB)
-
+            if (city_b !== false) {
+                let coordsB = [city_b.lng, city_b.lat];
+                let countryB = geojson.features.filter(d => d.properties.name === countries[1]);
+                drawMap(out_elem, coordsB, city_b.city, countryB)
+            }
+            
             // Build Map For City C
-            const coordsC = [city_c.lng, city_c.lat];
-            drawMap(out_elem, coordsC, city_c.city, countryC)
+            if (city_c !== false) {
+                const coordsC = [city_c.lng, city_c.lat];
+                let countryC = geojson.features.filter(d => d.properties.name === countries[2]);
+                drawMap(out_elem, coordsC, city_c.city, countryC)
+            }
+
+            // Output Message if no data submitted
+            // this check will likely not be needed, but in the event
+            // the r code fails (for some reason) an error message will
+            // be displayed
+            if (!city_a && !city_b && !city_c) {
+                d3.select(out_elem)
+                .append("p")
+                .attr("class", "error")
+                .text("Sorry, no results were returned. Either select more countries or reset the number of cities to remove.")
+            }
 
         }).catch(error => {
-            d3.select(out_elem).text(`ERROR: ${error}`).style("color", "red");
+            d3.select(out_elem)
+            .append("p")
+            .attr("class", "error")
+            .text(`ERROR: ${error}`);
             console.log(error);
         })
     }
 
-    // Register with Shiny
+    // Register with Shiny and evaluate the presence of all three cities
     Shiny.addCustomMessageHandler("render_top_city_maps", function (value) {
-        const city_a = value[0];
-        const city_b = value[1];
-        const city_c = value[2];
+        let city_a, city_b, city_c;
+        if (value.length > 0) {
+            if ( value.length === 1) {
+                city_a = value[0];
+                city_b = false;
+                city_c = false;
+            }
+            if (value.length === 2) {
+                city_a = value[0];
+                city_b = value[1];
+                city_c = false;
+            }
+            if (value.length === 3) {
+                city_a = value[0];
+                city_b = value[1];
+                city_c = value[2];
+            }
+        } else {
+            city_a = false;
+            city_b = false;
+            city_c = false;
+        }
         render_top_city_maps(city_a, city_b, city_c);
+    })
+
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// ~ 5 ~
+// D3 Visualizations Tables
+
+// function and handler to generate data tables
+(function () {
+
+    // function for evaluating classnames for td elements
+    function set_classname(value, col) {
+        let css;
+        const datatype = typeof value;
+        if (datatype === "number") {
+            if (value > 0) {
+                css = "datatype-number value-positive";
+            } else if (value < 0) {
+                css = "datatype-number value-negative";
+            } else if (value === 0) {
+                css = "datatype-number value-zero"
+            }
+        } else {
+            css = `datatype-${typeof value}`;
+        }
+        css = css + " column-" + (col + 1);
+        return (css)
+    }
+
+    // build datatable
+    function datatable(id, data, columns, caption, css) {
+
+        // define table
+        d3.select(`${id} table`).remove();
+        const table = d3.select(id)
+            .append("table")
+            .attr("class", "datatable");
+
+        // update css if present
+        if (css) {
+            table.attr("class", `datatable ${css}`)
+        }
+
+        // render caption
+        if (caption) {
+            table.append("caption").text(caption)
+        }
+
+        // <thead>
+        const thead = table.append("thead")
+            .attr("class", "datatable-head")
+            .append("tr")
+            .attr("role", "row")
+            .selectAll("th")
+            .data(columns)
+            .enter()
+            .append("th")
+            .attr("scope", "col")
+            .attr("class", (d, i) => `column-${i + 1}`)
+            .text(c => c);
+
+        // // <tbody>
+        const tbody = table.append("tbody")
+            .attr("class", "datatable-body");
+
+        // // create rows
+        const rows = tbody.selectAll("tr")
+            .data(data)
+            .enter()
+            .append("tr")
+            .attr("role", "row");
+
+        // create cells
+        const cells = rows.selectAll("td")
+            .data(function (row) {
+                return columns.map(function (column) {
+                    return {
+                        column: column,
+                        value: row[column]
+                    };
+                });
+            })
+            .enter()
+            .append("td")
+            .attr("role", "cell")
+            .attr("class", (d, i) => { return set_classname(d.value, i); });
+
+        // create responsive cells
+        cells.text(d => d.value)
+        cells.append("span")
+            .attr("class", "hidden-colname")
+            .attr("aria-hidden", "true")
+            .text(d => d.column)
+            .lower()
+    }
+
+    // shiny handler
+    Shiny.addCustomMessageHandler("render_datatable", function (value) {
+        setTimeout(function () {
+            datatable(
+                id = value[0],
+                data = value[1],
+                columns = value[2],
+                caption = value[3],
+                css = value[4]
+            )
+        }, 500)
     })
 
 })();

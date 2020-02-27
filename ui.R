@@ -42,8 +42,8 @@ ui <- tagList(
         src$app(
             src$navbar(
                 title = "shinyTravel",
-                links = c("home", "finder", "explorer"),
-                labels = c("Home", "Finder", "Explorer")
+                links = c("home", "search", "map", "data"),
+                labels = c("Home", "Search", "Map", "Data")
             ),
             uiOutput("page"),
             tags$div(
