@@ -1,14 +1,15 @@
 #' ////////////////////////////////////////////////////////////////////////////
-#' FILE: finder.R
+#' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-26
-#' PURPOSE: ui page component for finder tab
+#' MODIFIED: 2020-02-27
+#' PURPOSE: ui page component for search tab
 #' STATUS: in.progress
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
-#' COMMENTS: NA
+#' COMMENTS: load page in server and use reactiveVal "current_page" to render
+#'           pages dynamically (application routing)
 #' ////////////////////////////////////////////////////////////////////////////
-finder_tab <- function() {
+search_page <- function() {
 
     # define country filter
     country_filter <- function() {
@@ -42,10 +43,11 @@ finder_tab <- function() {
             ),
 
             #' Neutral (default checked)
+            #' Requires a small value to avoid nulls
             src$radioInput(
                     name = id,
                     label = "No Preference",
-                    value = 0,
+                    value = 0.1,
                     checked = TRUE
             ),
 
@@ -201,7 +203,12 @@ finder_tab <- function() {
                 tags$div(
                     class = "b-list",
                     tags$button(
-                        id = "submitForm",
+                        id = "resetTravelForm",
+                        class = "action-button shiny-bound-input b b-secondary",
+                        "Reset"
+                    ),
+                    tags$button(
+                        id = "submitTravelForm",
                         class = "action-button shiny-bound-input b b-primary",
                         "Submit"
                     )
@@ -213,24 +220,27 @@ finder_tab <- function() {
         #' Build Report
         tags$article(
             id = "travel-summary",
-            # class = "article visually-hidden",
+            class = "article visually-hidden",
             class = "article",
-            # `aria-hidden` = "true",
+            `aria-hidden` = "true",
 
             # section maps
             src$section(
                 tags$h2("Recommended Cities"),
-                tags$p(
-                    "Based on your selections, here are the top three",
-                    "recommended cities. Scroll down to view why these",
-                    "cities were recommended and more about them."
+                tags$p("Based on your selections, here are your results."),
+                tags$figcaption(
+                    id = "recommended-cities-caption",
+                    class = "visually-hidden"
                 ),
-                tags$figcaption("Top 3 Cities"),
                 tags$figure(
                     id = "recommended-cities",
+                    `aria-describedby` = "recommended-cities-caption",
                     class = "d3-viz-output top-n-maps",
                 )
             )
-        )
+        ),
+
+        # Call JavaScript Functions
+        tags$script("setTimeout(function() { accordions.addToggles()}, 375);")
     )
 }
