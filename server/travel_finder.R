@@ -55,40 +55,12 @@ options(stringsAsFactors = FALSE)
 #'
 #' Save Transformed Data for Use in Application.
 #' saveRDS(travel, "data/travel_recommendations.RDS")
-
 #' Define a function that returns all cities in the dataset where each city is
 #' given a new score based on user preferences. The score is a weighted mean
-#' that is weighted by a user's selection and rating of place type (i.e.,
+#' that is weighted by a user's prefernces for each place type (i.e.,
 #' cafes, breweries, museums).
 #' recs <- readRDS("data/travel_recommendations.RDS")
-travel_preferences <- function(weights, limits = FALSE, data = recs) {
-
-    #' Define a function that returns the limits
-    new_limits <- function(limits) {
-        top_50 <- c(
-            162, 1, 281, 56, 278, 341, 139, 269, 98, 57, 322, 301, 70,
-            210, 248, 239, 191, 192, 58, 63, 362, 393, 174, 55, 74,
-            138, 229, 249, 165, 221, 221, 211, 335, 68, 60, 250, 370,
-            300, 345, 29, 163, 349, 286, 403, 168, 380, 264, 61, 14, 85
-        )
-        return(top_50[1:limits])
-    }
-
-    #' Define a function that takes the master dataset and selected first n
-    internal_ref_df <- function(data, limits) {
-        if (!isFALSE(limits)) {
-            lim <- new_limits(limits = limits)
-            return(data[!data$id %in% lim, ])
-        }
-        if (isFALSE(limits)) {
-            return(data)
-        }
-    }
-
-    #' Define a function that returns the reference dataset
-    new_refs <- function(data) {
-        return(as.matrix(data[, c("brewery", "cafe", "museum")]))
-    }
+travel_preferences <- function(weights, data) {
 
     #' Define a function that builds a blank user preferences object
     new_prefs <- function(data) {
@@ -104,22 +76,16 @@ travel_preferences <- function(weights, limits = FALSE, data = recs) {
         )
     }
 
-    #' Create Required Objects
+    #' Create Required Objects (weights, references, and preferences)
     user_weights <- as.numeric(weights)
-    internal_df <- internal_ref_df(data = data, limits = limits)
-    cities_mat <- new_refs(data = internal_df)
-    prefs <- new_prefs(data = internal_df)
+    refs <- as.matrix(data[, c("brewery", "cafe", "museum")])
+    prefs <- new_prefs(data = data)
 
-    #' Build a new score per city (weighted mean)
-    for (d in seq_len(NROW(cities_mat))) {
-
-        #' Caclulate Scores for City and Place Type based on weights
-        #' you can also use the weighted.mean function, but I wanted
-        #' to return the scores for each place type for use in the
-        #' visualisations.
-        scores <- (cities_mat[d, ] * user_weights)
-
-        #' Append to Preferences Object
+    #' Build a new score per city (weighted mean). I'm using my own
+    #' weighted means formula in case I want to use the subscores in
+    #' the app
+    for (d in seq_len(NROW(refs))) {
+        scores <- (refs[d, ] * user_weights)
         prefs[d, c("brewery", "cafe", "museum", "score")] <- cbind(
             rbind(scores),
             score = sum(scores) / sum(user_weights)
@@ -131,4 +97,4 @@ travel_preferences <- function(weights, limits = FALSE, data = recs) {
 }
 
 #' Test
-travel_preferences(weights = c(-2, 1, 2))
+#' travel_preferences(weights = c(-2, 1, 2))
