@@ -2,7 +2,7 @@
 #' FILE: client.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-25
+#' MODIFIED: 2020-02-27
 #' PURPOSE: list of ui components
 #' STATUS: in.progress
 #' PACKAGES: shiny; htmltools
@@ -254,7 +254,12 @@ src$radioInput <- function(name, label, value, checked = FALSE) {
             name = name,
             value = value,
     )
-    if (isTRUE(checked)) btn$attribs$checked <- "true";
+    if (isTRUE(checked)) {
+        btn$attribs$checked <- "true"
+        btn$attribs$`data-default` <- "true"
+    } else {
+        btn$attribs$`data-default` <- "false"
+    }
     return(tags$div(class = "radio-btn", btn, lab))
 }
 
@@ -286,7 +291,12 @@ src$checkBoxInput <- function(name, label, value, checked = FALSE) {
             name = name,
             value = value
     )
-    if (isTRUE(checked)) btn$attribs$checked <- "true";
+    if (isTRUE(checked)) {
+        btn$attribs$checked <- "true"
+        btn$attribs$`data-default` <- "true"
+    } else {
+        btn$attribs$`data-default` <- "false"
+    }
     return(tags$div(class = "checkbox-btn", btn, lab))
 }
 
@@ -302,48 +312,21 @@ src$accordion <- function(..., id, heading, text = NULL) {
 
     #' define internal IDs
     btnID <- paste0("accordion_", id)
-    sectionID <- paste0(btnID, "_section")
+    sectionID <- paste0("accordion_section_",btnID)
 
-    #' Define a function that returns a script that controls the
-    #' opening and closing of the accordion section. This includes
-    #' the handling of html and aria attributes, as well as toggling
-    #' of css classes.
-    js <- function(id) {
-        bID <- paste0("a_", id)
-        sID <- paste0(id, "_section")
-        tog <- paste0(bID, "_icon")
-        paste0(
-            "let ", bID, " = document.getElementById('", id, "');",
-            "let ", sID, " = document.getElementById('", sID, "');",
-            "let ", tog, " = ", bID, ".getElementsByTagName('svg')[0];",
-            bID, ".addEventListener('click', function() {",
-            sID, ".classList.toggle('visually-hidden');",
-            tog, ".classList.toggle('rotated');",
-            "if (", bID, ".getAttribute('aria-expanded', 'value')",
-                "=== 'false')",
-                "{",
-                    bID, ".setAttribute('aria-expanded', true);",
-                    sID, ".removeAttribute('hidden');",
-                "}",
-                "else {",
-                    bID, ".setAttribute('aria-expanded', false);",
-                    sID, ".setAttribute('hidden', '');",
-                "}",
-            "});"
-        )
-    }
     #' Create heading with button and icon
     h <- tags$h4(
         class = "accordion-heading",
         tags$button(
             id = btnID,
             class = "accordion-button",
+            `data-name` = id,
             `aria-controls` = "accordion-panel",
             `aria-expanded` = "false",
             heading,
             HTML(
                 '<svg aria-hidden="true" class="accordion-icon" 
-                    width="50" height="50">
+                    width="50" height="50" data-name=', id, '>
                     <g stroke="none" strokeWidth="1" fill="none">
                         <circle fill="#3F454B" cx="25" cy="25" r="24">
                         </circle>
@@ -367,12 +350,13 @@ src$accordion <- function(..., id, heading, text = NULL) {
         id = sectionID,
         class = "accordion-content visually-hidden",
         `aria-labelledby` = btnID,
+        `data-name` = id,
         hidden = "",
         ...
     )
 
     #' Gather all elemenets
-    a <- tagList(h, s, tags$script(js(id = btnID)))
+    a <- tagList(h, s)
 
     #'  return
     return(a)

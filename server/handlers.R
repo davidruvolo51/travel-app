@@ -68,6 +68,15 @@ js$remove_element_attribute <- function(elem, attr) {
     )
 }
 
+#' Reset Input Groups
+js$reset_input_groups <- function() {
+    session <- js$get_shiny_session()
+    session$sendCustomMessage(
+        "reset_input_groups",
+        ""
+    )
+}
+
 #' Scroll to the Top of a page
 js$scroll_to_top <- function() {
     session <- js$get_shiny_session()
