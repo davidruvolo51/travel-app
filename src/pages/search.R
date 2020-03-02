@@ -237,6 +237,21 @@ search_page <- function() {
                     `aria-describedby` = "recommended-cities-caption",
                     class = "d3-viz-output top-n-maps",
                 )
+            ),
+
+            # summary charts
+            src$section(
+                tags$h2("Summary of Recommended Cities"),
+                tags$p("Some text here"),
+                tags$figcaption(
+                    id = "summary-of-cities-caption",
+                    class = "visually-hidden"
+                ),
+                tags$figure(
+                    id = "summary-of-cities",
+                    `aria-describedby` = "summary-of-cities-caption",
+                    class = "d3-viz-output top-n-cities-sum"
+                )
             )
         ),
 

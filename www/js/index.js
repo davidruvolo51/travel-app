@@ -220,17 +220,17 @@ const accordions = (function () {
 
 // ~ c ~ 
 // Function to reset all radio input groups and checkbox input groups
-(function(){
+(function () {
     function resetInputGroups() {
         const elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
-        elems.forEach(function(el) {
+        elems.forEach(function (el) {
             el.checked = false;
             if (el.getAttribute("data-default", "value") === "true") {
                 el.checked = true;
             }
         });
     }
-    Shiny.addCustomMessageHandler("reset_input_groups", function(value) {
+    Shiny.addCustomMessageHandler("reset_input_groups", function (value) {
         resetInputGroups()
     })
 })();
@@ -402,21 +402,21 @@ const accordions = (function () {
                 // console.log(d.properties.name);
                 return countries.indexOf(d.properties.name) > -1;
             });
-            
+
             // Build Map For City A
             if (city_a !== false) {
                 let coordsA = [city_a.lng, city_a.lat];
                 let countryA = geojson.features.filter(d => d.properties.name === countries[0]);
                 drawMap(out_elem, coordsA, city_a.city, countryA)
             }
-            
+
             // Build Map For City B
             if (city_b !== false) {
                 let coordsB = [city_b.lng, city_b.lat];
                 let countryB = geojson.features.filter(d => d.properties.name === countries[1]);
                 drawMap(out_elem, coordsB, city_b.city, countryB)
             }
-            
+
             // Build Map For City C
             if (city_c !== false) {
                 const coordsC = [city_c.lng, city_c.lat];
@@ -430,16 +430,16 @@ const accordions = (function () {
             // be displayed
             if (!city_a && !city_b && !city_c) {
                 d3.select(out_elem)
-                .append("p")
-                .attr("class", "error")
-                .text("Sorry, no results were returned. Either select more countries or reset the number of cities to remove.")
+                    .append("p")
+                    .attr("class", "error")
+                    .text("Sorry, no results were returned. Either select more countries or reset the number of cities to remove.")
             }
 
         }).catch(error => {
             d3.select(out_elem)
-            .append("p")
-            .attr("class", "error")
-            .text(`ERROR: ${error}`);
+                .append("p")
+                .attr("class", "error")
+                .text(`ERROR: ${error}`);
             console.log(error);
         })
     }
@@ -448,7 +448,7 @@ const accordions = (function () {
     Shiny.addCustomMessageHandler("render_top_city_maps", function (value) {
         let city_a, city_b, city_c;
         if (value.length > 0) {
-            if ( value.length === 1) {
+            if (value.length === 1) {
                 city_a = value[0];
                 city_b = false;
                 city_c = false;
@@ -578,6 +578,189 @@ const accordions = (function () {
                 css = value[4]
             )
         }, 500)
+    })
+
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// function for rendering columncharts
+
+(function () {
+    // function for determining yMax value
+    function ymax(value, data, y) {
+        if (typeof value === "undefined") {
+            let val = Math.max(...data.map(function (d) { return [d[y]]; }));
+            if (val <= 0) {
+                val = 0;
+            }
+            return val;
+        } else {
+            return ymax;
+        }
+    }
+
+    // function for determining the ymin value
+    function ymin(value, data, y) {
+        if (typeof value === "undefined") {
+            let val = Math.min(...data.map(function (d) { return [d[y]]; }));
+            if (val >= 0) {
+                val = 0
+            }
+            return val
+        } else {
+            return value;
+        }
+    }
+    function columnChart({ id, data, x, y, yMin, yMax }) {
+
+        // set params
+        let width = 550, height = 350;
+        const margin = ({ top: 35, right: 0, bottom: 50, left: 70 });
+        const range = {
+            ymin: ymin(yMin, data, y),
+            ymax: ymax(yMax, data, y)
+        }
+        console.log(arguments[0], range)
+
+        // select and define svg element
+        let svg = d3.select(id)
+            .append("svg")
+            .attr("class", "d3-viz column-chart")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", ` 0 0 ${width} ${height}`)
+            .attr("preserveAspectRatio", "xMinYMin");
+
+        // append inner svg aread
+        let g = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        // define group for all coumns
+        let columnArea = g.append("g")
+            .attr("class", "chart-data")
+            .selectAll("chart-data");
+
+        // define axes
+        let xScale = d3.scaleBand()
+            .domain(data.map(d => d[x]))
+            .range([0, width - margin.left - margin.right]);
+        let yScale = d3.scaleLinear()
+            .domain([range.ymin, range.ymax])
+            .nice()
+            .range([height - margin.top - margin.bottom, 0]);
+
+        // render x
+        g.append("g")
+            .attr("class", "axis x-axis")
+            .attr("transform", `translate(0, ${yScale(0)})`)
+            .call(d3.axisBottom(xScale));
+
+        // render y
+        g.append("g")
+            .attr("class", "axis y-axis")
+            .call(d3.axisLeft(yScale));
+
+        // build columns
+        let columns = columnArea
+            .data(data)
+            .enter()
+            .append("g")
+            .attr("transform", d => `translate(${xScale(d[x])}, 0)`);
+
+        // BUILD <rect>
+        let rect = columns
+            .append("rect")
+            .attr("x", xScale.bandwidth() * 0.2)
+            .attr("y", yScale(0))
+            .attr("width", xScale.bandwidth() * 0.5 + 10)
+            .style("cursor", "pointer");
+
+        // Animate
+        rect.attr("height", 0)
+            .transition()
+            .delay(250)
+            .duration(1250)
+            .attr("y", (d) => yScale(Math.max(0, d[y])))
+            .attr("height", d => Math.abs(yScale(d[y]) - yScale(0)));
+
+
+        // tooltips
+        let tooltip = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .attr("id", `${id}-tooltip`)
+            .attr("class", "d3-tooltip")
+            .style("opacity", 0)
+            .style("z-index", 200)
+            .style("background-color", "white")
+            .style("box-shadow", "0 0 4px 2px hsl(0, 0%, 0%, 0.2)")
+            .style("border-radius", "3px")
+            .style("padding", "12px 18px")
+
+        // define events
+        function mouseover(d) {
+            // d3.select(this).attr("fill", config.colors.hover);
+            tooltip.style("opacity", 1);
+        }
+
+        function mousemove(d) {
+            tooltip.html("<strong>" + d[x] + "</strong>: " + "<output>" + d[y] + "</output>")
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 55) + "px");
+        }
+
+        function mouseleave(d) {
+            // d3.select(this).attr("fill", config.colors.fill);
+            tooltip.style("opacity", 0);
+        }
+
+        // attach mouse events
+        rect.on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave);
+    }
+
+    // function to render all three column charts
+    function render_city_column_charts(city_a, city_b, city_c) {
+        const id = "#summary-of-cities";
+        if (city_a !== false) {
+            columnChart({id: id, data: city_a, x: "", y: ""})
+        }
+        if (city_b !== false) {
+            columnChart({id: id, data: city_a, x: "", y: ""})
+        }
+        if (city_c !== false) {
+            columnChart({id: id, data: city_a, x: "", y: ""})
+        }
+    }
+
+    // handler to render all three charts if they exist
+    Shiny.addCustomMessageHandler("render_city_column_charts", function(value) {
+        console.log(value)
+        // let city_a, city_b, city_c;
+        // if (value.length > 0) {
+        //     if (value.length === 1) {
+        //         city_a = value[0];
+        //         city_b = false;
+        //         city_c = false;
+        //     }
+        //     if (value.length === 2) {
+        //         city_a = value[0];
+        //         city_b = value[1];
+        //         city_c = false;
+        //     }
+        //     if (value.length === 3) {
+        //         city_a = value[0];
+        //         city_b = value[1];
+        //         city_c = value[2];
+        //     }
+        // } else {
+        //     city_a = false;
+        //     city_b = false;
+        //     city_c = false;
+        // }
+        // render_city_column_charts(city_a, city_b, city_c);
     })
 
 })();
