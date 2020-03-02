@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-02-25
+#' MODIFIED: 2020-03-02
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: complete; working;
 #' PACKAGES: tidyverse
@@ -451,10 +451,62 @@ geo <- geo %>%
 #'//////////////////////////////////////////////////////////////////////////////
 
 #' ~ 3 ~
+#' Create Travel Recommendations objects
+
+
+#' Wide (for use in user preferences function)
+recs_wide <- travel$descriptives$places_by_city %>%
+    select(city, country, type, n, "tot_n" = tot_city_places) %>%
+    pivot_wider(
+        names_from = type,
+        values_from = n,
+        values_fill = list(n = 0)
+    ) %>%
+    left_join(
+        geo %>%
+            select(id, city, lat, lng),
+        by = "city"
+    ) %>%
+    select(id, city, country, lat, lng, everything()) %>%
+    as.data.frame()
+
+#' Long (for use in visualisations)
+recs_long <- travel$descriptives$places_by_city %>%
+    select(city, country, type, n, "total" = tot_city_places) %>%
+    left_join(
+        geo %>%
+            select(id, city, lat, lng),
+        by = "city"
+    ) %>%
+    mutate(
+        rate = round((n / total) * 100, 2)
+    ) %>%
+    select(
+        id,
+        city,
+        country,
+        lat,
+        lng,
+        "place" = type,
+        "count" = n,
+        rate,
+        total
+    ) %>%
+    as.data.frame()
+
+#'//////////////////////////////////////////////////////////////////////////////
+
+#' ~ 3 ~
 # save all objects
 
+#' Save Individual Place Type Objects
 saveRDS(brew, "data/all_european_breweries.RDS")
 saveRDS(cafes, "data/all_european_coffee.RDS")
 saveRDS(museums, "data/all_european_museums.RDS")
-saveRDS(travel, "data/travel_summary.RDS")
+
+#' Save Summarized Data For Viz and User Preferences Function
+saveRDS(recs_wide, "data/travel_summary_userprefs.RDS")  # use for user preferences
+saveRDS(recs_long, "data/travel_summary_general.RDS")    # use for visualisations
+
+#' Save All Geodata
 saveRDS(geo, "data/travel_all_cities_geocoded.RDS")
