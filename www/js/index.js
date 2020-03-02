@@ -596,7 +596,7 @@ const accordions = (function () {
             }
             return val;
         } else {
-            return ymax;
+            return value;
         }
     }
 
@@ -613,23 +613,21 @@ const accordions = (function () {
         }
     }
     function columnChart({ id, data, x, y, yMin, yMax }) {
-
         // set params
-        let width = 550, height = 350;
-        const margin = ({ top: 35, right: 0, bottom: 50, left: 70 });
+        let width = 550, height = 300, scale = 1.05;
+        const margin = ({ top: 35, right: 0, bottom: 35, left: 35 });
         const range = {
             ymin: ymin(yMin, data, y),
             ymax: ymax(yMax, data, y)
         }
-        console.log(arguments[0], range)
 
         // select and define svg element
         let svg = d3.select(id)
             .append("svg")
             .attr("class", "d3-viz column-chart")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("viewBox", ` 0 0 ${width} ${height}`)
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", ` 0 0 ${width * scale} ${height}`)
             .attr("preserveAspectRatio", "xMinYMin");
 
         // append inner svg aread
@@ -725,42 +723,42 @@ const accordions = (function () {
     function render_city_column_charts(city_a, city_b, city_c) {
         const id = "#summary-of-cities";
         if (city_a !== false) {
-            columnChart({id: id, data: city_a, x: "", y: ""})
+            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
         }
         if (city_b !== false) {
-            columnChart({id: id, data: city_a, x: "", y: ""})
+            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
         }
         if (city_c !== false) {
-            columnChart({id: id, data: city_a, x: "", y: ""})
+            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
         }
     }
 
     // handler to render all three charts if they exist
     Shiny.addCustomMessageHandler("render_city_column_charts", function(value) {
-        console.log(value)
-        // let city_a, city_b, city_c;
-        // if (value.length > 0) {
-        //     if (value.length === 1) {
-        //         city_a = value[0];
-        //         city_b = false;
-        //         city_c = false;
-        //     }
-        //     if (value.length === 2) {
-        //         city_a = value[0];
-        //         city_b = value[1];
-        //         city_c = false;
-        //     }
-        //     if (value.length === 3) {
-        //         city_a = value[0];
-        //         city_b = value[1];
-        //         city_c = value[2];
-        //     }
-        // } else {
-        //     city_a = false;
-        //     city_b = false;
-        //     city_c = false;
-        // }
-        // render_city_column_charts(city_a, city_b, city_c);
+        const keys = Array.from(new Set([...value.map(d => d.id)]));
+        let city_a, city_b, city_c;
+        if (keys.length > 0) {
+            if (keys.length === 1) {
+                city_a = value.filter(d => d.id === keys[0]);
+                city_b = false;
+                city_c = false;
+            }
+            if (keys.length === 2) {
+                city_a = value.filter(d => d.id === keys[0]);
+                city_b = value.filter(d => d.id === keys[1]);
+                city_c = false;
+            }
+            if (keys.length === 3) {
+                city_a = value.filter(d => d.id === keys[0]);
+                city_b = value.filter(d => d.id === keys[1]);
+                city_c = value.filter(d => d.id === keys[3]);
+            }
+        } else {
+            city_a = false;
+            city_b = false;
+            city_c = false;
+        }
+        render_city_column_charts(city_a, city_b, city_c);
     })
 
 })();

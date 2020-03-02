@@ -16,7 +16,7 @@ search_page <- function() {
         countries <- sort(unique(recs$country))
         boxes <- lapply(seq_len(length(countries)), function(d) {
             src$checkBoxInput(
-                name  = "countryFilter",
+                name  = "country_limits",
                 label = countries[d],
                 value = countries[d]
             )
@@ -156,7 +156,7 @@ search_page <- function() {
                         "if you would like to search everything."
                     ),
                     src$checkBoxGroup(
-                        id = "countryFilter",
+                        id = "country_limits",
                         class = "checkboxes",
                         country_filter()
                     )
@@ -227,7 +227,7 @@ search_page <- function() {
             # section maps
             src$section(
                 tags$h2("Recommended Cities"),
-                tags$p("Based on your selections, here are your results."),
+                tags$p(id = "recommended-cities-summary"),
                 tags$figcaption(
                     id = "recommended-cities-caption",
                     class = "visually-hidden"
@@ -242,7 +242,7 @@ search_page <- function() {
             # summary charts
             src$section(
                 tags$h2("Summary of Recommended Cities"),
-                tags$p("Some text here"),
+                tags$p(id = "recommended-cities-summary"),
                 tags$figcaption(
                     id = "summary-of-cities-caption",
                     class = "visually-hidden"
