@@ -476,15 +476,22 @@ recs_wide <- travel$descriptives$places_by_city %>%
     as.data.frame()
 
 #' Long (for use in visualisations)
-recs_long <- travel$descriptives$places_by_city %>%
-    select(city, country, type, n, "total" = tot_city_places) %>%
+#' use wide as missing cases are already filled and geo data is merged
+recs_long <- recs_wide %>%
+    select(id, tot_n, brewery, cafe, museum) %>%
+    group_by(id) %>%
+    pivot_longer(
+        c(brewery, cafe, museum),
+        names_to = "place",
+        values_to = "n"
+    ) %>%
     left_join(
         geo %>%
-            select(id, city, lat, lng),
-        by = "city"
+            select(id, city, country, lat, lng),
+        by = "id"
     ) %>%
     mutate(
-        rate = round((n / total) * 100, 2)
+        rate = round((n / tot_n) * 100, 2)
     ) %>%
     select(
         id,
@@ -492,12 +499,12 @@ recs_long <- travel$descriptives$places_by_city %>%
         country,
         lat,
         lng,
-        "place" = type,
+        place,
         "count" = n,
         rate,
-        total
+        "total" = tot_n
     ) %>%
-    as.data.frame()
+    as.data.frame(.)
 
 #'//////////////////////////////////////////////////////////////////////////////
 
