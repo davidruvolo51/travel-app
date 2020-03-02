@@ -122,6 +122,11 @@ coffee$rating[coffee$cafeId == "cafe_585"] <- 4.8
 # View entry
 coffee[coffee$cafeId == "cafe_585", ]
 
+#' Recode Cafe in Antwerp that is incorrectly coded as Netherlands
+coffee$country[coffee$cafeId == "cafe_1197"] <- "Belgium"
+coffee$address[coffee$cafeId == "cafe_1197"] <- "Lange Klarenstraat 14 2000  Antwerp Belgium"
+
+
 #'//////////////////////////////////////
 
 #' Reduce the Museums Dataset
