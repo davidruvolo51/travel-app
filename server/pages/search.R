@@ -2,7 +2,7 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-02
+#' MODIFIED: 2020-03-03
 #' PURPOSE: server code for search page
 #' STATUS: in.progress
 #' PACKAGES: NA
@@ -49,11 +49,11 @@ txt <- list()
 #' Function that recodes weights
 txt$format_weights <- function(data) {
     case_when(
-        weights == -2 ~ "Not at all",
-        weights == -1 ~ "Tend to avoid",
-        weights == 0.1 ~ "No Preference",
-        weights == 1 ~ "Tend to Visit",
-        weights == 2 ~ "Essential"
+        data == -2 ~ "Not at all",
+        data == -1 ~ "Tend to avoid",
+        data == 0.1 ~ "No Preference",
+        data == 1 ~ "Tend to Visit",
+        data == 2 ~ "Essential"
     )
 }
 
@@ -82,55 +82,9 @@ txt$format_list <- function(data) {
 generate_recs_text <- function(cities) {
     txt <- paste0(
         "Based on the selections you made, you may enjoy",
-        " visiting ", txt$format_cities(cities), "."
+        " visiting ", txt$format_list(cities), "."
     )
     return(txt)
-}
-
-#' Summary Text
-generate_sum_text <- function(cities, countries, weights) {
-    # convert weights to text
-    inputs <- as.character(sapply(weights, txt$format_weights))
-    selection <- paste0(
-        "Breweries: \"", inputs[1], "\", ",
-        "Cafes: \"", inputs[2], "\", and ",
-        "Museums: \"", inputs[3], "\""
-    )
-
-    #' Generate Countries Text
-    country_processed <- txt$format_list(countries)
-    if (isTRUE(country_processed)) {
-        country_text <- paste0(
-            "was limited to places in ",
-            country_processed
-        )
-    }
-    if (isFALSE(country_processed)) {
-        country_text <- "was not filtered for any countries"
-    }
-
-    #' Generate Cities Text
-    if (length(cities) == 1) {
-        city_text <- paste0(
-            "The top ", length(cities), "city was also removed"
-        )
-    } else if (length(cities) > 1) {
-        city_text <- paste0(
-            "The top ", length(cities), "cities were also removed"
-        )
-    } else {
-        city_text <- paste0(
-            "No cities were removed"
-        )
-    }
-    #' Process Countries
-    txt <- paste0(
-        "So why were ", txt$format_list(cities), " recommended?",
-        "Based on your preferences - ", selection, "- ", "all cities were",
-        "scored and ranked accordingly.", "The data ", country_text, ". ",
-        city_text, "from the results."
-    )
-    return(text)
 }
 
 #'//////////////////////////////////////
@@ -138,6 +92,7 @@ generate_sum_text <- function(cities, countries, weights) {
 #' Define server code for search page
 observe({
     if (current_page() == "search") {
+
         #' Server Code for Finder Tab
         validated <- reactiveVal(FALSE)
         has_error <- reactiveVal(FALSE)
@@ -145,6 +100,8 @@ observe({
         city_limits <- reactiveVal(0)
         country_limits <- reactiveVal(FALSE)
 
+        #'//////////////////////////////////////
+        
         #' Run Code for Data
         observeEvent(input$submitTravelForm, {
 
@@ -207,7 +164,6 @@ observe({
                     as.numeric(input$coffeePrefs),
                     as.numeric(input$museumPrefs)
                 )
-                js$console_log(w)
 
                 #' Filter User Preferences Based on Recs
                 recs_filtered <- filterData(
@@ -244,7 +200,7 @@ observe({
                     cities_map <- cities_map[complete.cases(cities_map), ]
                     viz$render_top_city_maps(cities_map)
 
-                    #' Render Text
+                    #' Render Text Blocks
                     recs_text <- generate_recs_text(cities_map$city)
                     js$inner_html("#recommended-cities-summary", recs_text)
 
@@ -259,6 +215,12 @@ observe({
                     viz$render_city_column_charts(cities_sum)
                 }
             }
+        })
+
+        #'//////////////////////////////////////
+        #' Reset Inputs
+        observeEvent(input$resetTravelForm, {
+            js$reset_input_groups()
         })
     }
 })

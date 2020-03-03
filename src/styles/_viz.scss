@@ -1,36 +1,34 @@
 
-.d3-viz-output {
-    &.top-n-maps {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        
-        .top-three-cities-maps {
-            margin: 12px;
-            background-color: $light;
-            box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
-    }
+#recommended-cities {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    &.top-n-cities-sum {
-        display: grid;
-        grid-template-columns: 1fr;
-        column-gap: 24px;
-        row-gap: 24px;
+    .d3-map {
+        margin-bottom: 24px;
+        background-color: $light;
+        box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
 
 
 @media (min-width: 800px) {
-    .d3-viz-output {
-        &.top-n-maps {
-            flex-direction: row;
-        }
+    #recommended-cities {
+        flex-direction: row;
 
-        &.top-n-cities-sum {
-            // grid-template-columns: 1fr 1fr;
+        .d3-map {
+            margin-bottom: 0; 
+            margin-right: 24px;
+
+            &:last-child {
+                margin-right: 0;
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-02-24
+// MODIFIED: 2020-03-03
 // PURPOSE: primary functions for application
 // DEPENDENCIES: NA
 // STATUS: d3; topojson; countries geojson;
@@ -612,18 +612,21 @@ const accordions = (function () {
             return value;
         }
     }
-    function columnChart({ id, data, x, y, yMin, yMax }) {
+    function columnChart({ id, data, x, y, z, yMin, yMax, title }) {
         // set params
-        let width = 550, height = 300, scale = 1.05;
-        const margin = ({ top: 35, right: 0, bottom: 35, left: 35 });
+        let width = 600, height = 300, scale = 1.05, hover_fill = "#507dbc", default_fill = "#a6bbda";
+        const margin = ({ top: 10, right: 0, bottom: 25, left: 55 });
         const range = {
             ymin: ymin(yMin, data, y),
             ymax: ymax(yMax, data, y)
         }
 
+        // define parent element
+        let node = d3.select(id).append("figure");
+        node.append("figcaption").text(title)
+
         // select and define svg element
-        let svg = d3.select(id)
-            .append("svg")
+        let svg = node.append("svg")
             .attr("class", "d3-viz column-chart")
             .attr("width", "100%")
             .attr("height", "100%")
@@ -672,6 +675,7 @@ const accordions = (function () {
             .attr("x", xScale.bandwidth() * 0.2)
             .attr("y", yScale(0))
             .attr("width", xScale.bandwidth() * 0.5 + 10)
+            .attr("fill", "#a6bbda")
             .style("cursor", "pointer");
 
         // Animate
@@ -698,18 +702,22 @@ const accordions = (function () {
 
         // define events
         function mouseover(d) {
-            // d3.select(this).attr("fill", config.colors.hover);
+            d3.select(this).attr("fill", hover_fill);
             tooltip.style("opacity", 1);
         }
 
         function mousemove(d) {
-            tooltip.html("<strong>" + d[x] + "</strong>: " + "<output>" + d[y] + "</output>")
+            tooltip.html(
+                    "<strong>" + d[x] + "</strong><br/>" +
+                    "<span>n: <output>" + d[z] + "</output></span><br/>" +
+                    "<span>%: <output>" + d[y] + "</output></span>"
+                )
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 55) + "px");
         }
 
         function mouseleave(d) {
-            // d3.select(this).attr("fill", config.colors.fill);
+            d3.select(this).attr("fill", default_fill);
             tooltip.style("opacity", 0);
         }
 
@@ -721,15 +729,40 @@ const accordions = (function () {
 
     // function to render all three column charts
     function render_city_column_charts(city_a, city_b, city_c) {
+        d3.selectAll("#summary-of-cities figure").remove();
         const id = "#summary-of-cities";
         if (city_a !== false) {
-            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
+            columnChart({
+                id: id,
+                data: city_a,
+                x: "place",
+                y: "rate",
+                z: "count",
+                yMax: 100,
+                title: `Summary of places in ${city_a[0]['city']} (% by type)`
+            })
         }
         if (city_b !== false) {
-            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
+            columnChart({
+                id: id,
+                data: city_b,
+                x: "place",
+                y: "rate",
+                z: "count",
+                yMax: 100,
+                title: `Summary of places in ${city_b[0]['city']} (% by type)`
+            })
         }
         if (city_c !== false) {
-            columnChart({id: id, data: city_a, x: "place", y: "rate", yMax: 100})
+            columnChart({
+                id: id,
+                data: city_c,
+                x: "place",
+                y: "rate",
+                z: "count",
+                yMax: 100,
+                title: `Summary of places in ${city_c[0]['city']} (% by type)`
+            })
         }
     }
 
@@ -751,7 +784,7 @@ const accordions = (function () {
             if (keys.length === 3) {
                 city_a = value.filter(d => d.id === keys[0]);
                 city_b = value.filter(d => d.id === keys[1]);
-                city_c = value.filter(d => d.id === keys[3]);
+                city_c = value.filter(d => d.id === keys[2]);
             }
         } else {
             city_a = false;

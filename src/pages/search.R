@@ -243,17 +243,20 @@ search_page <- function() {
                     id = "recommended-cities-caption",
                     class = "visually-hidden"
                 ),
-                tags$figure(
+                tags$section(
                     id = "recommended-cities",
                     `aria-describedby` = "recommended-cities-caption",
-                    class = "d3-viz-output top-n-maps",
+                    class = "d3-viz-output",
                 )
             ),
 
             # summary charts
             tags$section(class = "section",
                 tags$h2("Summary of Recommended Cities"),
-                tags$p(id = "recommended-cities-summary"),
+                tags$p(
+                    "The following figures ",
+                    "show the percentage of locations by type for each city."
+                ),
                 tags$figcaption(
                     id = "summary-of-cities-caption",
                     class = "visually-hidden"
@@ -261,7 +264,21 @@ search_page <- function() {
                 tags$figure(
                     id = "summary-of-cities",
                     `aria-describedby` = "summary-of-cities-caption",
-                    class = "d3-viz-output top-n-cities-sum"
+                    class = "d3-viz-output"
+                )
+            ),
+            # wrap up
+            tags$section(class = "section",
+                tags$h2("About the Results"),
+                tags$p(
+                    "Based on your selections above, all cities were ",
+                    "rescored using a weighted mean where the weights are ",
+                    "your preference for each place. Cities with higher ",
+                    "scores are  are likely to be good holiday destinations ",
+                    "than  cities with lower scores as these cities are may ",
+                    "not have many places to visit. Cities with more places ",
+                    "are likely to be recommended more as these can effect ",
+                    "scores depending on your preference. "
                 )
             )
         ),
