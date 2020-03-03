@@ -2,7 +2,7 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-27
+#' MODIFIED: 2020-03-03
 #' PURPOSE: ui page component for search tab
 #' STATUS: in.progress
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
@@ -68,23 +68,29 @@ search_page <- function() {
     }
 
     # return ui
-    src$main(
+    tags$main(
+        id = "search-main",
+        class = "main main-extra-top-spacing",
+
         # hero
-        src$hero(
+        tags$header(
             id = "hero-finder",
-            is_small = TRUE,
-            tags$img(
-                class = "illustration size-small airplane",
-                src = "images/airplane-illustration.svg"
-            ),
-            tags$h1("Finder"),
-            tags$h2("Get Travel Recommendations")
+            class = "hero hero-small",
+            tags$div(class = "hero-content",
+                tags$img(
+                    class = "illustration size-small airplane",
+                    src = "images/airplane-illustration.svg"
+                ),
+                tags$h1("Finder"),
+                tags$h2("Get Travel Recommendations")
+            )
         ),
 
         #' //////////////////////////////////////
         # Introduction and Form
-        src$section(
-            class = "section-finder-intro",
+        tags$section(
+            class = "section",
+            id = "section-finder-intro",
             tags$h2("Plan a Holiday"),
             tags$p(
                 "Let's figure out where you may want to visit. Rate how",
@@ -116,9 +122,10 @@ search_page <- function() {
 
                 #' //////////////////////////////////////
                 # coffee
-                src$radioInputGroup(
+                tags$fieldset(
                     id = "coffeePrefs",
-                    class = "radios coffee-radio",
+                    class = "shiny-input-radiogroup radios coffee-radio",
+                    role = "radio-group",
                     tags$legend(
                         class = "radios-title",
                         "Cafes with Specialty Coffee?"
@@ -126,16 +133,18 @@ search_page <- function() {
                     user_prefs_ui(id = "coffeePrefs")
                 ),
                 # breweries
-                src$radioInputGroup(
+                tags$fieldset(
                     id = "breweryPrefs",
-                    class = "radios brewery-radio",
+                    class = "shiny-input-radiogroup radios brewery-radio",
+                    role = "radio-group",
                     tags$legend(class = "radios-title", "Breweries?"),
                     user_prefs_ui(id = "breweryPrefs")
                 ),
                 # musuems
-                src$radioInputGroup(
+                tags$fieldset(
                     id = "museumPrefs",
-                    class = "radios musem-radio",
+                    class = "shiny-input-radiogroup radios musem-radio",
+                    role = "radio-group",
                     tags$legend(class = "radios-title", "Museums?"),
                     user_prefs_ui(id = "museumPrefs")
                 ),
@@ -155,9 +164,10 @@ search_page <- function() {
                         "to search for destinations. Leave everything blank",
                         "if you would like to search everything."
                     ),
-                    src$checkBoxGroup(
+                    tags$fieldset(
                         id = "country_limits",
-                        class = "checkboxes",
+                        class = "shiny-input-checkboxgroup checkboxes",
+                        role = "checkboxgroup",
                         country_filter()
                     )
                 ),
@@ -225,7 +235,8 @@ search_page <- function() {
             `aria-hidden` = "true",
 
             # section maps
-            src$section(
+            tags$section(
+                class = "section",
                 tags$h2("Recommended Cities"),
                 tags$p(id = "recommended-cities-summary"),
                 tags$figcaption(
@@ -240,7 +251,7 @@ search_page <- function() {
             ),
 
             # summary charts
-            src$section(
+            tags$section(class = "section",
                 tags$h2("Summary of Recommended Cities"),
                 tags$p(id = "recommended-cities-summary"),
                 tags$figcaption(

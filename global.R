@@ -14,9 +14,7 @@ options(stringsAsFactors = FALSE)
 suppressPackageStartupMessages(library(shiny))
 suppressPackageStartupMessages(library(tidyverse))
 
-#' load components
-source("src/components/client.R")
-
 #' data
 recs <- readRDS("data/travel_summary_userprefs.RDS")
 places <- readRDS("data/travel_summary_general.RDS")
+travel <- readRDS("data/travel_summary.RDS")

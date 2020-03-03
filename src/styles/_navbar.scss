@@ -5,24 +5,31 @@
 	display: -ms-grid;
 	display: grid;
 	width: 100%;
-	padding: 8px 0;
+	padding: 12px 0;
 	grid-template-columns: calc(100% - 55px) 50px;
 	grid-template-areas: "brandlink menuBtn";
 	column-gap: 0;
 	row-gap: 0;
-	z-index: 10;
+	z-index: 15;
 	background-color: white;
-	box-shadow: 0 0 6px 3px $shadow;
+	box-shadow: 0 0 2px 6px $shadow;
 
 	.nav-item {
 		display: inline-flex;
 		align-items: center;
-
-		&.brand-link {
+		
+		&.nav-title {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
 			font-weight: 600;
 			font-size: 14pt;
 			padding-left: 16px;
 			color: $dark;
+
+			.nav-title-icon {
+				transform: scale(0.7);
+			}
 		}
 
 		&.menu {
@@ -34,8 +41,10 @@
 			clip: rect(0, 0, 0, 0);
 			clip: rect(0 0 0 0);
 			overflow: hidden;
-			z-index: inherit;
+			z-index: 10;
 			list-style: none;
+			background-color: inherit;
+			box-shadow: none;
 			margin: 0;
 			padding: 0;
 
@@ -67,8 +76,7 @@
 				width: 100%;
 				height: auto;
 				clip: auto;
-				-webkit-box-shadow: 0 0 2px 6px $shadow;
-				box-shadow: 0 0 2px 6px $shadow;
+				box-shadow: 0 8px 3px 2px $shadow;
 			}
 		}
 
@@ -163,6 +171,7 @@
 				clip: auto;
 				overflow: visible;
 				grid-area: navLinks;
+				box-shadow: none;
 
 				.menu-item {
 					display: inline-blocK;

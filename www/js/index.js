@@ -248,7 +248,7 @@ const accordions = (function () {
     const width = body.getBoundingClientRect().width;
 
     // init menu state
-    menu.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         if (width > 912) {
             menu.setAttribute("hidden", "false");
         }
@@ -272,9 +272,9 @@ const accordions = (function () {
     });
 
     // handle menu action when window is resized
-    menu.addEventListener("resize", function () {
+    window.addEventListener("resize", function () {
         let w = body.getBoundingClientRect().width;
-        if (w > 912) {
+        if (w >= 912) {
             menu.classList.remove("expanded");
             menu.removeAttribute("hidden");
             menuToggle.classList.remove("open");
