@@ -22,7 +22,7 @@ home_page <- function() {
                     src = "images/shiny-travel-illustration.svg"
                 ),
                 tags$h1("shinyTravel"),
-                tags$h2("Plan your next European city break")
+                tags$h2("Plan your next European holiday using data")
             )
         ),
         tags$section(
@@ -80,7 +80,7 @@ home_page <- function() {
         ),
         tags$section(
             id = "section-learn",
-            class = "flex flex-50x2-layout",
+            class = "section flex flex-50x2-layout",
             tags$div(
                 class = "flex-child child-centered",
                 tags$img(
@@ -90,27 +90,32 @@ home_page <- function() {
             ),
             tags$div(
                 class = "flex-child",
-                tags$h2("Would you like to read more?"),
+                tags$h2("Where can I read more about the app?"),
                 tags$p(
-                    "To learn more about the app view you can view the",
+                    "All of the",
                     tags$a(
                         href = "https://github.com/davidruvolo51/travel-app",
-                        "Source code"
+                        "code"
                     ),
-                    "and read the",
+                    "and",
+                    tags$a(
+                        href =
+                            "https://github.com/davidruvolo51/travel-app-data",
+                        "data"
+                    ),
+                    "is available on github. See the",
                     tags$a(
                         href =
                             "https://github.com/davidruvolo51/travel-app/wiki",
                         "Wiki"
                     ),
-                    ". You can also view the code used to source and clean all",
-                    "of the data in the",
+                    "for more information about the development of the app,",
+                    "methods, and data. If you have any questions, feel free",
+                    "to open a new",
                     tags$a(
-                        href =
-                            "https://github.com/davidruvolo51/travel-app-data",
-                        "Data Repo"
-                    ),
-                    "."
+                        href = "https://github.com/davidruvolo51/travel-app/issue",
+                        "issue"
+                    ), "."
                 )
             )
         ),
