@@ -29,6 +29,10 @@
 		max-height: 135px;
 		padding: 5% 0;
 	}
+
+	&.airplane {
+		transform: rotate(30deg);
+	}
 }
 
 .uppercased-text {
@@ -70,18 +74,12 @@
 	font-weight: bold;
 }
 
-// #travel-form {
-// 	background-color: hsla(0, 0, 99);
-// 	padding: 1.1em;
-// 	border-radius: 4px;
+#resetTravelForm {
+	border-color: $brand;
+	background-color: white;
+}
 
-// 	.form-title {
-// 		margin-bottom: 21px;
-// 		font-size: 16pt;
-// 	}
-// }
-
-.footer-banner {
+#footer-banner {
 	height: 100px;
 	background-size: contain;
 	background-position: center 100%;
