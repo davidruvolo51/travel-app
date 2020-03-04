@@ -43,12 +43,7 @@ ui <- tagList(
         tags$nav(class = "nav", role = "navigation",
             tags$h1(
                 class = "nav-item nav-title",
-                tags$img(
-                    class = "nav-title-icon",
-                    src = "images/camera-illustration.svg",
-                    `aria-hidden` = "true"
-                ),
-                tags$span("shinyTravel")
+                "shinyTravel"
             ),
             #' Links
             tags$ul(
@@ -116,7 +111,7 @@ ui <- tagList(
         ),
         uiOutput("page"),
         tags$div(
-            class = "footer-banner",
+            id = "footer-banner",
             `aria-hidden` = "true",
             style = "
                 background-image: url('images/page-footer-grayscale.svg')
