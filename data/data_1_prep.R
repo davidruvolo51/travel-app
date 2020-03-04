@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-03-02
+#' MODIFIED: 2020-03-04
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: complete; working;
 #' PACKAGES: tidyverse
@@ -509,6 +509,52 @@ recs_long <- recs_wide %>%
 #'//////////////////////////////////////////////////////////////////////////////
 
 #' ~ 3 ~
+#' Create GEOJSON object for use in the mapbox
+
+#' remove missing cases
+map_data <- places %>%
+    filter(!is.na(lat)) %>%
+    select(id, city, country, name, lat, lon, type)
+
+#' define parent object
+json <- list(
+    type = "FeatureCollection",
+    totalFeatures = length(unique(map_data$id)),
+    features = list()
+)
+
+#' fill in geometry
+x <- 1
+max.reps <- NROW(map_data)
+while (x <= max.reps) {
+    json$features[[x]] <- list(
+        type = "Feature",
+        id = map_data$id[x],
+        geometry = list(
+            type = "Point",
+            coordinates = list(
+                map_data$lon[x],
+                map_data$lat[x]
+            )
+        ),
+        properties = list(
+            id = map_data$id[x],
+            name = map_data$name[x],
+            city = map_data$city[x],
+            country = map_data$country[x],
+            place = map_data$type[x],
+            lat = map_data$lat[x],
+            lon = map_data$lon[x]
+        )
+    )
+    # update counter
+    x <- x + 1
+}
+
+
+#'//////////////////////////////////////////////////////////////////////////////
+
+#' ~ 4 ~
 # save all objects
 
 #' Save Individual Place Type Objects
@@ -522,3 +568,7 @@ saveRDS(recs_long, "data/travel_summary_general.RDS")    # use for visualisation
 
 #' Save All Geodata
 saveRDS(geo, "data/travel_all_cities_geocoded.RDS")
+
+#' Save GEOjson
+j <- jsonlite::toJSON(json)
+write(j, "www/data/travel.geojson")
