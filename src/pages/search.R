@@ -11,20 +11,6 @@
 #' ////////////////////////////////////////////////////////////////////////////
 search_page <- function() {
 
-    # define country filter
-    country_filter <- function() {
-        countries <- sort(unique(recs$country))
-        boxes <- lapply(seq_len(length(countries)), function(d) {
-            src$checkBoxInput(
-                name  = "country_limits",
-                label = countries[d],
-                value = countries[d]
-            )
-        })
-        rm(countries)
-        return(boxes)
-    }
-
     # set user preferences buttons function
     user_prefs_ui <- function(id) {
         tagList(
@@ -168,7 +154,7 @@ search_page <- function() {
                         id = "country_limits",
                         class = "shiny-input-checkboxgroup checkboxes",
                         role = "checkboxgroup",
-                        country_filter()
+                        src$country_filter(id = "country_limits")
                     )
                 ),
 
@@ -251,20 +237,14 @@ search_page <- function() {
             ),
 
             # summary charts
-            tags$section(class = "section",
+            tags$section(
+                id = "summary-of-recommended-cities",
+                class = "section",
                 tags$h2("Summary of Recommended Cities"),
                 tags$p(
-                    "The following figures ",
-                    "show the percentage of locations by type for each city."
-                ),
-                tags$figcaption(
-                    id = "summary-of-cities-caption",
-                    class = "visually-hidden"
-                ),
-                tags$figure(
-                    id = "summary-of-cities",
-                    `aria-describedby` = "summary-of-cities-caption",
-                    class = "d3-viz-output"
+                    "The following table displays a summary of the ",
+                    "recommended cities. This includes the number of cafes ",
+                    "breweries, and museums."
                 )
             ),
             # wrap up

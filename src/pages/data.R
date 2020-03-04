@@ -2,7 +2,7 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-27
+#' MODIFIED: 2020-03-04
 #' PURPOSE: ui page component for data page
 #' STATUS: in.progress
 #' PACKAGES: shiny; see global
@@ -10,22 +10,6 @@
 #'          dynamically load pages
 #'////////////////////////////////////////////////////////////////////////////
 data_page <- function() {
-
-    # functional component for country filters
-    rec_country_filter <- function(id) {
-        countries <- sort(unique(recs$country))
-        boxes <- lapply(seq_len(length(countries)), function(d) {
-            src$checkBoxInput(
-                name  = id,
-                label = countries[d],
-                value = countries[d]
-            )
-        })
-        rm(countries)
-        return(boxes)
-    }
-
-    # Render
     tags$main(
         id = "data-page",
         class = "main main-extra-top-spacing",
@@ -154,7 +138,7 @@ data_page <- function() {
                                 id = "ref_form_country_filter",
                                 class = "shiny-input-checkboxgroup checkboxes",
                                 role = "checkboxgroup",
-                                rec_country_filter(
+                                src$country_filter(
                                     id = "ref_form_country_filter"
                                 )
                         )

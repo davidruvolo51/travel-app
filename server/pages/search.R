@@ -204,15 +204,25 @@ observe({
                     recs_text <- generate_recs_text(cities_map$city)
                     js$inner_html("#recommended-cities-summary", recs_text)
 
-                    #' Render Charts
-                    cities_sum <- places %>%
+                    #' Render Summary Datatable
+                    cities_table <- recs %>%
                         filter(id %in% cities_map$id) %>%
-                        mutate(
-                            id = factor(id, unique(cities_map$id))
+                        select(id, city, country, brewery, cafe, museum) %>%
+                        left_join(
+                            cities_map %>% select(id, score),
+                            by = "id"
                         ) %>%
-                        arrange(id) %>%
-                        as.data.frame()
-                    viz$render_city_column_charts(cities_sum)
+                        mutate(
+                            score = round(score, 2)
+                        ) %>%
+                        arrange(-score)
+
+                    #' Render D3 Table
+                    viz$render_datatable(
+                        "#summary-of-recommended-cities",
+                        cities_table,
+                        names(cities_table)
+                    )
                 }
             }
         })
