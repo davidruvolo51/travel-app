@@ -2,7 +2,7 @@
 #' FILE: client.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-03
+#' MODIFIED: 2020-03-04
 #' PURPOSE: list of ui components
 #' STATUS: in.progress
 #' PACKAGES: shiny; htmltools
@@ -105,4 +105,19 @@ src$accordion <- function(..., id, heading, text = NULL) {
 
     #'  return
     return(a)
+}
+
+
+#' Functional compontent for generating country filters
+src$country_filter <- function(id) {
+    countries <- sort(unique(recs$country))
+    boxes <- lapply(seq_len(length(countries)), function(d) {
+        src$checkBoxInput(
+            name  = id,
+            label = countries[d],
+            value = countries[d]
+        )
+    })
+    rm(countries)
+    return(boxes)
 }
