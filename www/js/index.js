@@ -2,7 +2,7 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-02-24
+// MODIFIED: 2020-03-05
 // PURPOSE: primary functions for application
 // DEPENDENCIES: NA
 // STATUS: d3; topojson; countries geojson;
@@ -20,18 +20,6 @@
         elems.forEach(e => e.classList.add(css))
     }
 
-    // CLEAR INPUT VALUE
-    function clear_input(elem, value) {
-        const inputs = document.querySelectorAll(elem);
-        inputs.forEach(input => {
-            if (value.length > 0) {
-                input.value = value
-            } else {
-                input.value = ""
-            }
-        });
-    }
-
     // LOG SOMETHING TO THE CONSOLE
     function console_log(value, asDir) {
         if (asDir) {
@@ -39,17 +27,6 @@
         } else {
             console.log(value);
         }
-    }
-
-    // HIDE ELEM
-    function hide_elem(elem, css) {
-        const el = document.querySelector(elem);
-        if (css.length > 0) {
-            el.classList.add(css)
-        } else {
-            el.classList.add("hidden");
-        }
-        el.setAttribute("hidden", true);
     }
 
     // SET INNERHTML
@@ -61,11 +38,6 @@
         } else {
             document.querySelector(elem).innerHTML = string;
         }
-    }
-
-    // REFRESH PAGE
-    function refresh_page(value) {
-        history.go(0);
     }
 
     // REMOVE CSS CLASS
@@ -95,46 +67,18 @@
         document.querySelector(elem).setAttribute(attr, value);
     }
 
-    // SHOW ELEM (SHOW / HIDE)
-    function show_elem(elem, css) {
-        const el = document.querySelector(elem);
-        if (css.length > 0) {
-            el.classList.remove(css);
-        } else {
-            el.classList.remove("hidden");
-        }
-        el.removeAttribute("hidden");
-    }
-
-    // TOGGLE CSS CLASS
-    function toggle_css(elem, css) {
-        const elems = document.querySelectorAll(elem);
-        elems.forEach(e => e.classList.toggle(css))
-    }
-
     ////////////////////////////////////////
     // Register Functions
     Shiny.addCustomMessageHandler("add_css", function (value) {
         add_css(value[0], value[1]);
     });
 
-    Shiny.addCustomMessageHandler("clear_input", function (value) {
-        clear_input(value)
-    })
-
     Shiny.addCustomMessageHandler("console_log", function (value) {
         console_log(value[0], value[1]);
     });
 
-    Shiny.addCustomMessageHandler("hide_elem", function (value) {
-        hide_elem(value[0], value[1]);
-    });
     Shiny.addCustomMessageHandler("inner_html", function (value) {
         inner_html(value[0], value[1], value[2])
-    });
-
-    Shiny.addCustomMessageHandler("refresh_page", function (value) {
-        refresh_page(value);
     });
 
     Shiny.addCustomMessageHandler("remove_css", function (value) {
@@ -143,7 +87,7 @@
 
     Shiny.addCustomMessageHandler("remove_elem", function (value) {
         remove_elem(value)
-    })
+    });
 
     Shiny.addCustomMessageHandler("remove_element_attribute", function (value) {
         remove_element_attribute(value[0], value[1]);
@@ -155,21 +99,11 @@
 
     Shiny.addCustomMessageHandler("scroll_to_top", function (value) {
         scroll_to_top(value);
-    })
-
-    Shiny.addCustomMessageHandler("show_elem", function (value) {
-        show_elem(value[0], value[1]);
     });
-
-    Shiny.addCustomMessageHandler("toggle_css", function (value) {
-        toggle_css(value[0], value[1]);
-    });
-
 })();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// ~ 2 ~
 // Navigation, Toggles, and Buttons
 
 // ~ a ~
@@ -196,7 +130,7 @@ const accordions = (function () {
     function addToggles() {
         const buttons = document.querySelectorAll(".accordion-button");
         buttons.forEach(function (btn) {
-            btn.addEventListener("click", function (e) {
+            btn.addEventListener("click", function (event) {
                 let id = btn.getAttribute("data-name", "value");
                 let svg = document.querySelector(`svg[data-name="${id}"]`);
                 let sec = document.querySelector(`section[data-name="${id}"]`);
@@ -220,20 +154,27 @@ const accordions = (function () {
 
 // ~ c ~ 
 // Function to reset all radio input groups and checkbox input groups
-(function(){
-    function resetInputGroups() {
-        const elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
-        elems.forEach(function(el) {
-            el.checked = false;
-            if (el.getAttribute("data-default", "value") === "true") {
-                el.checked = true;
-            }
-        });
-    }
-    Shiny.addCustomMessageHandler("reset_input_groups", function(value) {
-        resetInputGroups()
-    })
-})();
+// (function () {
+//     function resetInputGroups() {
+//         let elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
+//         elems.forEach(function (el) {
+//             el.checked = false;
+//             if (el.getAttribute("data-default", "value") === "true") {
+//                 el.checked = true;
+//             }
+//         });
+//         let groups = document.querySelectorAll("fieldset[role='radioinputgroup'], fieldset[role='checkboxgroup']");
+//         groups.forEach(function (el) {
+//             console.log(el)
+//             el.value = "";
+//         })
+//     }
+
+//     Shiny.addCustomMessageHandler("reset_form", function (value) {
+//         resetInputGroups()
+//         // document.getElementById(value).reset();
+//     })
+// })();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -248,7 +189,7 @@ const accordions = (function () {
     const width = body.getBoundingClientRect().width;
 
     // init menu state
-    menu.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         if (width > 912) {
             menu.setAttribute("hidden", "false");
         }
@@ -272,9 +213,9 @@ const accordions = (function () {
     });
 
     // handle menu action when window is resized
-    menu.addEventListener("resize", function () {
+    window.addEventListener("resize", function () {
         let w = body.getBoundingClientRect().width;
-        if (w > 912) {
+        if (w >= 912) {
             menu.classList.remove("expanded");
             menu.removeAttribute("hidden");
             menuToggle.classList.remove("open");
@@ -396,27 +337,29 @@ const accordions = (function () {
         }).then(result => {
 
             // Pull Data
-            const countries = [city_a.country, city_b.country, city_c.country];
+            const countries = [city_a.country, city_b.country, city_c.country].map(d => {
+                return d === "Czech Republic" ? "Czech Rep." : d
+            });
             let geojson = topojson.feature(result, result.objects.europe);
             geojson.features = geojson.features.filter(d => {
                 // console.log(d.properties.name);
                 return countries.indexOf(d.properties.name) > -1;
             });
-            
+
             // Build Map For City A
             if (city_a !== false) {
                 let coordsA = [city_a.lng, city_a.lat];
                 let countryA = geojson.features.filter(d => d.properties.name === countries[0]);
                 drawMap(out_elem, coordsA, city_a.city, countryA)
             }
-            
+
             // Build Map For City B
             if (city_b !== false) {
                 let coordsB = [city_b.lng, city_b.lat];
                 let countryB = geojson.features.filter(d => d.properties.name === countries[1]);
                 drawMap(out_elem, coordsB, city_b.city, countryB)
             }
-            
+
             // Build Map For City C
             if (city_c !== false) {
                 const coordsC = [city_c.lng, city_c.lat];
@@ -430,16 +373,16 @@ const accordions = (function () {
             // be displayed
             if (!city_a && !city_b && !city_c) {
                 d3.select(out_elem)
-                .append("p")
-                .attr("class", "error")
-                .text("Sorry, no results were returned. Either select more countries or reset the number of cities to remove.")
+                    .append("p")
+                    .attr("class", "error")
+                    .text("Sorry, no results were returned. Either select more countries or reset the number of cities to remove.")
             }
 
         }).catch(error => {
             d3.select(out_elem)
-            .append("p")
-            .attr("class", "error")
-            .text(`ERROR: ${error}`);
+                .append("p")
+                .attr("class", "error")
+                .text(`ERROR: ${error}`);
             console.log(error);
         })
     }
@@ -448,7 +391,7 @@ const accordions = (function () {
     Shiny.addCustomMessageHandler("render_top_city_maps", function (value) {
         let city_a, city_b, city_c;
         if (value.length > 0) {
-            if ( value.length === 1) {
+            if (value.length === 1) {
                 city_a = value[0];
                 city_b = false;
                 city_c = false;
@@ -579,5 +522,119 @@ const accordions = (function () {
             )
         }, 500)
     })
+
+})();
+
+////////////////////////////////////////////////////////////////////////////////
+
+// map box code
+const map = (function () {
+
+    // public token
+    mapboxgl.accessToken = "pk.eyJ1IjoiZGNydXZvbG8iLCJhIjoiY2psaW9mZXpmMDNkZDNxcG54cDd2OTJ4YyJ9.qjJnQuhtjHfZ4zBzRyB74g"
+
+    function render_mapbox(id) {
+        // build map
+        let map = new mapboxgl.Map({
+            container: id,
+            style: "mapbox://styles/mapbox/dark-v10",
+            center: [11.3351122, 44.4941305], // set to Bologna
+            pitch: 10,
+            zoom: 0,
+            maxBounds: [
+                [-33.014707, 29.886634], // southwest coords
+                [49.469993, 75.898085]   // northeast coords
+            ],
+            antialias: true
+        })
+
+        // when loaded add layers
+        map.on('load', function () {
+
+            // Insert the layer beneath any symbol layer.
+            var layers = map.getStyle().layers;
+
+            var labelLayerId;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                    labelLayerId = layers[i].id;
+                    break;
+                }
+            }
+
+            // add buildings
+            map.addLayer(
+                {
+                    'id': '3d-buildings',
+                    'source': 'composite',
+                    'source-layer': 'building',
+                    'filter': ['==', 'extrude', 'true'],
+                    'type': 'fill-extrusion',
+                    'minzoom': 15,
+                    'paint': {
+                        'fill-extrusion-color': '#aaa',
+
+                        // use an 'interpolate' expression to add a smooth transition effect to the
+                        // buildings as the user zooms in
+                        'fill-extrusion-height': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'height']
+                        ],
+                        'fill-extrusion-base': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'min_height']
+                        ],
+                        'fill-extrusion-opacity': 0.6
+                    }
+                },
+                labelLayerId
+            );
+
+            // add coords
+            map.addSource("destinations", {
+                type: "geojson",
+                url: "../data/travel.geojson"
+            });
+
+            map.addLayer({
+                'id': 'locations',
+                'type': 'circle',
+                'source': 'destinations',
+                'paint': {
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [[12, 2], [22, 180]]
+                    },
+                    'circle-color': [
+                        'match',
+                        ['get', 'places'],
+                        'brewery',
+                        '#66c2a5',
+                        'coffee',
+                        "#fc8d62",
+                        'musuem',
+                        "#8da0cb",
+                        // other
+                        "#ffffff"
+
+                    ]
+                }
+                });
+        });
+    }
+
+    return {
+        render_mapbox: render_mapbox
+    }
 
 })();

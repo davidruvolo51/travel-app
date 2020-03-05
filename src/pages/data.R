@@ -2,7 +2,7 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-27
+#' MODIFIED: 2020-03-04
 #' PURPOSE: ui page component for data page
 #' STATUS: in.progress
 #' PACKAGES: shiny; see global
@@ -10,37 +10,24 @@
 #'          dynamically load pages
 #'////////////////////////////////////////////////////////////////////////////
 data_page <- function() {
-
-    # functional component for country filters
-    rec_country_filter <- function(id) {
-        countries <- sort(unique(recs$country))
-        boxes <- lapply(seq_len(length(countries)), function(d) {
-            src$checkBoxInput(
-                name  = id,
-                label = countries[d],
-                value = countries[d]
-            )
-        })
-        rm(countries)
-        return(boxes)
-    }
-
-    # Render
-    src$main(
-        class = "main-extra-top-spacing",
-        src$hero(
+    tags$main(
+        id = "data-page",
+        class = "main main-extra-top-spacing",
+        tags$header(
             id = "hero-data",
-            is_small = TRUE,
-            tags$im(
-                class = "illustration size-small camera",
-                src = "images/camera-illustration.svg"
-            ),
-            tags$h1("Data"),
-            tags$h2("View the Data")
+            class = "hero hero-small",
+            tags$div(class = "hero-content",
+                tags$img(
+                    class = "illustration size-small camera",
+                    src = "images/camera-illustration.svg"
+                ),
+                tags$h1("Data"),
+                tags$h2("View the Data")
+            )
         ),
-        src$section(
+        tags$section(
             id = "data-intro",
-            class = "section-data-intro",
+            class = "section",
             tags$h2("About"),
             tags$p(
                 "On this page, you can view all of the summarized datasets",
@@ -68,8 +55,9 @@ data_page <- function() {
                 ), ".",
             )
         ),
-        src$section(
+        tags$section(
             id = "summary-of-data",
+            class = "section",
             tags$h2("Summary of Data"),
             tags$p(
                 "The following table provides a overview of the number of",
@@ -78,8 +66,9 @@ data_page <- function() {
                 tags$output(id = "summary-total-countries"), "countries."
             )
         ),
-        src$section(
+        tags$section(
             id = "reference-table",
+            class = "section",
             tags$h2("Recommendations Dataset"),
             tags$p(
                 "The following table displays the dataset used to generate",
@@ -92,9 +81,10 @@ data_page <- function() {
                     id = "refs_table_form",
                     heading = "Filter Data",
                     tags$label("Sort Data by Variable"),
-                    src$radioInputGroup(
+                    tags$fieldset(
                         id = "refs_table_sort",
-                        class = "radios sort-radio",
+                        class = "shiny-input-radiogroup radios sort-radio",
+                        role = "radiogroup",
                         src$radioInput(
                             name = "refs_table_sort",
                             label = "None",
@@ -144,10 +134,13 @@ data_page <- function() {
                             "Select any number of countries to display in the",
                             "table below."
                         ),
-                        src$checkBoxGroup(
+                        tags$fieldset(
                                 id = "ref_form_country_filter",
-                                class = "checkboxes",
-                                rec_country_filter(id = "ref_form_country_filter")
+                                class = "shiny-input-checkboxgroup checkboxes",
+                                role = "checkboxgroup",
+                                src$country_filter(
+                                    id = "ref_form_country_filter"
+                                )
                         )
                     ),
                     # Form buttons

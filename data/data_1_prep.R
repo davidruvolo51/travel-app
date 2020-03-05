@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-02-25
+#' MODIFIED: 2020-03-04
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: complete; working;
 #' PACKAGES: tidyverse
@@ -121,6 +121,11 @@ coffee$rating[coffee$cafeId == "cafe_585"] <- 4.8
 
 # View entry
 coffee[coffee$cafeId == "cafe_585", ]
+
+#' Recode Cafe in Antwerp that is incorrectly coded as Netherlands
+coffee$country[coffee$cafeId == "cafe_1197"] <- "Belgium"
+coffee$address[coffee$cafeId == "cafe_1197"] <- "Lange Klarenstraat 14 2000  Antwerp Belgium"
+
 
 #'//////////////////////////////////////
 
@@ -451,10 +456,119 @@ geo <- geo %>%
 #'//////////////////////////////////////////////////////////////////////////////
 
 #' ~ 3 ~
+#' Create Travel Recommendations objects
+
+
+#' Wide (for use in user preferences function)
+recs_wide <- travel$descriptives$places_by_city %>%
+    select(city, country, type, n, "tot_n" = tot_city_places) %>%
+    pivot_wider(
+        names_from = type,
+        values_from = n,
+        values_fill = list(n = 0)
+    ) %>%
+    left_join(
+        geo %>%
+            select(id, city, lat, lng),
+        by = "city"
+    ) %>%
+    select(id, city, country, lat, lng, everything()) %>%
+    as.data.frame()
+
+#' Long (for use in visualisations)
+#' use wide as missing cases are already filled and geo data is merged
+recs_long <- recs_wide %>%
+    select(id, tot_n, brewery, cafe, museum) %>%
+    group_by(id) %>%
+    pivot_longer(
+        c(brewery, cafe, museum),
+        names_to = "place",
+        values_to = "n"
+    ) %>%
+    left_join(
+        geo %>%
+            select(id, city, country, lat, lng),
+        by = "id"
+    ) %>%
+    mutate(
+        rate = round((n / tot_n) * 100, 2)
+    ) %>%
+    select(
+        id,
+        city,
+        country,
+        lat,
+        lng,
+        place,
+        "count" = n,
+        rate,
+        "total" = tot_n
+    ) %>%
+    as.data.frame(.)
+
+#'//////////////////////////////////////////////////////////////////////////////
+
+#' ~ 3 ~
+#' Create GEOJSON object for use in the mapbox
+
+#' remove missing cases
+map_data <- places %>%
+    filter(!is.na(lat)) %>%
+    select(id, city, country, name, lat, lon, type)
+
+#' define parent object
+json <- list(
+    type = "FeatureCollection",
+    totalFeatures = length(unique(map_data$id)),
+    features = list()
+)
+
+#' fill in geometry
+x <- 1
+max.reps <- NROW(map_data)
+while (x <= max.reps) {
+    json$features[[x]] <- list(
+        type = "Feature",
+        id = map_data$id[x],
+        geometry = list(
+            type = "Point",
+            coordinates = list(
+                map_data$lon[x],
+                map_data$lat[x]
+            )
+        ),
+        properties = list(
+            id = map_data$id[x],
+            name = map_data$name[x],
+            city = map_data$city[x],
+            country = map_data$country[x],
+            place = map_data$type[x],
+            lat = map_data$lat[x],
+            lon = map_data$lon[x]
+        )
+    )
+    # update counter
+    x <- x + 1
+}
+
+
+#'//////////////////////////////////////////////////////////////////////////////
+
+#' ~ 4 ~
 # save all objects
 
+#' Save Individual Place Type Objects
 saveRDS(brew, "data/all_european_breweries.RDS")
 saveRDS(cafes, "data/all_european_coffee.RDS")
 saveRDS(museums, "data/all_european_museums.RDS")
-saveRDS(travel, "data/travel_summary.RDS")
+
+#' Save Summarized Data For Viz and User Preferences Function
+saveRDS(recs_wide, "data/travel_summary_userprefs.RDS")  # use for user preferences
+saveRDS(recs_long, "data/travel_summary_general.RDS")    # use for visualisations
+
+#' Save All Geodata
 saveRDS(geo, "data/travel_all_cities_geocoded.RDS")
+
+#' Save GEOjson
+j <- jsonlite::toJSON(json)
+write(j, "www/data/travel.geojson")

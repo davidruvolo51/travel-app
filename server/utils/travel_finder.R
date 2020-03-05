@@ -2,7 +2,7 @@
 #' FILE: travel_finder.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-17
-#' MODIFIED: 2020-02-24
+#' MODIFIED: 2020-03-02
 #' PURPOSE: primary function for finding cities
 #' STATUS: working; complete
 #' PACKAGES: tidyverse (only for data prep)
@@ -24,42 +24,8 @@
 #'      pull(id) %>%
 #'      paste0(collapse=", ")
 #'
+#' Data is generated in script data/data_1_prep.R
 #' ////////////////////////////////////////////////////////////////////////////
-options(stringsAsFactors = FALSE)
-
-#' pkgs
-#' suppressPackageStartupMessages(library(tidyverse))
-#' Prep Data
-#' To prep the data for use in the function, uncomment the following lines.
-#' This code loads the travel summary object and extracted ths summarized obj
-#' "places_by_city". Since the aim of the application is to provide
-#' recommendations for cities, we do not need to worry about the country
-#' level summary. After loading the object in, transform the data so that
-#' all counts of place type in each city are in a single row. Save this new
-#' object separately for use in the application.
-#' travel <-
-#' readRDS("data/travel_summary.RDS")[["descriptives"]][["places_by_city"]] %>%
-#'     select(city, country, type, n, "tot_n" = tot_city_places) %>%
-#'     pivot_wider(
-#'         names_from = type,
-#'         values_from = n,
-#'         values_fill = list(n = 0)
-#'     ) %>%
-#'     left_join(
-#'         readRDS("data/travel_all_cities_geocoded.RDS") %>%
-#'             select(id, city, lat, lng),
-#'         by = "city"
-#'     ) %>%
-#'     select(id, city, country, lat, lng, everything()) %>%
-#'     as.data.frame()
-#'
-#' Save Transformed Data for Use in Application.
-#' saveRDS(travel, "data/travel_recommendations.RDS")
-#' Define a function that returns all cities in the dataset where each city is
-#' given a new score based on user preferences. The score is a weighted mean
-#' that is weighted by a user's prefernces for each place type (i.e.,
-#' cafes, breweries, museums).
-#' recs <- readRDS("data/travel_recommendations.RDS")
 travel_preferences <- function(weights, data) {
 
     #' Define a function that builds a blank user preferences object

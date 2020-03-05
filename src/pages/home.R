@@ -2,7 +2,7 @@
 #' FILE: home.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-27
+#' MODIFIED: 2020-03-03
 #' PURPOSE: ui component for home page
 #' STATUS: in.progress
 #' PACKAGES: NA
@@ -10,19 +10,24 @@
 #' ////////////////////////////////////////////////////////////////////////////
 home_page <- function() {
     shiny_btn_css <- "action-button shiny-bound-input"
-    src$main(
-        extra_spacing = FALSE,
-        src$hero(
+    tags$main(
+        id = "home-main",
+        class = "main main-extra-top-spacing",
+        tags$header(
             id = "hero-home",
-            tags$img(
-                class = "illustration size-lg",
-                src = "images/shiny-travel-illustration.svg"
-            ),
-            tags$h1("shinyTravel"),
-            tags$h2("Plan your next European city break using data")
+            class = "hero",
+            tags$div(class = "hero-content",
+                tags$img(
+                    class = "illustration size-lg",
+                    src = "images/shiny-travel-illustration.svg"
+                ),
+                tags$h1("shinyTravel"),
+                tags$h2("Plan your next European holiday using data")
+            )
         ),
-        src$section(
-            id = "section-about", class = "flex flex-50x2-layout",
+        tags$section(
+            id = "section-about",
+            class = "section flex flex-50x2-layout",
             tags$div(
                 class = "flex-child child-centered",
                 tags$img(
@@ -46,9 +51,9 @@ home_page <- function() {
                 )
             )
         ),
-        src$section(
+        tags$section(
             id = "section-howto",
-            class = "flex flex-50x2-layout flex-wrap-reverse",
+            class = "section flex flex-50x2-layout flex-wrap-reverse",
             tags$div(
                 class = "flex-child",
                 tags$h2(
@@ -73,8 +78,9 @@ home_page <- function() {
                 )
             )
         ),
-        src$section(
-            id = "section-learn", class = "flex flex-50x2-layout",
+        tags$section(
+            id = "section-learn",
+            class = "section flex flex-50x2-layout",
             tags$div(
                 class = "flex-child child-centered",
                 tags$img(
@@ -84,32 +90,38 @@ home_page <- function() {
             ),
             tags$div(
                 class = "flex-child",
-                tags$h2("Would you like to read more?"),
+                tags$h2("Where can I read more about the app?"),
                 tags$p(
-                    "To learn more about the app view you can view the",
+                    "All of the",
                     tags$a(
                         href = "https://github.com/davidruvolo51/travel-app",
-                        "Source code"
+                        "code"
                     ),
-                    "and read the",
+                    "and",
+                    tags$a(
+                        href =
+                            "https://github.com/davidruvolo51/travel-app-data",
+                        "data"
+                    ),
+                    "is available on github. See the",
                     tags$a(
                         href =
                             "https://github.com/davidruvolo51/travel-app/wiki",
                         "Wiki"
                     ),
-                    ". You can also view the code used to source and clean all",
-                    "of the data in the",
+                    "for more information about the development of the app,",
+                    "methods, and data. If you have any questions, feel free",
+                    "to open a new",
                     tags$a(
-                        href = 
-                            "https://github.com/davidruvolo51/travel-app-data",
-                        "Data Repo"
-                    ),
-                    "."
+                        href = "https://github.com/davidruvolo51/travel-app/issue",
+                        "issue"
+                    ), "."
                 )
             )
         ),
-        src$section(
-            id = "section-start", class = "start",
+        tags$section(
+            id = "section-start",
+            class = "section",
             tags$h2("Are you reading to start planning your holiday?"),
             tags$p("Let's get started. Click the button below."),
             tags$button(

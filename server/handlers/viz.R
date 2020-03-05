@@ -47,3 +47,10 @@ viz$render_datatable <- function(id, data, columns, caption = NULL, class = NULL
         list(id, out, columns, caption, class)
     )
 }
+
+#' Render Charts of Recommended Cities
+viz$render_city_column_charts <- function(data) {
+    session <- viz$get_shiny_session()
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage("render_city_column_charts", out);
+}

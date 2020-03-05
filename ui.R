@@ -13,7 +13,6 @@
 #' ////////////////////////////////////////////////////////////////////////////
 ui <- tagList(
     tags$head(
-        `lang` = "en",
         tags$meta(charset = "utf-8"),
         tags$meta(`http-equiv` = "X-UA-Compatible", content = "IE=edge"),
         tags$meta(
@@ -27,6 +26,7 @@ ui <- tagList(
         ),
         tags$title("shinyTravel")
     ),
+    #' Loading page -- will be removed post load
     tags$div(id = "loading",
         tags$p(class = "visually-hidden", "Loading"),
         HTML("
@@ -37,35 +37,110 @@ ui <- tagList(
             </svg>"
         )
     ),
-    tags$div(
-        id = "root",
-        src$app(
-            src$navbar(
-                title = "shinyTravel",
-                links = c("home", "search", "map", "data"),
-                labels = c("Home", "Search", "Map", "Data")
+    #' App output container and subpages
+    tags$div(id = "root",
+        #' Navbar
+        tags$nav(class = "nav", role = "navigation",
+            tags$h1(
+                class = "nav-item nav-title",
+                "shinyTravel"
             ),
-            uiOutput("page"),
+            #' Links
+            tags$ul(
+                id = "navlinks",
+                class = "nav-item menu",
+                tags$li(class = "menu-item",
+                    tags$a(
+                        id = "home",
+                        class = "shiny-bound-input menu-link",
+                        href = "home",
+                        `data-tab` = "home",
+                        "Home"
+                    )
+                ),
+                tags$li(class = "menu-item",
+                    tags$a(
+                        id = "search",
+                        class = "shiny-bound-input menu-link",
+                        href = "search",
+                        `data-tab` = "search",
+                        "Search"
+                    )
+                ),
+                tags$li(class = "menu-item",
+                    tags$a(
+                        id = "map",
+                        class = "shiny-bound-input menu-link",
+                        href = "map",
+                        `data-tab` = "map",
+                        "Map"
+                    )
+                ),
+                tags$li(class = "menu-item",
+                    tags$a(
+                        id = "data",
+                        class = "shiny-bound-input menu-link",
+                        href = "data",
+                        `data-tab` = "data",
+                        "Data"
+                    )
+                )
+            ),
+            #' Menu Toggle
             tags$div(
-                class = "footer-banner",
-                `aria-hidden` = "true",
-                style = "
-                    background-image: url('images/page-footer-grayscale.svg')
-                "
-            ),
-            src$footer(
-                tags$h2("shinyTravel"),
-                src$nav$navlinks(
-                    id = "footer-nav",
-                    labels = c(
-                        "Code",
-                        "Data",
-                        "Wiki"
+                class = "nav-item menu-item menu-btn",
+                tags$button(
+                    id = "toggle",
+                    class = "btn btn-icon action-button shiny-button-input",
+                    `aria-describedby` = "toggle-label",
+                    `aria-expanded` = "false",
+                    tags$span(
+                        id = "toggle-label",
+                        class = "visually-hidden",
+                        "open and close menu"
                     ),
-                    links = c(
-                        "https://github.com/davidruvolo51/travel-app",
-                        "https://github.com/davidruvolo51/travel-app-data",
-                        "https://github.com/davidruvolo51/travel-app/wiki"
+                    tags$span(
+                        class = "menu-icon",
+                        `aria-hidden` = "true",
+                        tags$span(class = "menu-bar"),
+                        tags$span(class = "menu-bar"),
+                        tags$span(class = "menu-bar")
+                    )
+                )
+            )
+        ),
+        uiOutput("page"),
+        tags$div(
+            id = "footer-banner",
+            `aria-hidden` = "true",
+            style = "
+                background-image: url('images/page-footer-grayscale.svg')
+            "
+        ),
+        tags$footer(
+            class = "footer",
+            tags$div(
+                class = "footer-content",
+                tags$h2("shinyTravel"),
+                tags$ul(class = "menu", id = "footer-nav",
+                    tags$li(class = "menu-item",
+                        tags$a(class = "menu-link",
+                            href = "https://github.com/davidruvolo51/travel-app",
+                            "Code"
+                        )
+                    ),
+                    tags$li(class = "menu-item",
+                        tags$a(class = "menu-link",
+                            href = "https://github.com/davidruvolo51/travel-app-data",
+                            "Data"
+                        )
+                    ),
+                    tags$li(class = "menu-item",
+                        tags$a(class = "menu-link",
+                            href = "https://github.com/davidruvolo51/travel-app/wiki",
+                            "Wiki"
+                        )
+
                     )
                 )
             )
