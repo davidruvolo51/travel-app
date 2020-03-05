@@ -2,7 +2,7 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-03-03
+// MODIFIED: 2020-03-05
 // PURPOSE: primary functions for application
 // DEPENDENCIES: NA
 // STATUS: d3; topojson; countries geojson;
@@ -20,18 +20,6 @@
         elems.forEach(e => e.classList.add(css))
     }
 
-    // CLEAR INPUT VALUE
-    function clear_input(elem, value) {
-        const inputs = document.querySelectorAll(elem);
-        inputs.forEach(input => {
-            if (value.length > 0) {
-                input.value = value
-            } else {
-                input.value = ""
-            }
-        });
-    }
-
     // LOG SOMETHING TO THE CONSOLE
     function console_log(value, asDir) {
         if (asDir) {
@@ -39,17 +27,6 @@
         } else {
             console.log(value);
         }
-    }
-
-    // HIDE ELEM
-    function hide_elem(elem, css) {
-        const el = document.querySelector(elem);
-        if (css.length > 0) {
-            el.classList.add(css)
-        } else {
-            el.classList.add("hidden");
-        }
-        el.setAttribute("hidden", true);
     }
 
     // SET INNERHTML
@@ -61,11 +38,6 @@
         } else {
             document.querySelector(elem).innerHTML = string;
         }
-    }
-
-    // REFRESH PAGE
-    function refresh_page(value) {
-        history.go(0);
     }
 
     // REMOVE CSS CLASS
@@ -95,46 +67,18 @@
         document.querySelector(elem).setAttribute(attr, value);
     }
 
-    // SHOW ELEM (SHOW / HIDE)
-    function show_elem(elem, css) {
-        const el = document.querySelector(elem);
-        if (css.length > 0) {
-            el.classList.remove(css);
-        } else {
-            el.classList.remove("hidden");
-        }
-        el.removeAttribute("hidden");
-    }
-
-    // TOGGLE CSS CLASS
-    function toggle_css(elem, css) {
-        const elems = document.querySelectorAll(elem);
-        elems.forEach(e => e.classList.toggle(css))
-    }
-
     ////////////////////////////////////////
     // Register Functions
     Shiny.addCustomMessageHandler("add_css", function (value) {
         add_css(value[0], value[1]);
     });
 
-    Shiny.addCustomMessageHandler("clear_input", function (value) {
-        clear_input(value)
-    })
-
     Shiny.addCustomMessageHandler("console_log", function (value) {
         console_log(value[0], value[1]);
     });
 
-    Shiny.addCustomMessageHandler("hide_elem", function (value) {
-        hide_elem(value[0], value[1]);
-    });
     Shiny.addCustomMessageHandler("inner_html", function (value) {
         inner_html(value[0], value[1], value[2])
-    });
-
-    Shiny.addCustomMessageHandler("refresh_page", function (value) {
-        refresh_page(value);
     });
 
     Shiny.addCustomMessageHandler("remove_css", function (value) {
@@ -143,7 +87,7 @@
 
     Shiny.addCustomMessageHandler("remove_elem", function (value) {
         remove_elem(value)
-    })
+    });
 
     Shiny.addCustomMessageHandler("remove_element_attribute", function (value) {
         remove_element_attribute(value[0], value[1]);
@@ -155,21 +99,11 @@
 
     Shiny.addCustomMessageHandler("scroll_to_top", function (value) {
         scroll_to_top(value);
-    })
-
-    Shiny.addCustomMessageHandler("show_elem", function (value) {
-        show_elem(value[0], value[1]);
     });
-
-    Shiny.addCustomMessageHandler("toggle_css", function (value) {
-        toggle_css(value[0], value[1]);
-    });
-
 })();
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// ~ 2 ~
 // Navigation, Toggles, and Buttons
 
 // ~ a ~
@@ -196,7 +130,7 @@ const accordions = (function () {
     function addToggles() {
         const buttons = document.querySelectorAll(".accordion-button");
         buttons.forEach(function (btn) {
-            btn.addEventListener("click", function (e) {
+            btn.addEventListener("click", function (event) {
                 let id = btn.getAttribute("data-name", "value");
                 let svg = document.querySelector(`svg[data-name="${id}"]`);
                 let sec = document.querySelector(`section[data-name="${id}"]`);
@@ -220,25 +154,27 @@ const accordions = (function () {
 
 // ~ c ~ 
 // Function to reset all radio input groups and checkbox input groups
-(function () {
-    function resetInputGroups() {
-        const elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
-        elems.forEach(function (el) {
-            el.checked = false;
-            if (el.getAttribute("data-default", "value") === "true") {
-                el.checked = true;
-            }
-        });
+// (function () {
+//     function resetInputGroups() {
+//         let elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
+//         elems.forEach(function (el) {
+//             el.checked = false;
+//             if (el.getAttribute("data-default", "value") === "true") {
+//                 el.checked = true;
+//             }
+//         });
+//         let groups = document.querySelectorAll("fieldset[role='radioinputgroup'], fieldset[role='checkboxgroup']");
+//         groups.forEach(function (el) {
+//             console.log(el)
+//             el.value = "";
+//         })
+//     }
 
-        const groups = document.querySelectorAll("fieldset[role='radioinputgroup'], fieldset[role='checkboxgroup']");
-        groups.forEach(function(el) {
-            el.value = '';
-        })
-    }
-    Shiny.addCustomMessageHandler("reset_input_groups", function (value) {
-        resetInputGroups()
-    })
-})();
+//     Shiny.addCustomMessageHandler("reset_form", function (value) {
+//         resetInputGroups()
+//         // document.getElementById(value).reset();
+//     })
+// })();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -591,194 +527,114 @@ const accordions = (function () {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// function for rendering columncharts
+// map box code
+const map = (function () {
 
-// (function () {
-//     // function for determining yMax value
-//     function ymax(value, data, y) {
-//         if (typeof value === "undefined") {
-//             let val = Math.max(...data.map(function (d) { return [d[y]]; }));
-//             if (val <= 0) {
-//                 val = 0;
-//             }
-//             return val;
-//         } else {
-//             return value;
-//         }
-//     }
-//     // function for determining the ymin value
-//     function ymin(value, data, y) {
-//         if (typeof value === "undefined") {
-//             let val = Math.min(...data.map(function (d) { return [d[y]]; }));
-//             if (val >= 0) {
-//                 val = 0
-//             }
-//             return val
-//         } else {
-//             return value;
-//         }
-//     }
-//     function columnChart({ id, data, x, y, z, yMin, yMax, title }) {
-//         // set params
-//         let width = 600, height = 300, scale = 1.05, hover_fill = "#507dbc", default_fill = "#a6bbda";
-//         const margin = ({ top: 10, right: 0, bottom: 25, left: 55 });
-//         const range = {
-//             ymin: ymin(yMin, data, y),
-//             ymax: ymax(yMax, data, y)
-//         }
-//         // define parent element
-//         let node = d3.select(id).append("figure");
-//         node.append("figcaption").text(title)
-//         // select and define svg element
-//         let svg = node.append("svg")
-//             .attr("class", "d3-viz column-chart")
-//             .attr("width", "100%")
-//             .attr("height", "100%")
-//             .attr("viewBox", ` 0 0 ${width * scale} ${height}`)
-//             .attr("preserveAspectRatio", "xMinYMin");
-//         // append inner svg aread
-//         let g = svg.append("g")
-//             .attr("transform", `translate(${margin.left}, ${margin.top})`);
-//         // define group for all coumns
-//         let columnArea = g.append("g")
-//             .attr("class", "chart-data")
-//             .selectAll("chart-data");
-//         // define axes
-//         let xScale = d3.scaleBand()
-//             .domain(data.map(d => d[x]))
-//             .range([0, width - margin.left - margin.right]);
-//         let yScale = d3.scaleLinear()
-//             .domain([range.ymin, range.ymax])
-//             .nice()
-//             .range([height - margin.top - margin.bottom, 0]);
-//         // render x
-//         g.append("g")
-//             .attr("class", "axis x-axis")
-//             .attr("transform", `translate(0, ${yScale(0)})`)
-//             .call(d3.axisBottom(xScale));
-//         // render y
-//         g.append("g")
-//             .attr("class", "axis y-axis")
-//             .call(d3.axisLeft(yScale));
-//         // build columns
-//         let columns = columnArea
-//             .data(data)
-//             .enter()
-//             .append("g")
-//             .attr("transform", d => `translate(${xScale(d[x])}, 0)`);
-//         // BUILD <rect>
-//         let rect = columns
-//             .append("rect")
-//             .attr("x", xScale.bandwidth() * 0.2)
-//             .attr("y", yScale(0))
-//             .attr("width", xScale.bandwidth() * 0.5 + 10)
-//             .attr("fill", "#a6bbda")
-//             .style("cursor", "pointer");
-//         // Animate
-//         rect.attr("height", 0)
-//             .transition()
-//             .delay(250)
-//             .duration(1250)
-//             .attr("y", (d) => yScale(Math.max(0, d[y])))
-//             .attr("height", d => Math.abs(yScale(d[y]) - yScale(0)));
-//         // tooltips
-//         let tooltip = d3.select("body")
-//             .append("div")
-//             .style("position", "absolute")
-//             .attr("id", `${id}-tooltip`)
-//             .attr("class", "d3-tooltip")
-//             .style("opacity", 0)
-//             .style("z-index", 200)
-//             .style("background-color", "white")
-//             .style("box-shadow", "0 0 4px 2px hsl(0, 0%, 0%, 0.2)")
-//             .style("border-radius", "3px")
-//             .style("padding", "12px 18px")
-//         // define events
-//         function mouseover(d) {
-//             d3.select(this).attr("fill", hover_fill);
-//             tooltip.style("opacity", 1);
-//         }
-//         function mousemove(d) {
-//             tooltip.html(
-//                     "<strong>" + d[x] + "</strong><br/>" +
-//                     "<span>n: <output>" + d[z] + "</output></span><br/>" +
-//                     "<span>%: <output>" + d[y] + "</output></span>"
-//                 )
-//                 .style("left", (d3.event.pageX + 10) + "px")
-//                 .style("top", (d3.event.pageY - 55) + "px");
-//         }
-//         function mouseleave(d) {
-//             d3.select(this).attr("fill", default_fill);
-//             tooltip.style("opacity", 0);
-//         }
-//         // attach mouse events
-//         rect.on("mouseover", mouseover)
-//             .on("mousemove", mousemove)
-//             .on("mouseleave", mouseleave);
-//     }
-//     // function to render all three column charts
-//     function render_city_column_charts(city_a, city_b, city_c) {
-//         d3.selectAll("#summary-of-cities figure").remove();
-//         const id = "#summary-of-cities";
-//         if (city_a !== false) {
-//             columnChart({
-//                 id: id,
-//                 data: city_a,
-//                 x: "place",
-//                 y: "rate",
-//                 z: "count",
-//                 yMax: 100,
-//                 title: `Summary of places in ${city_a[0]['city']} (% by type)`
-//             })
-//         }
-//         if (city_b !== false) {
-//             columnChart({
-//                 id: id,
-//                 data: city_b,
-//                 x: "place",
-//                 y: "rate",
-//                 z: "count",
-//                 yMax: 100,
-//                 title: `Summary of places in ${city_b[0]['city']} (% by type)`
-//             })
-//         }
-//         if (city_c !== false) {
-//             columnChart({
-//                 id: id,
-//                 data: city_c,
-//                 x: "place",
-//                 y: "rate",
-//                 z: "count",
-//                 yMax: 100,
-//                 title: `Summary of places in ${city_c[0]['city']} (% by type)`
-//             })
-//         }
-//     }
-//     // handler to render all three charts if they exist
-//     Shiny.addCustomMessageHandler("render_city_column_charts", function(value) {
-//         const keys = Array.from(new Set([...value.map(d => d.id)]));
-//         let city_a, city_b, city_c;
-//         if (keys.length > 0) {
-//             if (keys.length === 1) {
-//                 city_a = value.filter(d => d.id === keys[0]);
-//                 city_b = false;
-//                 city_c = false;
-//             }
-//             if (keys.length === 2) {
-//                 city_a = value.filter(d => d.id === keys[0]);
-//                 city_b = value.filter(d => d.id === keys[1]);
-//                 city_c = false;
-//             }
-//             if (keys.length === 3) {
-//                 city_a = value.filter(d => d.id === keys[0]);
-//                 city_b = value.filter(d => d.id === keys[1]);
-//                 city_c = value.filter(d => d.id === keys[2]);
-//             }
-//         } else {
-//             city_a = false;
-//             city_b = false;
-//             city_c = false;
-//         }
-//         render_city_column_charts(city_a, city_b, city_c);
-//     })
-// })();
+    // public token
+    mapboxgl.accessToken = "pk.eyJ1IjoiZGNydXZvbG8iLCJhIjoiY2psaW9mZXpmMDNkZDNxcG54cDd2OTJ4YyJ9.qjJnQuhtjHfZ4zBzRyB74g"
+
+    function render_mapbox(id) {
+        // build map
+        let map = new mapboxgl.Map({
+            container: id,
+            style: "mapbox://styles/mapbox/dark-v10",
+            center: [11.3351122, 44.4941305], // set to Bologna
+            pitch: 10,
+            zoom: 0,
+            maxBounds: [
+                [-33.014707, 29.886634], // southwest coords
+                [49.469993, 75.898085]   // northeast coords
+            ],
+            antialias: true
+        })
+
+        // when loaded add layers
+        map.on('load', function () {
+
+            // Insert the layer beneath any symbol layer.
+            var layers = map.getStyle().layers;
+
+            var labelLayerId;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                    labelLayerId = layers[i].id;
+                    break;
+                }
+            }
+
+            // add buildings
+            map.addLayer(
+                {
+                    'id': '3d-buildings',
+                    'source': 'composite',
+                    'source-layer': 'building',
+                    'filter': ['==', 'extrude', 'true'],
+                    'type': 'fill-extrusion',
+                    'minzoom': 15,
+                    'paint': {
+                        'fill-extrusion-color': '#aaa',
+
+                        // use an 'interpolate' expression to add a smooth transition effect to the
+                        // buildings as the user zooms in
+                        'fill-extrusion-height': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'height']
+                        ],
+                        'fill-extrusion-base': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'min_height']
+                        ],
+                        'fill-extrusion-opacity': 0.6
+                    }
+                },
+                labelLayerId
+            );
+
+            // add coords
+            map.addSource("destinations", {
+                type: "geojson",
+                url: "../data/travel.geojson"
+            });
+
+            map.addLayer({
+                'id': 'locations',
+                'type': 'circle',
+                'source': 'destinations',
+                'paint': {
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [[12, 2], [22, 180]]
+                    },
+                    'circle-color': [
+                        'match',
+                        ['get', 'places'],
+                        'brewery',
+                        '#66c2a5',
+                        'coffee',
+                        "#fc8d62",
+                        'musuem',
+                        "#8da0cb",
+                        // other
+                        "#ffffff"
+
+                    ]
+                }
+                });
+        });
+    }
+
+    return {
+        render_mapbox: render_mapbox
+    }
+
+})();
