@@ -2,7 +2,7 @@
 #' FILE: ui.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-02-14
+#' MODIFIED: 2020-03-06
 #' PURPOSE: client side for application
 #' STATUS: working; on.going
 #' PACKAGES: NA
@@ -18,6 +18,13 @@ ui <- tagList(
         tags$meta(
             name = "viewport",
             content = "width=device-width, initial-scale=1"
+        ),
+        tags$script(
+            src = "https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"
+        ),
+        tags$link(
+            href = "https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css",
+            rel = "stylesheet"
         ),
         tags$link(
             rel = "stylesheet",

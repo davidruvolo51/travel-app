@@ -8,7 +8,8 @@
 	&.flex-60x40-layout,
 	&.flex-70x30-layout,
 	&.flex-33x3-layout,
-	&.flex-30x70-layout {
+	&.flex-30x70-layout,
+	&.flex-25x75-layout {
 		width: 100%;
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
@@ -101,10 +102,27 @@
 		&.flex-60x40-layout,
 		&.flex-40x60-layout,
 		&.flex-33x3-layout,
+		&.flex-25x75-layout,
 		&.flex-50x2-layout {
 			width: 100%;
 			flex-wrap: nowrap;
 		}
+
+		// layout for 25x75
+		&.flex-25x75-layout {
+			.flex-child {
+				display: inline-block;
+				
+				&:first-child {
+					width: 25%;
+				}
+
+				&:last-child {
+					width: 75%;
+				}
+			}
+		}
+
 		// layout for 33x3
 		&.flex-33x3-layout {
 			.flex-child {

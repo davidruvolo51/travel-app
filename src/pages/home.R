@@ -2,9 +2,9 @@
 #' FILE: home.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-03
+#' MODIFIED: 2020-03-06
 #' PURPOSE: ui component for home page
-#' STATUS: in.progress
+#' STATUS: working
 #' PACKAGES: NA
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////

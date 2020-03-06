@@ -2,7 +2,7 @@
 #' FILE: global.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-02
+#' MODIFIED: 2020-03-06
 #' PURPOSE: global script for app
 #' STATUS: in.progress
 #' PACKAGES: shiny

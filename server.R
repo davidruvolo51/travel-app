@@ -2,10 +2,10 @@
 #' FILE: server.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-03
+#' MODIFIED: 2020-03-06
 #' PURPOSE: server for application
-#' STATUS: in.progress
-#' PACKAGES: shiny
+#' STATUS: working; ongoing
+#' PACKAGES: shiny; tidyverse
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 server <- function(input, output, session) {
@@ -14,8 +14,9 @@ server <- function(input, output, session) {
     source("src/components/client.R", local = TRUE)
 
     #' define starting page
-    #' current_page <- reactiveVal("home")
-    current_page <- reactiveVal("search")
+    current_page <- reactiveVal("home")
+    #' current_page <- reactiveVal("search")
+    #' current_page <- reactiveVal("map")
     #' current_page <- reactiveVal("data")
 
     #' load server
@@ -25,7 +26,6 @@ server <- function(input, output, session) {
     source("server/pages/map.R", local = TRUE)
     source("server/utils/travel_finder.R", local = TRUE)
     source("server/handlers/index.R", local = TRUE)
-    source("server/handlers/viz.R", local = TRUE)
 
 
     #' load src/pages
@@ -35,10 +35,12 @@ server <- function(input, output, session) {
     source("src/pages/data.R", local = TRUE)
 
     #' render page
-    #' output$page <- renderUI(home_tab())
-    output$page <- renderUI(search_page())
+    output$page <- renderUI(home_page())
+    #' output$page <- renderUI(search_page())
+    #' output$page <- renderUI(map_page())
     #' output$page <- renderUI(data_page())
 
     #' Remove loading screen with app
+    Sys.sleep(1)
     js$remove_elem(elem = "#loading")
 }

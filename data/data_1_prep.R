@@ -80,6 +80,11 @@ breweries <- breweries %>%
 NROW(breweries)
 length(unique(breweries$id))
 
+#' Fix Breweries with Incorrect Coordinates
+breweries[breweries$id == "151333840", c("lat", "lon")] <- c(50.6775633, 4.5478229)
+breweries[breweries$id == "596642540", c("lat", "lon")] <- c(52.1507238, -2.4066475)
+breweries[breweries$id == "596388442", c("lat", "lon")] <- c(57.648959, 11.9920372)
+
 #'//////////////////////////////////////
 
 #' ~ B ~
@@ -126,6 +131,8 @@ coffee[coffee$cafeId == "cafe_585", ]
 coffee$country[coffee$cafeId == "cafe_1197"] <- "Belgium"
 coffee$address[coffee$cafeId == "cafe_1197"] <- "Lange Klarenstraat 14 2000  Antwerp Belgium"
 
+#' Fix Cafes with Incorrect Coordinates (this one might be closed?)
+coffee[coffee$cafeId == "cafe_19", c("lat", "lon")] <- c(50.825883, -0.1426511)
 
 #'//////////////////////////////////////
 

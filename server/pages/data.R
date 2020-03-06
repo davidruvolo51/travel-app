@@ -2,9 +2,9 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-02
+#' MODIFIED: 2020-03-05
 #' PURPOSE: server code for data page
-#' STATUS: in.progress
+#' STATUS: working;
 #' PACKAGES: NA
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
@@ -13,15 +13,15 @@ observe({
 
         #' Write Total Cities
         js$inner_html(
-            "#summary-total-cities",
-            travel$highlights$cities,
+            elem = "#summary-total-cities",
+            string = travel$highlights$cities,
             delay = 750
         )
 
         #' Write Total Countries
         js$inner_html(
-            "#summary-total-countries",
-            travel$highlights$countries,
+            elem = "#summary-total-countries",
+            string = travel$highlights$countries,
             delay = 750
         )
 
@@ -78,11 +78,6 @@ observe({
                 columns = names(refs_filtered),
                 caption = "Reference Data"
             )
-        })
-
-        #' If Form is selected
-        observeEvent(input$resetRefsForm, {
-            js$reset_input_groups()
         })
     }
 })

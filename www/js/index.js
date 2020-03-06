@@ -563,49 +563,49 @@ const map = (function () {
             }
 
             // add buildings
-            map.addLayer(
-                {
-                    'id': '3d-buildings',
-                    'source': 'composite',
-                    'source-layer': 'building',
-                    'filter': ['==', 'extrude', 'true'],
-                    'type': 'fill-extrusion',
-                    'minzoom': 15,
-                    'paint': {
-                        'fill-extrusion-color': '#aaa',
+            map.addLayer({
+                'id': '3d-buildings',
+                'source': 'composite',
+                'source-layer': 'building',
+                'filter': ['==', 'extrude', 'true'],
+                'type': 'fill-extrusion',
+                'minzoom': 15,
+                'paint': {
+                    'fill-extrusion-color': '#aaa',
 
-                        // use an 'interpolate' expression to add a smooth transition effect to the
-                        // buildings as the user zooms in
-                        'fill-extrusion-height': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            15,
-                            0,
-                            15.05,
-                            ['get', 'height']
-                        ],
-                        'fill-extrusion-base': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            15,
-                            0,
-                            15.05,
-                            ['get', 'min_height']
-                        ],
-                        'fill-extrusion-opacity': 0.6
-                    }
-                },
+                    // use an 'interpolate' expression to add a smooth transition effect to the
+                    // buildings as the user zooms in
+                    'fill-extrusion-height': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        15,
+                        0,
+                        15.05,
+                        ['get', 'height']
+                    ],
+                    'fill-extrusion-base': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        15,
+                        0,
+                        15.05,
+                        ['get', 'min_height']
+                    ],
+                    'fill-extrusion-opacity': 0.6
+                }
+            },
                 labelLayerId
             );
 
             // add coords
             map.addSource("destinations", {
                 type: "geojson",
-                url: "../data/travel.geojson"
+                data: "https://raw.githubusercontent.com/davidruvolo51/travel-app/master/www/data/travel.geojson"
             });
 
+            // add circles
             map.addLayer({
                 'id': 'locations',
                 'type': 'circle',
@@ -617,19 +617,77 @@ const map = (function () {
                     },
                     'circle-color': [
                         'match',
-                        ['get', 'places'],
-                        'brewery',
-                        '#66c2a5',
-                        'coffee',
-                        "#fc8d62",
-                        'musuem',
-                        "#8da0cb",
+                        ['get', 'type'],
+                        'brewery', '#66c2a5',
+                        'cafe', "#fc8d62",
+                        'museum', "#8da0cb",
                         // other
                         "#ffffff"
-
                     ]
                 }
-                });
+            });
+
+            // add icons
+            map.addLayer({
+                'id': 'destinations',
+                'type': 'symbol',
+                'source': 'destinations',
+                'layout': {
+                    'icon-image': '{icon}-15',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement' : true,
+                    'icon-size': {
+                        'base': 0.7,
+                        'type': 'exponential',
+                        'stops': [
+                            [10, 0],
+                            [12, 0.8],
+                            [15, 0.8],
+                            [18, 1]
+                        ]
+                    },
+                }
+            });
+
+            // mouse enter
+            map.on("mouseenter", "destinations", function (e) {
+                map.getCanvas().style.cursor = "pointer";
+            })
+
+            // onclick
+            map.on('click', 'destinations', function (e) {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = `
+                <span class="place-type">${e.features[0].properties.type}</span>
+                <strong class="place-name">${e.features[0].properties.name}</strong>
+                <span class="place-city">${e.features[0].properties.city}</span>
+                <span class="place-country">${e.features[0].properties.country}</span>
+                <span class="place-id">${e.features[0].properties.id}</span>
+            `;
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                new mapboxgl.Popup({ className: "place-popup" })
+                    .setMaxWidth("300px")
+                    .setLngLat(coordinates)
+                    .setHTML(description)
+                    .addTo(map);
+            });
+
+            // on leave
+            map.on('mouseleave', 'destinations', function () {
+                map.getCanvas().style.cursor = '';
+            });
         });
     }
 
