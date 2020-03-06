@@ -156,5 +156,5 @@ ui <- tagList(
     #' Load Assets
     tags$script(src = "assets/d3.v5.min.js"),
     tags$script(src = "assets/topojson.min.js"),
-    tags$script(src = "js/index.js")
+    tags$script(src = "js/index.min.js")
 )

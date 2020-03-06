@@ -104,43 +104,23 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// Navigation, Toggles, and Buttons
-
-// ~ a ~
-// Function for handling clicks of all navigation links
-(function () {
-    function toTitleCase(string) {
-        return string.charAt(0).toUpperCase() + string.substr(1).toLowerCase();
-    }
-    const links = document.querySelectorAll(".nav .menu-link");
-    links.forEach(function (link) {
-        link.addEventListener("click", function (event) {
-            event.preventDefault();
-            Shiny.setInputValue(event.target.id, event.target.id, { priority: "event" });
-            document.title = `shinyTravel | ${toTitleCase(event.target.innerText)}`;
-        })
-    })
-})();
-
-
-// ~ b ~ 
 // Function for opening and closing accordions to get this function to work
 // you must call it on the desired page.
 const accordions = (function () {
     function addToggles() {
         const buttons = document.querySelectorAll(".accordion-button");
-        buttons.forEach(function (btn) {
-            btn.addEventListener("click", function (event) {
-                let id = btn.getAttribute("data-name", "value");
+        buttons.forEach(function (b) {
+            b.addEventListener("click", function (event) {
+                let id = b.getAttribute("data-name", "value");
                 let svg = document.querySelector(`svg[data-name="${id}"]`);
                 let sec = document.querySelector(`section[data-name="${id}"]`);
                 sec.classList.toggle("visually-hidden");
                 svg.classList.toggle("rotated");
-                if (btn.getAttribute("aria-expanded", "value") === "false") {
-                    btn.setAttribute("aria-expanded", true);
+                if (b.getAttribute("aria-expanded", "value") === "false") {
+                    b.setAttribute("aria-expanded", true);
                     sec.removeAttribute("hidden");
                 } else {
-                    btn.setAttribute("aria-expanded", "false");
+                    b.setAttribute("aria-expanded", "false");
                     sec.setAttribute("hidden", "");
                 }
             });
@@ -151,42 +131,39 @@ const accordions = (function () {
     }
 })();
 
-
-// ~ c ~ 
-// Function to reset all radio input groups and checkbox input groups
-// (function () {
-//     function resetInputGroups() {
-//         let elems = document.querySelectorAll("input[type='radio'], input[type='checkbox']");
-//         elems.forEach(function (el) {
-//             el.checked = false;
-//             if (el.getAttribute("data-default", "value") === "true") {
-//                 el.checked = true;
-//             }
-//         });
-//         let groups = document.querySelectorAll("fieldset[role='radioinputgroup'], fieldset[role='checkboxgroup']");
-//         groups.forEach(function (el) {
-//             console.log(el)
-//             el.value = "";
-//         })
-//     }
-
-//     Shiny.addCustomMessageHandler("reset_form", function (value) {
-//         resetInputGroups()
-//         // document.getElementById(value).reset();
-//     })
-// })();
-
 ////////////////////////////////////////////////////////////////////////////////
 
 // ~ 3 ~
 // Function for handling menu opening and closing
+
 (function () {
 
     // pull all elements
-    const menuToggle = document.getElementById("toggle");
+    const btn = document.getElementById("toggle");
     const menu = document.getElementById("navlinks");
     const body = document.querySelector("body");
     const width = body.getBoundingClientRect().width;
+
+    // function to convert string to sentence case
+    function toTitleCase(string) {
+        return string.charAt(0).toUpperCase() + string.substr(1).toLowerCase();
+    }
+
+    // add listerer to links
+    const links = document.querySelectorAll(".nav .menu-link");
+    links.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            Shiny.setInputValue(event.target.id, event.target.id, { priority: "event" });
+            document.title = `shinyTravel | ${toTitleCase(event.target.innerText)}`;
+            if (btn.getAttribute("aria-expanded") === "true") {
+                menu.classList.remove("expanded");
+                btn.classList.remove("open");
+                btn.setAttribute("aria-expanded", "false");
+                menu.setAttribute("hidden", "true");
+            }
+        });
+    })
 
     // init menu state
     document.addEventListener("DOMContentLoaded", function () {
@@ -199,15 +176,14 @@ const accordions = (function () {
     })
 
     // bind to menu togle <button id="toggle">
-    menuToggle.addEventListener("click", function () {
+    btn.addEventListener("click", function () {
         menu.classList.toggle("expanded");
-        menuToggle.classList.toggle("open");
-        if (menuToggle.getAttribute("aria-expanded") === false) {
-            menuToggle.setAttribute("aria-expaned", "true");
+        btn.classList.toggle("open");
+        if (btn.getAttribute("aria-expanded") === "false") {
+            btn.setAttribute("aria-expanded", true);
             menu.removeAttribute("hidden");
-        }
-        if (menuToggle.getAttribute("aria-expanded") === true) {
-            menuToggle.setAttribute("aria-expanded", "false");
+        } else {
+            btn.setAttribute("aria-expanded", "false");
             menu.setAttribute("hidden", "true");
         }
     });
@@ -215,11 +191,11 @@ const accordions = (function () {
     // handle menu action when window is resized
     window.addEventListener("resize", function () {
         let w = body.getBoundingClientRect().width;
-        if (w >= 912) {
+        if (w >= 912 && btn.getAttribute("aria-expanded") === true) {
             menu.classList.remove("expanded");
             menu.removeAttribute("hidden");
-            menuToggle.classList.remove("open");
-            menuToggle.setAttribute("aria-expanded", "false");
+            btn.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
         }
     });
 })();
@@ -444,7 +420,7 @@ const accordions = (function () {
     }
 
     // build datatable
-    function datatable(id, data, columns, caption, css) {
+    function datatable({id, data, columns, caption, css}) {
 
         // define table
         d3.select(`${id} table`).remove();
@@ -513,13 +489,13 @@ const accordions = (function () {
     // shiny handler
     Shiny.addCustomMessageHandler("render_datatable", function (value) {
         setTimeout(function () {
-            datatable(
-                id = value[0],
-                data = value[1],
-                columns = value[2],
-                caption = value[3],
-                css = value[4]
-            )
+            datatable({
+                id: value[0],
+                data: value[1],
+                columns: value[2],
+                caption: value[3],
+                css: value[4]
+            })
         }, 500)
     })
 
@@ -543,7 +519,7 @@ const map = (function () {
             zoom: 0,
             maxBounds: [
                 [-33.014707, 29.886634], // southwest coords
-                [49.469993, 75.898085]   // northeast coords
+                [98.988014, 75.898085]   // northeast coords
             ],
             antialias: true
         })
@@ -635,7 +611,7 @@ const map = (function () {
                 'layout': {
                     'icon-image': '{icon}-15',
                     'icon-allow-overlap': true,
-                    'icon-ignore-placement' : true,
+                    'icon-ignore-placement': true,
                     'icon-size': {
                         'base': 0.7,
                         'type': 'exponential',

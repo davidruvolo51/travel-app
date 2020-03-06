@@ -2,7 +2,7 @@
 #' FILE: data_1_prep.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-12
-#' MODIFIED: 2020-03-04
+#' MODIFIED: 2020-03-06
 #' PURPOSE: prepare data into viz ready objects
 #' STATUS: complete; working;
 #' PACKAGES: tidyverse
@@ -85,6 +85,9 @@ breweries[breweries$id == "151333840", c("lat", "lon")] <- c(50.6775633, 4.54782
 breweries[breweries$id == "596642540", c("lat", "lon")] <- c(52.1507238, -2.4066475)
 breweries[breweries$id == "596388442", c("lat", "lon")] <- c(57.648959, 11.9920372)
 
+#' Check to see if there are cases with 0 coords
+breweries %>% filter(lat == 0)
+
 #'//////////////////////////////////////
 
 #' ~ B ~
@@ -131,8 +134,18 @@ coffee[coffee$cafeId == "cafe_585", ]
 coffee$country[coffee$cafeId == "cafe_1197"] <- "Belgium"
 coffee$address[coffee$cafeId == "cafe_1197"] <- "Lange Klarenstraat 14 2000  Antwerp Belgium"
 
+#' Find Cafes with 0 coords
+coffee %>% filter(lat == 0)
+
 #' Fix Cafes with Incorrect Coordinates (this one might be closed?)
-coffee[coffee$cafeId == "cafe_19", c("lat", "lon")] <- c(50.825883, -0.1426511)
+coffee[coffee$cafeId == "cafe_19", c("lat", "lng")] <- c(50.825883, -0.1426511)
+coffee[coffee$cafeId == "cafe_21", c("lat", "lng")] <- c(51.45488, -2.5945928)
+coffee[coffee$cafeId == "cafe_31", c("lat", "lng")] <- c(51.4537608, -2.5969607)
+coffee[coffee$cafeId == "cafe_145", c("lat", "lng")] <- c(51.5110599, -0.1231838)
+coffee[coffee$cafeId == "cafe_170", c("lat", "lng")] <- c(51.5471184, -0.0137393)
+coffee[coffee$cafeId == "cafe_249", c("lat", "lng")] <- c(51.4641561, -0.1180244)
+coffee[coffee$cafeId == "cafe_496", c("lat", "lng")] <- c(51.2262648, 6.7736714)
+
 
 #'//////////////////////////////////////
 

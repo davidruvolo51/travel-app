@@ -25,8 +25,8 @@
 		"sass": "parcel src/styles/styles.scss -d www/css --no-cache --no-source-maps --port 1111",
 		"sass_build": "parcel build src/styles/styles.scss -d www/css --no-cache --no-source-maps",
 		"sass_clean": "rm -rf www/css .sass-cache/",
-		"js_build": "babel www/js/index.js -d www/js/app.js --presets minify --no-comments",
-		"js_clean": "rm -rf www/js/index.js"
+		"js_build": "babel www/js/index.js --out-file www/js/index.min.js --presets minify --no-comments",
+		"js_clean": "rm -rf www/js/index.min.js"
 	},
 	"postcss": {
 		"modules": false,
