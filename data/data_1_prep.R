@@ -144,7 +144,7 @@ coffee[coffee$cafeId == "cafe_31", c("lat", "lng")] <- c(51.4537608, -2.5969607)
 coffee[coffee$cafeId == "cafe_145", c("lat", "lng")] <- c(51.5110599, -0.1231838)
 coffee[coffee$cafeId == "cafe_170", c("lat", "lng")] <- c(51.5471184, -0.0137393)
 coffee[coffee$cafeId == "cafe_249", c("lat", "lng")] <- c(51.4641561, -0.1180244)
-coffee[coffee$cafeId == "cafe_496", c("lat", "lng")] <- c(1.2262648, 6.7736714)
+coffee[coffee$cafeId == "cafe_496", c("lat", "lng")] <- c(51.2262648, 6.7736714)
 
 
 #'//////////////////////////////////////
