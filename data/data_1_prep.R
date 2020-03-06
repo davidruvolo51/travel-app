@@ -510,47 +510,41 @@ recs_long <- recs_wide %>%
 
 #' ~ 3 ~
 #' Create GEOJSON object for use in the mapbox
+#' alternatively load from source
+#' places <- readRDS("data/all_european_places.RDS")
 
 #' remove missing cases
 map_data <- places %>%
     filter(!is.na(lat)) %>%
-    select(id, city, country, name, lat, lon, type)
+    select(id, city, country, name, lat, lon, type) %>%
+    mutate(
+        icon = case_when(
+            #' align with MAKI icon sets
+            type == "brewery" ~ "beer",
 
-#' define parent object
-json <- list(
-    type = "FeatureCollection",
-    totalFeatures = length(unique(map_data$id)),
-    features = list()
-)
-
-#' fill in geometry
-x <- 1
-max.reps <- NROW(map_data)
-while (x <= max.reps) {
-    json$features[[x]] <- list(
-        type = "Feature",
-        id = map_data$id[x],
-        geometry = list(
-            type = "Point",
-            coordinates = list(
-                map_data$lon[x],
-                map_data$lat[x]
-            )
-        ),
-        properties = list(
-            id = map_data$id[x],
-            name = map_data$name[x],
-            city = map_data$city[x],
-            country = map_data$country[x],
-            place = map_data$type[x],
-            lat = map_data$lat[x],
-            lon = map_data$lon[x]
+            #' museum and cafe are okay
+            TRUE ~ as.character(type)
         )
     )
-    # update counter
-    x <- x + 1
-}
 
+#' source
+source("./data/data_99_utils.R")
+
+#' define geojson
+j <- as_geojson_point(
+    data = map_data,
+    id = "id",
+    lat = "lat",
+    lon = "lon",
+    properties = c("id", "city", "country", "name", "type", "icon")
+)
+
+#' write file
+json <- jsonlite::toJSON(j, auto_unbox = TRUE)
+write(
+    json,
+    file = "www/data/travel.geojson"
+)
 
 #'//////////////////////////////////////////////////////////////////////////////
 
@@ -561,14 +555,11 @@ while (x <= max.reps) {
 saveRDS(brew, "data/all_european_breweries.RDS")
 saveRDS(cafes, "data/all_european_coffee.RDS")
 saveRDS(museums, "data/all_european_museums.RDS")
+saveRDS(places, "data/all_european_places.RDS")
 
 #' Save Summarized Data For Viz and User Preferences Function
-saveRDS(recs_wide, "data/travel_summary_userprefs.RDS")  # use for user preferences
-saveRDS(recs_long, "data/travel_summary_general.RDS")    # use for visualisations
+saveRDS(recs_wide, "data/travel_summary_userprefs.RDS")  # use for user prefs
+saveRDS(recs_long, "data/travel_summary_general.RDS")    # use for vis
 
 #' Save All Geodata
 saveRDS(geo, "data/travel_all_cities_geocoded.RDS")
-
-#' Save GEOjson
-j <- jsonlite::toJSON(json)
-write(j, "www/data/travel.geojson")
