@@ -2,7 +2,7 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-05
+#' MODIFIED: 2020-03-06
 #' PURPOSE: server code for data page
 #' STATUS: working;
 #' PACKAGES: NA
@@ -15,14 +15,14 @@ observe({
         js$inner_html(
             elem = "#summary-total-cities",
             string = travel$highlights$cities,
-            delay = 750
+            delay = 1250
         )
 
         #' Write Total Countries
         js$inner_html(
             elem = "#summary-total-countries",
             string = travel$highlights$countries,
-            delay = 750
+            delay = 1250
         )
 
         #' Render Table removing cities and countries count
