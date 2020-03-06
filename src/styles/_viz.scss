@@ -17,6 +17,44 @@
     }
 }
 
+.legend {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    list-style: none;
+    background-color: $light;
+    padding: 16px 36px;
+    // margin: 0;
+
+    .legend-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0 18px; 
+        margin-bottom: 12px;
+        text-align: left;
+
+        svg {
+            margin-left: -35px;
+            margin-right: 6px;
+            margin-top: 3px;
+            display: block;
+            width: 24px;
+            height: 24px;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: $brand;
+
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
 
 @media (min-width: 800px) {
     #recommended-cities {
@@ -25,6 +63,20 @@
         .d3-map {
             margin-bottom: 0; 
             margin-right: 24px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .legend {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .legend-item {
+            margin-bottom: 0;
+            margin-right: 16px;
 
             &:last-child {
                 margin-right: 0;

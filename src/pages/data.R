@@ -2,9 +2,9 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-03-04
+#' MODIFIED: 2020-03-06
 #' PURPOSE: ui page component for data page
-#' STATUS: in.progress
+#' STATUS: working
 #' PACKAGES: shiny; see global
 #' COMMENTS: import page in server and use reactiveVal current_page to
 #'          dynamically load pages
@@ -146,11 +146,6 @@ data_page <- function() {
                     # Form buttons
                     tags$div(
                         class = "b-list",
-                        tags$button(
-                            id = "resetRefsForm",
-                            class = "action-button shiny-bound-input b b-secondary",
-                            "Reset"
-                        ),
                         tags$button(
                             id = "submitRefsForm",
                             class = "action-button shiny-bound-input b b-primary",

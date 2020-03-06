@@ -2,9 +2,9 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-03-03
+#' MODIFIED: 2020-03-06
 #' PURPOSE: ui page component for search tab
-#' STATUS: in.progress
+#' STATUS: working
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
 #' COMMENTS: load page in server and use reactiveVal "current_page" to render
 #'           pages dynamically (application routing)
@@ -176,7 +176,7 @@ search_page <- function() {
                     tags$fieldset(
                         class = "number-input-group",
                         tags$label(
-                            `for` = "limitResults",
+                            `for` = "option_city_limits",
                             class = "number-input-label",
                             "Enter the number of top cities you would like to",
                             "remove."
@@ -198,11 +198,6 @@ search_page <- function() {
                 # Form buttons
                 tags$div(
                     class = "b-list",
-                    tags$button(
-                        id = "resetTravelForm",
-                        class = "action-button shiny-bound-input b b-secondary",
-                        "Reset"
-                    ),
                     tags$button(
                         id = "submitTravelForm",
                         class = "action-button shiny-bound-input b b-primary",

@@ -10,8 +10,10 @@
     align-items: center;
     width: 100%;
     height: 100vh;
+    top: 0;
+    left: 0;
     background-color: white;
-    z-index: 99;
+    z-index: 300;
 
     .dot {
         fill: $brand;
@@ -27,4 +29,9 @@
             animation: blink 1s .4s infinite
         }
     }
+}
+
+#root {
+    opacity: 0;
+    animation: blink 1.5s 1.5s forwards;
 }

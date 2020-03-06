@@ -87,6 +87,59 @@
 	opacity: 0.75;
 }
 
+#travelMap {
+	width: 90%;
+	margin: 32px auto;
+	height: 90vh;
+	background-color: $dark;
+	border-radius: 6px;
+}
+
+#places {
+	.legend-item {
+		svg {
+			fill: white;
+		}
+		#beer-15 {
+				background-color: #66c2a5;
+		}
+		#cafe-15 {
+			background-color: #fc8d62;
+		}
+		#museums-15 {
+			background-color: #8da0cb;
+		}
+	}
+}
+
+.place-popup {
+	.place-type {
+		display: block;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-weight: bold;
+		font-size: 11pt;
+		color: $medium;
+		line-height: $heading-line-height;
+	}
+	.place-name {
+		display: block;
+		font-size: 14pt;
+		font-weight: bold;
+		color: $dark;
+		line-height: $text-line-height;
+	}
+	.place-city, .place-country {
+		font-size: 12pt;
+	}
+	.place-id {
+		display: block;
+		text-align: right;
+		font-size: 11pt;
+		color: $medium;
+	}
+}
+
 @media (min-width: $screen-break) {
 	#appStart {
 		width: 250px;
@@ -109,6 +162,18 @@
 	#summary-of-data {
 		.column-2 {
 			text-align: right;
+		}
+	}
+
+	#reference-table,
+	#summary-of-recommended-cities {
+		.datatable {
+			.column-4,
+			.column-5,
+			.column-6,
+			.column-7 {
+				text-align: right;
+			}
 		}
 	}
 }

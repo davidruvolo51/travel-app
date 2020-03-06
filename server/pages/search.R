@@ -2,7 +2,7 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-03
+#' MODIFIED: 2020-03-05
 #' PURPOSE: server code for search page
 #' STATUS: in.progress
 #' PACKAGES: NA
@@ -98,16 +98,21 @@ observe({
         has_error <- reactiveVal(FALSE)
         show_report <- reactiveVal(FALSE)
         city_limits <- reactiveVal(0)
-        country_limits <- reactiveVal(FALSE)
+        country_limits <- reactiveVal("")
+        brewery_prefs <- reactiveVal(0.1)
+        coffee_prefs <- reactiveVal(0.1)
+        museum_prefs <- reactiveVal(0.1)
 
         #'//////////////////////////////////////
-        
         #' Run Code for Data
         observeEvent(input$submitTravelForm, {
 
             #' Set ReactiveVals
             city_limits(input$option_city_limits)
             country_limits(input$country_limits)
+            brewery_prefs(input$breweryPrefs)
+            coffee_prefs(input$coffeePrefs)
+            museum_prefs(input$museumPrefs)
 
             #' Reset Form only if there is an error
             if (isTRUE(has_error())) {
@@ -127,25 +132,33 @@ observe({
 
             #' Get Limits Input
             if (class(city_limits()) != "integer" | city_limits() > 50 | city_limits() < 0) {
-
                 #' Update Reactive Values and Client
                 has_error(TRUE)
-                js$remove_css("#travel-form-error", "visually-hidden")
-                js$remove_css("#limit-results-error", "visually-hidden")
-                js$remove_element_attribute("#travel-form-error", "aria-hidden")
+                js$remove_css(
+                    elem = "#travel-form-error",
+                    css = "visually-hidden"
+                )
+                js$remove_css(
+                    elem = "#limit-results-error",
+                    css = "visually-hidden"
+                )
                 js$remove_element_attribute(
-                    "#limit-results-error",
-                    "aria-hidden"
+                    elem = "#travel-form-error",
+                    attr = "aria-hidden"
+                )
+                js$remove_element_attribute(
+                    elem = "#limit-results-error",
+                    attr = "aria-hidden"
                 )
 
                 #' Send Error Messages
                 js$inner_html(
-                    "#travel-form-error",
-                    "ERROR: There was a problem with the 'limit results' field"
+                    elem = "#travel-form-error",
+                    string = "ERROR: A problem occurred with 'limit results'"
                 )
                 js$inner_html(
-                    "#limit-results-error",
-                    "ERROR: Enter a number from 0 to 50"
+                    elem = "#limit-results-error",
+                    string = "ERROR: Enter a number from 0 to 50"
                 )
             } else {
 
@@ -154,16 +167,15 @@ observe({
 
                 #' Reveal report on the first time only
                 if (isFALSE(show_report())) {
-                    js$remove_css("#travel-summary", "visually-hidden")
+                    js$remove_css(
+                        elem = "#travel-summary",
+                        css = "visually-hidden"
+                    )
                     show_report(TRUE)
                 }
 
-                #' Prep weights
-                w <- c(
-                    as.numeric(input$breweryPrefs),
-                    as.numeric(input$coffeePrefs),
-                    as.numeric(input$museumPrefs)
-                )
+                #' Prep weights - weights must be in alphabetical order
+                w <- c(brewery_prefs(), coffee_prefs(), museum_prefs())
 
                 #' Filter User Preferences Based on Recs
                 recs_filtered <- filterData(
@@ -175,8 +187,8 @@ observe({
                 #' Render Charts Based on Filtered Status
                 if (isFALSE(recs_filtered$status)) {
                     js$inner_html(
-                        "#recommended-cities",
-                        paste0(
+                        elem = "#recommended-cities",
+                        string = paste0(
                             "<p class=\"error\">",
                             "Too many filters were applied. As a result, ",
                             "no data was returned. Select more countries or",
@@ -192,8 +204,16 @@ observe({
                     #' Get Recommendations
                     results <- travel_preferences(
                         weights = w,
-                        data = isolate(recs_filtered$data)
+                        data = recs_filtered$data
                     )
+
+                    #' js$console_log(
+                    #'     list(
+                    #'         weights = w,
+                    #'         cities = city_limits(),
+                    #'         countries = country_limits()
+                    #'     )
+                    #' )
 
                     #' Render Map
                     cities_map <- results[c(1, 2, 3), ]
@@ -202,7 +222,10 @@ observe({
 
                     #' Render Text Blocks
                     recs_text <- generate_recs_text(cities_map$city)
-                    js$inner_html("#recommended-cities-summary", recs_text)
+                    js$inner_html(
+                        elem = "#recommended-cities-summary",
+                        string = recs_text
+                    )
 
                     #' Render Summary Datatable
                     cities_table <- recs %>%
@@ -225,12 +248,6 @@ observe({
                     )
                 }
             }
-        })
-
-        #'//////////////////////////////////////
-        #' Reset Inputs
-        observeEvent(input$resetTravelForm, {
-            js$reset_input_groups()
-        })
+        }, ignoreInit = TRUE)
     }
 })

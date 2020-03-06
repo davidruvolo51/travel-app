@@ -2,7 +2,7 @@
 #' FILE: index.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-02-21
+#' MODIFIED: 2020-03-05
 #' PURPOSE: A collection of js handlers for use in shiny apps
 #' STATUS: working
 #' PACKAGES: NA
@@ -41,12 +41,6 @@ js$inner_html <- function(elem, string, delay = NULL) {
     session$sendCustomMessage("inner_html", list(elem, string, delay))
 }
 
-#' Trigger a Page Refresh
-js$refresh_page <- function() {
-    session <- js$get_shiny_session()
-    session$sendCustomMessage("refresh_page", "")
-}
-
 #' Remove a css class of an element
 js$remove_css <- function(elem, css) {
     session <- js$get_shiny_session()
@@ -77,6 +71,12 @@ js$reset_input_groups <- function() {
     )
 }
 
+#' Reset Form
+js$reset_form <- function(id) {
+    session <- js$get_shiny_session()
+    session$sendCustomMessage("reset_form", id)
+}
+
 #' Scroll to the Top of a page
 js$scroll_to_top <- function() {
     session <- js$get_shiny_session()
@@ -89,20 +89,38 @@ js$set_element_attribute <- function(elem, attr, value) {
     session$sendCustomMessage("set_element_attribute", list(elem, attr, value))
 }
 
-#' Toggle a css class of an element
-js$toggle_css <- function(elem, css) {
-    session <- js$get_shiny_session()
-    session$sendCustomMessage("toggle_css", list(elem, css))
+#'//////////////////////////////////////
+
+#' Visualization Handlers
+viz <- list()
+
+#' Function to prep d3 json object
+viz$as_json_object <- function(data) {
+    parent <- list()
+    lapply(seq_len(NROW(data)), function(row) {
+        child <- list()
+        lapply(seq_len(NCOL(data)), function(col) {
+            child[[col]] <<- data[row, col]
+            names(child)[[col]] <<- colnames(data)[col]
+        })
+        parent[[row]] <<- child
+    })
+    return(parent)
 }
 
-#' Show Element by removing class "hidden"
-js$show_elem <- function(elem, css = NULL) {
+#' Render Top Cities Maps
+viz$render_top_city_maps <- function(data) {
     session <- js$get_shiny_session()
-    session$sendCustomMessage("show_elem", list(elem, css))
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage("render_top_city_maps", out)
 }
 
-#' Hide element by adding class "hidden"
-js$hide_elem <- function(elem, css = NULL) {
+#' Render Datatable
+viz$render_datatable <- function(id, data, columns, caption = NULL, class = NULL) {
     session <- js$get_shiny_session()
-    session$sendCustomMessage("hide_elem", list(elem, css))
+    out <- viz$as_json_object(data)
+    session$sendCustomMessage(
+        "render_datatable",
+        list(id, out, columns, caption, class)
+    )
 }
