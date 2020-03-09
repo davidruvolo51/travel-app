@@ -5,10 +5,6 @@
 		}
 	],
 	"settings": {
-		"linters": {
-			"lintr": {
-			  "linters": "with_defaults(undesirable_function_linter = FALSE)"
-			}
-		  }
+		"sassVariablesHelper.route": "src/styles/_variables.scss"
 	},
 }
