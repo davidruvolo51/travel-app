@@ -2,7 +2,7 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-03-06
+#' MODIFIED: 2020-03-10
 #' PURPOSE: ui page component for search tab
 #' STATUS: working
 #' PACKAGES: shiny; custom handlers; sass; babel; D3
@@ -77,15 +77,15 @@ search_page <- function() {
         tags$section(
             class = "section",
             id = "section-finder-intro",
-            tags$h2("Plan a Holiday"),
+            tags$h2("Plan your next holiday"),
             tags$p(
-                "Let's figure out where you may want to visit. Rate how",
-                "important it is to visit cafes with speciality coffee,",
-                "craft breweries, and museums when on holiday.",
-                "By default, all options are set to", tags$em("No Preference"),
-                ", which can be used if you find a place",
-                "neither important or unimportant. Press submit when you",
-                "have made all of your decisions.",
+                "Let's figure out where to go. Rate how",
+                "important it is to visit cafes with",
+                tags$a(
+                    href = "https://sca.coffee/research/what-is-specialty-coffee",
+                    "speciality coffee,"
+                ),
+                "breweries, and museums when visiting a new city."
             ),
             tags$form(
                 id = "travel-form",
@@ -145,10 +145,9 @@ search_page <- function() {
                     id = "countries_fieldset",
                     heading = "Limit Results to Specific Countries",
                     tags$p(
-                        "Do you have a few countries that you would like to",
-                        "visit in mind? Select the countries you would like",
-                        "to search for destinations. Leave everything blank",
-                        "if you would like to search everything."
+                        "Do you have a country in mind or would you like",
+                        "to search a few countries at once? Select the",
+                        "countries that you would like to visit."
                     ),
                     tags$fieldset(
                         id = "country_limits",
@@ -166,20 +165,16 @@ search_page <- function() {
                     "You can exclude any number of the cities with",
                     "them most places from the results. Larger cities",
                     "are likely to be recommended more as there are",
-                    "more places to visit. You can remove any number of",
-                    "the largest cities from the results. For example,",
-                    "entering '3' will remove the top three cities. '4' will",
-                    "remove the top four cities and so on. Entering '0' will",
-                    "keep all cities. See the data tab for a complete list of",
-                    "cities."
+                    "more places to visit.",
+                    "See the data tab for a complete list of cities"
                     ),
                     tags$fieldset(
                         class = "number-input-group",
                         tags$label(
                             `for` = "option_city_limits",
                             class = "number-input-label",
-                            "Enter the number of top cities you would like to",
-                            "remove."
+                            "Enter the number of top cities (up to 50) that",
+                            "you would like to remove."
                         ),
                         tags$input(
                             id = "option_city_limits",
@@ -237,23 +232,21 @@ search_page <- function() {
                 class = "section",
                 tags$h2("Summary of Recommended Cities"),
                 tags$p(
-                    "The following table displays a summary of the ",
-                    "recommended cities. This includes the number of cafes ",
-                    "breweries, and museums."
+                    "The following table displays the number of places",
+                    "and score for the recommended cities."
                 )
             ),
             # wrap up
             tags$section(class = "section",
                 tags$h2("About the Results"),
                 tags$p(
-                    "Based on your selections above, all cities were ",
-                    "rescored using a weighted mean where the weights are ",
-                    "your preference for each place. Cities with higher ",
-                    "scores are  are likely to be good holiday destinations ",
-                    "than  cities with lower scores as these cities are may ",
-                    "not have many places to visit. Cities with more places ",
-                    "are likely to be recommended more as these can effect ",
-                    "scores depending on your preference. "
+                    "All cities were scored using a weight mean where the",
+                    "weights are your preference for visting each place.",
+                    "Cities with higher scores are more likely to be a better",
+                    "destinations then cities with lower scores.",
+                    "Larger cities are likely to be recommended more often as",
+                    "these cities have more places. Use the additional",
+                    "options to customize your search."
                 )
             )
         ),

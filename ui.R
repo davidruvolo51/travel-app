@@ -2,14 +2,17 @@
 #' FILE: ui.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-06
+#' MODIFIED: 2020-03-10
 #' PURPOSE: client side for application
-#' STATUS: working; on.going
-#' PACKAGES: NA
+#' STATUS: working
+#' PACKAGES: see global
 #' COMMENTS:
 #'      In this file, define all <head> content and load any javascript assets.
 #'      This application works by rendering the subpages into the uiOutput
-#'      element "page". This is loaded dynamically in the server.
+#'      element "page". This is loaded dynamically in the server. Application
+#'      routing is defined in server/routing.R and the corresponding JavaScript
+#'      can be found in www/js/index.js.
+#'      Using `tags$body` will render two <body> elements. Avoid using it!
 #' ////////////////////////////////////////////////////////////////////////////
 ui <- tagList(
     tags$head(
@@ -26,11 +29,7 @@ ui <- tagList(
             href = "https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css",
             rel = "stylesheet"
         ),
-        tags$link(
-            rel = "stylesheet",
-            type = "text/css",
-            href = "css/styles.css"
-        ),
+        tags$link(rel = "stylesheet", href = "css/styles.css"),
         tags$title("shinyTravel")
     ),
     #' Loading page -- will be removed post load
@@ -144,8 +143,8 @@ ui <- tagList(
                     ),
                     tags$li(class = "menu-item",
                         tags$a(class = "menu-link",
-                            href = "https://github.com/davidruvolo51/travel-app/wiki",
-                            "Wiki"
+                            href = "https://davidruvolo51.github.io/shinytutorials/tutorials/shiny-contest-submission",
+                            "Blog"
                         )
 
                     )
@@ -156,5 +155,6 @@ ui <- tagList(
     #' Load Assets
     tags$script(src = "assets/d3.v5.min.js"),
     tags$script(src = "assets/topojson.min.js"),
+    # tags$script(src = "js/index.js")
     tags$script(src = "js/index.min.js")
 )

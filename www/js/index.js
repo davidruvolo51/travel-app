@@ -2,10 +2,10 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-03-05
+// MODIFIED: 2020-03-10
 // PURPOSE: primary functions for application
-// DEPENDENCIES: NA
-// STATUS: d3; topojson; countries geojson;
+// DEPENDENCIES: d3; topojson; countries geojson; handlers.R
+// STATUS: working
 // COMMENTS: NA
 ////////////////////////////////////////////////////////////////////////////////
 // BEGIN
@@ -298,9 +298,6 @@ const accordions = (function () {
     // cities,
     function render_top_city_maps(city_a, city_b, city_c) {
 
-        // Remove Existing Maps
-        d3.selectAll("#recommended-cities .top-three-cities-maps, #recommended-cities .error").remove();
-
         // define output id
         const out_elem = "#recommended-cities";
         // run fetch
@@ -365,6 +362,12 @@ const accordions = (function () {
 
     // Register with Shiny and evaluate the presence of all three cities
     Shiny.addCustomMessageHandler("render_top_city_maps", function (value) {
+
+        // Remove Existing Maps
+        d3.selectAll(".top-three-cities-maps").remove();
+        d3.selectAll("#recommended-cities .error").remove();
+
+        // process inputs
         let city_a, city_b, city_c;
         if (value.length > 0) {
             if (value.length === 1) {
@@ -636,13 +639,7 @@ const map = (function () {
                 map.getCanvas().style.cursor = 'pointer';
 
                 var coordinates = e.features[0].geometry.coordinates.slice();
-                var description = `
-                <span class="place-type">${e.features[0].properties.type}</span>
-                <strong class="place-name">${e.features[0].properties.name}</strong>
-                <span class="place-city">${e.features[0].properties.city}</span>
-                <span class="place-country">${e.features[0].properties.country}</span>
-                <span class="place-id">${e.features[0].properties.id}</span>
-            `;
+                var description = `<span class="place-type">${e.features[0].properties.type}</span><strong class="place-name">${e.features[0].properties.name}</strong><span class="place-city">${e.features[0].properties.city}</span><span class="place-country">${e.features[0].properties.country}</span><span class="place-id">ID: ${e.features[0].properties.id}</span>`;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears

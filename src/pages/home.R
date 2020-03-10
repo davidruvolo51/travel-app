@@ -2,14 +2,13 @@
 #' FILE: home.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-13
-#' MODIFIED: 2020-03-06
+#' MODIFIED: 2020-03-10
 #' PURPOSE: ui component for home page
 #' STATUS: working
-#' PACKAGES: NA
-#' COMMENTS: NA
+#' PACKAGES: see global
+#' COMMENTS: Requires some functional components and illustrations
 #' ////////////////////////////////////////////////////////////////////////////
 home_page <- function() {
-    shiny_btn_css <- "action-button shiny-bound-input"
     tags$main(
         id = "home-main",
         class = "main main-extra-top-spacing",
@@ -65,9 +64,10 @@ home_page <- function() {
                     "You can use the",
                     tags$span(class = "app-title", "shinyTravel"),
                     "app in a number of ways. Use the",
-                    tags$strong("Finder"), "to get city recommendations.",
-                    "You can also use the", tags$strong("Explorer"), "page",
-                    "to search for cities and places to visit."
+                    tags$strong("Seach"), "page to get city recommendations.",
+                    "You can explore all cities and places on the",
+                    tags$strong("Map"), "page and view summary tables on the",
+                    tags$strong("Data"), "page."
                 )
             ),
             tags$div(
@@ -103,19 +103,13 @@ home_page <- function() {
                             "https://github.com/davidruvolo51/travel-app-data",
                         "data"
                     ),
-                    "is available on github. See the",
+                    "used to develop this app is available on github. See the",
+                    "accompanying",
                     tags$a(
-                        href =
-                            "https://github.com/davidruvolo51/travel-app/wiki",
-                        "Wiki"
+                        href = "https://davidruvolo51.github.io/shinytutorials/tutorials/shiny-contest-submission",
+                        "blog post"
                     ),
-                    "for more information about the development of the app,",
-                    "methods, and data. If you have any questions, feel free",
-                    "to open a new",
-                    tags$a(
-                        href = "https://github.com/davidruvolo51/travel-app/issue",
-                        "issue"
-                    ), "."
+                    "for more information."
                 )
             )
         ),
@@ -123,13 +117,10 @@ home_page <- function() {
             id = "section-start",
             class = "section",
             tags$h2("Are you reading to start planning your holiday?"),
-            tags$p("Let's get started. Click the button below."),
+            tags$p("Let's get started! Click the button below."),
             tags$button(
                 id = "appStart",
-                class = paste0(
-                    shiny_btn_css,
-                    " b b-primary"
-                ),
+                class = "action-button shiny-bound-input b b-primary",
                 "Start"
             )
         )

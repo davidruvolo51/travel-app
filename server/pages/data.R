@@ -2,10 +2,10 @@
 #' FILE: data.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-06
+#' MODIFIED: 2020-03-10
 #' PURPOSE: server code for data page
 #' STATUS: working;
-#' PACKAGES: NA
+#' PACKAGES: see global
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 observe({
@@ -30,7 +30,7 @@ observe({
             id = "#summary-of-data",
             data = travel$highlights$all[-c(1, 2), ],
             columns = names(travel$highlights$all),
-            caption = "Count of Places by Type",
+            caption = "Number of Places by Type",
             class = "datatable-small"
         )
 

@@ -2,10 +2,10 @@
 #' FILE: search.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-03-02
-#' MODIFIED: 2020-03-05
+#' MODIFIED: 2020-03-10
 #' PURPOSE: server code for search page
-#' STATUS: in.progress
-#' PACKAGES: NA
+#' STATUS: working
+#' PACKAGES: see global
 #' COMMENTS: NA
 #' ////////////////////////////////////////////////////////////////////////////
 
@@ -206,14 +206,6 @@ observe({
                         weights = w,
                         data = recs_filtered$data
                     )
-
-                    #' js$console_log(
-                    #'     list(
-                    #'         weights = w,
-                    #'         cities = city_limits(),
-                    #'         countries = country_limits()
-                    #'     )
-                    #' )
 
                     #' Render Map
                     cities_map <- results[c(1, 2, 3), ]

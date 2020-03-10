@@ -2,7 +2,7 @@
 #' FILE: map.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-02-18
-#' MODIFIED: 2020-03-06
+#' MODIFIED: 2020-03-10
 #' PURPOSE: ui page component for explorer page
 #' STATUS: working
 #' PACKAGES: shiny; mapbox
@@ -29,14 +29,9 @@ map_page <- function() {
             class = "section",
             tags$h2("Plan your trip using a map"),
             tags$p(
-                "Would you rather search for places using a map?",
-                "Use the map below to search through the dataset.",
-                "Use the keyboard, mouse, or touch screen to control the ",
-                "map. Click on a point to view more information about the ",
-                "location."
-            ),
-            tags$p(
-                "The legend for place types is displayed below."
+                "View all cities and places using the map below.",
+                "Tap on a location to view more information about the place.",
+                "The legend for the places is defined below."
             ),
             tags$ul(
                 id = "places",
@@ -69,7 +64,7 @@ map_page <- function() {
             class = "section",
             tags$h2("Notice any issues?"),
             tags$p(
-                "Is a location incorrect? Does something not look right?",
+                "Is a location incorrect or does something look off?",
                 "Take note of the ID in the popup and file a new",
                 tags$a(
                     href = "https://github.com/davidruvolo51/travel-app/issues",
