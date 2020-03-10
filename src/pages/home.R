@@ -21,7 +21,7 @@ home_page <- function() {
                     src = "images/shiny-travel-illustration.svg"
                 ),
                 tags$h1("shinyTravel"),
-                tags$h2("Plan your next European holiday using data")
+                tags$h2("Plan Your Next European Holiday Using Data")
             )
         ),
         tags$section(
@@ -45,8 +45,8 @@ home_page <- function() {
                     tags$span(class = "app-title", "shinyTravel"),
                     "is a data-driven shiny app for planning your next",
                     "European holiday. This app provides city recommendations",
-                    "based on", tags$strong("your"), "preference for",
-                    "specialty coffee, craft breweries, and museums",
+                    "based on your preference for breweries, museums, and",
+                    "cafes with specialty coffee.",
                 )
             )
         ),
@@ -64,10 +64,10 @@ home_page <- function() {
                     "You can use the",
                     tags$span(class = "app-title", "shinyTravel"),
                     "app in a number of ways. Use the",
-                    tags$strong("Seach"), "page to get city recommendations.",
-                    "You can explore all cities and places on the",
-                    tags$strong("Map"), "page and view summary tables on the",
-                    tags$strong("Data"), "page."
+                    tags$strong("Search"), "page to get city recommendations",
+                    "and the", tags$strong("Map"), "page to explore all ",
+                    "locations. On the ", tags$strong("Data"), "page,",
+                    "you can view a list of locations by type and city."
                 )
             ),
             tags$div(
@@ -92,7 +92,7 @@ home_page <- function() {
                 class = "flex-child",
                 tags$h2("Where can I read more about the app?"),
                 tags$p(
-                    "All of the",
+                    "The",
                     tags$a(
                         href = "https://github.com/davidruvolo51/travel-app",
                         "code"
@@ -103,7 +103,7 @@ home_page <- function() {
                             "https://github.com/davidruvolo51/travel-app-data",
                         "data"
                     ),
-                    "used to develop this app is available on github. See the",
+                    "used to develop this app are available on GitHub. See the",
                     "accompanying",
                     tags$a(
                         href = "https://davidruvolo51.github.io/shinytutorials/tutorials/shiny-contest-submission",
@@ -116,7 +116,7 @@ home_page <- function() {
         tags$section(
             id = "section-start",
             class = "section",
-            tags$h2("Are you reading to start planning your holiday?"),
+            tags$h2("Are you ready to start planning your holiday?"),
             tags$p("Let's get started! Click the button below."),
             tags$button(
                 id = "appStart",

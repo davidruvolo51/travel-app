@@ -67,7 +67,7 @@ search_page <- function() {
                     class = "illustration size-small airplane",
                     src = "images/airplane-illustration.svg"
                 ),
-                tags$h1("Finder"),
+                tags$h1("Search"),
                 tags$h2("Get Travel Recommendations")
             )
         ),
@@ -80,12 +80,8 @@ search_page <- function() {
             tags$h2("Plan your next holiday"),
             tags$p(
                 "Let's figure out where to go. Rate how",
-                "important it is to visit cafes with",
-                tags$a(
-                    href = "https://sca.coffee/research/what-is-specialty-coffee",
-                    "speciality coffee,"
-                ),
-                "breweries, and museums when visiting a new city."
+                "important it is to visit breweries, museums, and",
+                "cafes with specialty coffee.",
             ),
             tags$form(
                 id = "travel-form",
@@ -107,17 +103,6 @@ search_page <- function() {
                 ),
 
                 #' //////////////////////////////////////
-                # coffee
-                tags$fieldset(
-                    id = "coffeePrefs",
-                    class = "shiny-input-radiogroup radios coffee-radio",
-                    role = "radio-group",
-                    tags$legend(
-                        class = "radios-title",
-                        "Cafes with Specialty Coffee?"
-                    ),
-                    user_prefs_ui(id = "coffeePrefs")
-                ),
                 # breweries
                 tags$fieldset(
                     id = "breweryPrefs",
@@ -134,6 +119,17 @@ search_page <- function() {
                     tags$legend(class = "radios-title", "Museums?"),
                     user_prefs_ui(id = "museumPrefs")
                 ),
+                # coffee
+                tags$fieldset(
+                    id = "coffeePrefs",
+                    class = "shiny-input-radiogroup radios coffee-radio",
+                    role = "radio-group",
+                    tags$legend(
+                        class = "radios-title",
+                        "Cafes with Specialty Coffee?"
+                    ),
+                    user_prefs_ui(id = "coffeePrefs")
+                ),
 
                 #'//////////////////////////////////////
 
@@ -145,7 +141,7 @@ search_page <- function() {
                     id = "countries_fieldset",
                     heading = "Limit Results to Specific Countries",
                     tags$p(
-                        "Do you have a country in mind or would you like",
+                        "Do you have a country in mind, or would you like",
                         "to search a few countries at once? Select the",
                         "countries that you would like to visit."
                     ),
@@ -160,21 +156,20 @@ search_page <- function() {
                 # input to limit results
                 src$accordion(
                     id = "limits_fieldset",
-                    heading = "Exclude Top Cities",
+                    heading = "Exclude Largest Cities",
                     tags$p(
-                    "You can exclude any number of the cities with",
-                    "them most places from the results. Larger cities",
-                    "are likely to be recommended more as there are",
-                    "more places to visit.",
-                    "See the data tab for a complete list of cities"
+                    "You can exclude the largest cities",
+                    "from the results. Larger cities are more likely",
+                    "to be recommended since there are more places to visit.",
+                    "See the Data page for a complete list of cities."
                     ),
                     tags$fieldset(
                         class = "number-input-group",
                         tags$label(
                             `for` = "option_city_limits",
                             class = "number-input-label",
-                            "Enter the number of top cities (up to 50) that",
-                            "you would like to remove."
+                            "Enter the number of largest cities (up to 50)",
+                            "to remove."
                         ),
                         tags$input(
                             id = "option_city_limits",
@@ -232,21 +227,20 @@ search_page <- function() {
                 class = "section",
                 tags$h2("Summary of Recommended Cities"),
                 tags$p(
-                    "The following table displays the number of places",
-                    "and score for the recommended cities."
+                    "The following table displays the score and the",
+                    "number of locations by type for the recommended cities."
                 )
             ),
             # wrap up
             tags$section(class = "section",
                 tags$h2("About the Results"),
                 tags$p(
-                    "All cities were scored using a weight mean where the",
-                    "weights are your preference for visting each place.",
-                    "Cities with higher scores are more likely to be a better",
-                    "destinations then cities with lower scores.",
-                    "Larger cities are likely to be recommended more often as",
-                    "these cities have more places. Use the additional",
-                    "options to customize your search."
+                    "All cities were scored using a weighted mean where the",
+                    "weights are your preference for visting each location type.",
+                    "Cities with higher scores are more likely to be suited",
+                    "to your preferences than cities with lower scores.",
+                    "In addition, larger cities are likely to be recommended,",
+                    "as these cities have more locations."
                 )
             )
         ),

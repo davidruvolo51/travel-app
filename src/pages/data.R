@@ -32,8 +32,8 @@ data_page <- function() {
             tags$p(
                 "On this page, you can view the summarized datasets",
                 "used in the app. The first table provides an overview",
-                "of the dataset and the dataset used to generate user",
-                "preferences can be found in the second table."
+                "of the dataset. The second table displays the",
+                "dataset used to generate the city recommendations."
             )
         ),
         tags$section(
@@ -41,8 +41,8 @@ data_page <- function() {
             class = "section",
             tags$h2("Summary of Data"),
             tags$p(
-                "The following table provides a overview of the number of",
-                "places by type. In total, there are",
+                "The following table lists the number of",
+                "locations by type. In total, there are",
                 tags$output(id = "summary-total-cities"), "cities across",
                 tags$output(id = "summary-total-countries"), "countries."
             )
@@ -52,8 +52,9 @@ data_page <- function() {
             class = "section",
             tags$h2("Recommendations Dataset"),
             tags$p(
-                "The following table displays the dataset used to generate",
-                "city recommendations. Use the filters below to limit and",
+                "The following table displays the number of locations by type",
+                "for all cities. This data is used to produce the list of ",
+                "recommended cities. Use the filters below to limit and",
                 "sort the results."
             ),
             tags$form(
