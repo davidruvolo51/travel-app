@@ -9,13 +9,24 @@ The application demonstrates how to design and develop a custom shiny applicatio
 
 You can find out more about the application in the following places
 
+**Demo**
+
+A live version of the application can be found here: [davidruvolo.shinyapps.io/travel-app/](https://davidruvolo.shinyapps.io/travel-app/).
+
+**Github**
 - [travel-app](https://github.com/davidruvolo51/travel-app): repo for all code and data used to create the app (current repo)
 - [travel-app-data](https://github.com/davidruvolo51/travel-app-data): repo for all code for sourcing data
-- [About this submission](#): I wrote a bit more about the app on my site.
+
+**RStudio Cloud**
+
+- [travel-app](https://rstudio.cloud/project/1030890)
+- [travel-app-data](https://rstudio.cloud/project/914494)
+
+**Blog Post**
+- [About this submission](https://davidruvolo51.github.io/shinytutorials/tutorials/shiny-contest-submission): I wrote a bit more about the app on my site.
 
 ## Run
 
-A live version of the application can be found here: [coming soon](#).
 
 There are a few options to run the application locally. The easiest is likely through the R console itself. Alternatively, you can clone the repo and run in RStudio by opening the R project file.
 

@@ -2,7 +2,7 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-02-14
-// MODIFIED: 2020-03-10
+// MODIFIED: 2020-03-11
 // PURPOSE: primary functions for application
 // DEPENDENCIES: d3; topojson; countries geojson; handlers.R
 // STATUS: working
@@ -510,7 +510,7 @@ const accordions = (function () {
 const map = (function () {
 
     // public token
-    mapboxgl.accessToken = "pk.eyJ1IjoiZGNydXZvbG8iLCJhIjoiY2psaW9mZXpmMDNkZDNxcG54cDd2OTJ4YyJ9.qjJnQuhtjHfZ4zBzRyB74g"
+    mapboxgl.accessToken = "pk.eyJ1IjoiZGNydXZvbG8iLCJhIjoiY2psaW9oYW9xMDMzdDNwbDFmc2gzeXpyZiJ9.ahxvY7S2HNASGselkXtHZw"
 
     function render_mapbox(id) {
         // build map
